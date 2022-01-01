@@ -1,33 +1,31 @@
-import { Controller, Get, HttpCode, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+
 import {
   ApiBearerAuth,
   ApiConsumes,
   ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-
-//   import { AdminAuthGuard, JwtAuthGuard } from '../auth/jwt.strategy';
-import { GetListUserDto, ResGetListUserDto } from './dto/get.dto';
 import { AuthService } from './auth.service';
-
-@ApiTags('Auth api . Vòng quay')
+import { LoginUserDto, ResLoginUserDto } from './dto/login.dto';
+import { RegisterUserDto } from './dto/register.dto';
+@ApiTags('Auth Api')
 @ApiConsumes('Auth Api')
-@ApiBearerAuth()
-@Controller('Auth')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Get()
-  @ApiOperation({
-    summary: 'Get list user . Lấy danh sách user',
-  })
-  // @UseGuards(AdminAuthGuard)
-  @HttpCode(200)
-  @ApiUnauthorizedResponse()
-  @ApiOkResponse({ type: ResGetListUserDto, status: 200 })
-  async getList(@Query() getListUserDto: GetListUserDto) {
-    return this.authService.getList(getListUserDto);
+  @ApiOperation({ summary: 'Register user' })
+  @ApiOkResponse({ type: RegisterUserDto, status: 200 })
+  @Post('register')
+  async register(@Body() registerUserDto: RegisterUserDto) {
+    return this.authService.register(registerUserDto);
+  }
+
+  @Post('login')
+  @ApiOperation({ summary: 'Login user Api' })
+  @ApiOkResponse({ type: ResLoginUserDto, status: 200 })
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.login(loginUserDto);
   }
 }
