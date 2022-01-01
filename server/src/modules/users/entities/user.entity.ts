@@ -18,15 +18,15 @@ export class UserEntity {
   userName: string;
 
   @ApiProperty()
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text' })
   password: string;
 
   @ApiProperty()
-  @Column({ length: 50, nullable: true })
+  @Column({ length: 50 })
   fullName: string;
 
   @ApiProperty()
-  @Column('int', { default: 1 })
+  @Column({ type: 'tinyint', default: 1 })
   role: number;
 
   @ApiProperty()

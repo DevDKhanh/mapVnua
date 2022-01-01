@@ -1,15 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { I18nRequestScopeService } from 'nestjs-i18n';
-import { radomNumber, radomText } from 'src/common/text.helper';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { RegisterUserDto } from './dto/register.dto';
 import { UserEntity } from '../users/entities/user.entity';
 import { LoginUserDto } from './dto/login.dto';
+import { resultData } from 'src/common/text.helper';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +17,6 @@ export class AuthService {
     private usersRepository: Repository<UserEntity>,
     private readonly i18n: I18nRequestScopeService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
   ) {}
   private HASH_ROUND_NUMBER: number = 5;
 
@@ -43,12 +41,9 @@ export class AuthService {
     let user = await this.usersRepository.create(registerUserDto);
 
     user.password = passwordHash;
-    await this.usersRepository.save(user);
+    const data = await this.usersRepository.save(user);
 
-    throw new HttpException(
-      await this.i18n.translate('user.SUCCESS_SIGNUP'),
-      HttpStatus.CREATED,
-    );
+    return resultData(await this.i18n.translate('user.SUCCESS_SIGNUP'), data);
   }
 
   async login(loginUserDto: LoginUserDto) {
@@ -82,12 +77,12 @@ export class AuthService {
       { expiresIn: '365d' },
     );
 
-    return {
+    return resultData(await this.i18n.translate('auth.AUTH_LOGIN_SUCCESS'), {
       token,
       role: user.role,
       id: user.id,
       fullName: user.fullName,
       userName: user.userName,
-    };
+    });
   }
 }

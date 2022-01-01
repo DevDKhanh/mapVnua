@@ -8,6 +8,7 @@ import { SharedModule } from './shared/shared.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 import { AuthModule } from './modules/auth/auth.module';
+import { SettingModule } from './modules/setting/setting.module';
 @Module({
   imports: [
     SharedModule,
@@ -30,6 +31,7 @@ import { AuthModule } from './modules/auth/auth.module';
       }),
     }),
     AuthModule,
+    SettingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
