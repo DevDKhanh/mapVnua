@@ -1,0 +1,10 @@
+{
+    "HELLO":"xin chao",
+    "EMAIL_IS_EXITS":"Email này đã tồn tại .",
+    "EMAIL_IS_NOT_EXITS":"Email chưa tồn tại .",
+    "PASSWORD_IS_INCORRECT":"Mật khẩu chưa đúng .",
+    "USER_NOT_FOUND":"Người dùng không tồn tại .",
+    "CODE_INCORRECT":"Code đổi mật khẩu không đúng .",
+    "USER_DONT_HAVE_ENOUGHT_MONEY":"Bạn không đủ tiền.",
+    "USER_NOT_ACTIVED":"Người dùng chưa kích hoạt . Vui lòng kiểm tra mail và kich hoạt tài khoản"
+}

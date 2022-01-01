@@ -1,0 +1,8 @@
+{
+  "WHEEL_NOT_FOUND": "Không tìm thấy vòng quay",
+  "WHEEL_CANNOT_CREATE": "Không thể tạo vòng quay",
+  "WHEEL_TITLE_IS_EXITS": "Tên vòng quay bị trùng",
+  "WHEEL_PERCENT_IS_MAX": "Phần trăm của các sản phẩm đã vượt quá 100%",
+  "WHEEL_PERCENT_NOT_MAX": "Tổng phần trăm các sản phẩm chưa bằng 100%",
+  "WHEEL_UPDATE_SUCCESS": "Cập nhật vòng quay thành công"
+}
