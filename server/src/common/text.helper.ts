@@ -20,8 +20,8 @@ export function radomNumber(length: number): string {
   }
   return result;
 }
-export function createPagination<T>(
-  data: T[],
+export function createPagination<Data>(
+  data: Data[],
   total: number,
   page: number,
   pageSize: number,
