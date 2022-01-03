@@ -1,0 +1,18 @@
+.Li_List_Second {
+    width      : 100%;
+    display    : flex;
+    align-items: center;
+
+    &>label {
+        padding  : 5px 0 5px 30px;
+        margin   : 0;
+        width    : 80%;
+        cursor   : pointer;
+        font-size: 14px;
+    }
+
+    &>div {
+        width     : 15%;
+        text-align: center;
+    }
+}
