@@ -9,6 +9,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 import { AuthModule } from './modules/auth/auth.module';
 import { SettingModule } from './modules/setting/setting.module';
+import { LanguageModule } from './modules/language/language.module';
 @Module({
   imports: [
     SharedModule,
@@ -32,6 +33,7 @@ import { SettingModule } from './modules/setting/setting.module';
     }),
     AuthModule,
     SettingModule,
+    LanguageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

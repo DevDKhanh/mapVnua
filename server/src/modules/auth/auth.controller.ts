@@ -16,7 +16,7 @@ import { RegisterUserDto } from './dto/register.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @ApiOperation({ summary: 'Register user' })
-  @ApiOkResponse({ type: RegisterUserDto, status: 200 })
+  @ApiOkResponse({ type: RegisterUserDto, status: 201 })
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.register(registerUserDto);
