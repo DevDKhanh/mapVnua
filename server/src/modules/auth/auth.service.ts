@@ -29,7 +29,7 @@ export class AuthService {
 
     if (userCheck) {
       throw new HttpException(
-        await this.i18n.translate('user.USER_IS_EXITS'),
+        await this.i18n.translate('user.USER_IS_EXIST'),
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -56,7 +56,7 @@ export class AuthService {
     /********** Check userName **********/
     if (!user) {
       throw new HttpException(
-        await this.i18n.translate('user.USER_IS_NOT_EXITS'),
+        await this.i18n.translate('user.USER_IS_NOT_EXIST'),
         HttpStatus.NOT_FOUND,
       );
     }

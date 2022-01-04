@@ -1,0 +1,14 @@
+@import '../../../style/color';
+
+.groupForm {
+	.inputElement {
+		width: 100%;
+		border: 1px solid $color-border-gray;
+		outline: none;
+		padding: 5px 10px;
+	}
+}
+
+.groupForm + .groupForm {
+	margin-top: 10px;
+}
