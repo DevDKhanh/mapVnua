@@ -1,5 +1,5 @@
 ## pages
-DashBoard:
+HomePages:
     - Props: N/A
     - State: 
         - listRegion
@@ -35,7 +35,7 @@ DashBoard
             - pageManagementLanguage
             - securityManagement
     - MainContent:
-        - Props: 
+        - Props:
             - listRegion
             - listClassify
             - listClass

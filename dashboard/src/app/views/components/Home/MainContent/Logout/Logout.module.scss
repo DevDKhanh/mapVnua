@@ -1,0 +1,30 @@
+.wrapper_logoutBar {
+    display         : flex;
+    min-width       : 200px;
+    padding         : 15px 20px;
+    justify-content : space-between;
+    align-items     : center;
+    background-color: #ddd;
+    border-radius   : 8px;
+    opacity         : 0;
+    transform       : translateY(0px);
+    animation       : animateTransForm .2s linear 1 normal forwards !important;
+
+    @keyframes animateTransForm {
+        0% {
+            opacity  : 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity  : 1;
+            transform: translateY(60px);
+        }
+    }
+
+    &>p {
+        text-transform: uppercase;
+        font-size     : 14px;
+        font-weight   : 600;
+    }
+}

@@ -7,8 +7,9 @@ const HomePage = lazy(() => import("../views/pages/HomePage"));
 function Routers() {
   return (
     <Routes>
+      <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/home" element={<HomePage />} />
+      <Route path="*" element={<h2>Trang không tồn tại</h2>} />
     </Routes>
   );
 }
