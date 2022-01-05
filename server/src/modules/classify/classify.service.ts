@@ -1,36 +1,51 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
 import { I18nRequestScopeService } from 'nestjs-i18n';
 import { Repository } from 'typeorm';
 
-import { CreateSettingDto } from './dto/post.dto';
-import { UpdateSettingDto } from './dto/put.dto';
+import { CreateClassifyDto } from './dto/post.dto';
+import { UpdateClassifyDto } from './dto/put.dto';
 import { GetListDto } from '../../common/dto/index.dto';
-import { SettingEntity } from './entities/setting.entity';
+import { ClassifyEntity } from './entities/classify.entity';
 import { LanguageEntity } from '../language/entities/language.entity';
 import { createPagination, resultData } from '../../common/text.helper';
+import { LayerEntity } from '../layer/entities/layer.entity';
 
 @Injectable()
-export class SettingService {
+export class ClassifyService {
   constructor(
-    @InjectRepository(SettingEntity)
-    private settingRepository: Repository<SettingEntity>,
+    @InjectRepository(ClassifyEntity)
+    private classifyRepository: Repository<ClassifyEntity>,
 
     @InjectRepository(LanguageEntity)
     private languageRepository: Repository<LanguageEntity>,
 
+    @InjectRepository(LayerEntity)
+    private layerRepository: Repository<LayerEntity>,
+
     private readonly i18n: I18nRequestScopeService,
   ) {}
 
-  async create(createSettingDto: CreateSettingDto) {
-    const createNew = await this.settingRepository.create({
-      ...createSettingDto,
+  async create(createClassifyDto: CreateClassifyDto) {
+    const createNew = await this.classifyRepository.create({
+      ...createClassifyDto,
     });
 
     const checkLanguage = await this.languageRepository.findOne(
-      createSettingDto.languageId,
+      createClassifyDto.languageId,
     );
+    const checkClassId = await this.classifyRepository.findOne(
+      createClassifyDto.id,
+    );
+
+    if (checkClassId) {
+      throw new HttpException(
+        await this.i18n.translate('site.IS_EXISTS', {
+          args: { name: 'Id phân loại' },
+        }),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     if (!checkLanguage) {
       throw new HttpException(
@@ -41,27 +56,27 @@ export class SettingService {
       );
     }
 
-    const saveSetting = await this.settingRepository.save(createNew);
+    const saveClassify = await this.classifyRepository.save(createNew);
     return resultData(
       await this.i18n.translate('site.SUCCESS_CREATE'),
-      saveSetting,
+      saveClassify,
     );
   }
 
-  async update(id: number, updateSettingDto: UpdateSettingDto) {
-    const checkId = await this.settingRepository.findOne({
+  async update(id: string, updateClassifyDto: UpdateClassifyDto) {
+    const checkId = await this.classifyRepository.findOne({
       where: {
         id,
       },
     });
     const checkLanguage = await this.languageRepository.findOne(
-      updateSettingDto.languageId,
+      updateClassifyDto.languageId,
     );
 
     if (!checkId) {
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
-          args: { name: 'Cấu hình' },
+          args: { name: 'phân loại' },
         }),
         HttpStatus.BAD_REQUEST,
       );
@@ -76,19 +91,20 @@ export class SettingService {
       );
     }
 
-    await this.settingRepository.update({ id }, { ...updateSettingDto });
-    const setting = await this.settingRepository.findOne(id);
-    const language = await this.languageRepository.findOne(setting.languageId);
+    await this.classifyRepository.update({ id }, { ...updateClassifyDto });
+    const Classify = await this.classifyRepository.findOne(id);
+    const language = await this.languageRepository.findOne(Classify.languageId);
     return resultData(await this.i18n.translate('site.SUCCESS_UPDATE'), {
-      ...setting,
+      ...Classify,
       language,
     });
   }
 
   async getList(getListDto: GetListDto) {
-    const result = await this.settingRepository
-      .createQueryBuilder('setting')
-      .leftJoinAndSelect('setting.language', 'language')
+    const result = await this.classifyRepository
+      .createQueryBuilder('classify')
+      .leftJoinAndSelect('classify.language', 'language')
+      .innerJoinAndSelect('classify.layers', 'layers')
       .skip((+getListDto.page - 1) * getListDto.pageSize)
       .take(+getListDto.pageSize)
       .getManyAndCount();
@@ -101,40 +117,46 @@ export class SettingService {
     );
   }
 
-  async getDetail(id: number) {
-    const setting = await this.settingRepository.findOne(id);
+  async getDetail(id: string) {
+    const result = await this.classifyRepository.findOne(id);
 
-    if (!setting) {
+    if (!result) {
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
-          args: { name: 'Cấu hình' },
+          args: { name: 'phân loại' },
         }),
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    const language = await this.languageRepository.findOne(setting.languageId);
+    const language = await this.languageRepository.findOne(result.languageId);
+    const layers = await this.layerRepository.find({
+      where: {
+        classifyId: result.id,
+      },
+    });
+
     return resultData(
       await this.i18n.translate('site.DETAIL_DATA', {
-        args: { name: 'Cấu hình' },
+        args: { name: 'phân loại' },
       }),
-      { ...setting, language },
+      { ...result, language, layers },
     );
   }
 
-  async delete(id: number) {
+  async delete(id: string) {
     try {
-      const setting = await this.settingRepository.findOne(id);
-      if (!setting) {
+      const Classify = await this.classifyRepository.findOne(id);
+      if (!Classify) {
         return new HttpException(
           await this.i18n.translate('site.IS_NOT_EXISTS', {
-            args: { name: 'Cấu hình' },
+            args: { name: 'phân loại' },
           }),
           HttpStatus.BAD_REQUEST,
         );
       }
 
-      await this.settingRepository.delete(id);
+      await this.classifyRepository.delete(id);
       return resultData(await this.i18n.translate('site.SUCCESS_DELETE'), id);
     } catch (err) {
       return new HttpException(

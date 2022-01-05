@@ -1,9 +1,4 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
 import { CreateSettingDto } from './post.dto';
 
-export class UpdateSettingDto extends PartialType(CreateSettingDto) {
-  @ApiProperty({ example: false })
-  @IsBoolean()
-  active: boolean;
-}
+export class UpdateSettingDto extends PartialType(CreateSettingDto) {}

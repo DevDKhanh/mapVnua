@@ -1,77 +1,69 @@
 import {
   Body,
   Controller,
-  Post,
-  Get,
-  Put,
   Delete,
-  Query,
+  Get,
   HttpCode,
-  UseGuards,
   Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
-  ApiTags,
   ApiConsumes,
   ApiOkResponse,
   ApiOperation,
+  ApiTags,
 } from '@nestjs/swagger';
+
+import { AdminAuthGuard } from '../auth/jwt.strategy';
 import { SettingService } from './setting.service';
 import { CreateSettingDto } from './dto/post.dto';
-import { GetListSettingDto } from './dto/get.dto';
 import { UpdateSettingDto } from './dto/put.dto';
-import { AdminAuthGuard } from '../auth/jwt.strategy';
+import { GetListDto } from 'src/common/dto/index.dto';
 
 @ApiTags('Setting API')
 @ApiConsumes('Setting Api')
 @Controller('setting')
 export class SettingController {
   constructor(private readonly settingService: SettingService) {}
+
   @Post('/')
   @UseGuards(AdminAuthGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Create setting new . Admin' })
-  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
+  @ApiOkResponse({ type: CreateSettingDto, status: 201 })
   async create(@Body() createSettingDto: CreateSettingDto) {
     return this.settingService.create(createSettingDto);
-  }
-
-  @Get('/')
-  @UseGuards(AdminAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'All list setting . Admin' })
-  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
-  async getAll(@Query() getListSettingDto: GetListSettingDto) {
-    return this.settingService.gettAll(getListSettingDto);
-  }
-
-  @Get('/active/')
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Get one setting . User' })
-  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
-  async getSettingActive() {
-    return this.settingService.getSettingActive();
-  }
-
-  @Get('/:id')
-  @UseGuards(AdminAuthGuard)
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Get one setting . Admin' })
-  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
-  async getOne(@Param() id: number) {
-    return this.settingService.getOne(id);
   }
 
   @Put('/:id')
   @UseGuards(AdminAuthGuard)
   @HttpCode(200)
-  @ApiOperation({ summary: 'Update one setting . Admin' })
-  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
-  async updateOne(
+  @ApiOperation({ summary: 'Update setting . Admin' })
+  @ApiOkResponse({ type: UpdateSettingDto, status: 201 })
+  async update(
     @Param('id') id: number,
     @Body() updateSettingDto: UpdateSettingDto,
   ) {
-    return this.settingService.updateOne(id, updateSettingDto);
+    return this.settingService.update(id, updateSettingDto);
+  }
+
+  @Get('/')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Get list setting . Public' })
+  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
+  async getList(@Query() getListDto: GetListDto) {
+    return this.settingService.getList(getListDto);
+  }
+
+  @Get('/:id')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Get detail setting . Public' })
+  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
+  async getDetail(@Param() id: number) {
+    return this.settingService.getDetail(id);
   }
 
   @Delete('/:id')
@@ -79,7 +71,7 @@ export class SettingController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete one setting . Admin' })
   @ApiOkResponse({ type: CreateSettingDto, status: 200 })
-  async deleteOne(@Param('id') id: number) {
-    return this.settingService.deleteOne(id);
+  async delete(@Param() id: number) {
+    return this.settingService.delete(id);
   }
 }

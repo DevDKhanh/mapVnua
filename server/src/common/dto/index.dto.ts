@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt } from 'class-validator';
 
-export class GetListSettingDto {
+export class GetListDto {
   @ApiProperty({ example: 1 })
   @IsInt()
   page: number;
