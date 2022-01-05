@@ -10,6 +10,9 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { SettingModule } from './modules/setting/setting.module';
 import { LanguageModule } from './modules/language/language.module';
+import { ClassifyModule } from './modules/classify/classify.module';
+import { AreaModule } from './modules/area/area.module';
+import { LayerModule } from './modules/layer/layer.module';
 @Module({
   imports: [
     SharedModule,
@@ -34,6 +37,9 @@ import { LanguageModule } from './modules/language/language.module';
     AuthModule,
     SettingModule,
     LanguageModule,
+    ClassifyModule,
+    AreaModule,
+    LayerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

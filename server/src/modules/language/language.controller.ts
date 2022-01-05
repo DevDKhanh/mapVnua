@@ -51,9 +51,8 @@ export class LanguageController {
   }
 
   @Get('/')
-  @UseGuards(AdminAuthGuard)
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get list language . Admin' })
+  @ApiOperation({ summary: 'Get list language . Public' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 200 })
   async getList(@Query() getListDto: GetListDto) {
     return this.languageService.getList(getListDto);
@@ -70,7 +69,7 @@ export class LanguageController {
   @Delete('/:id')
   @UseGuards(AdminAuthGuard)
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get detail language . Public' })
+  @ApiOperation({ summary: 'Get detail language . Admin' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 200 })
   async delete(@Param('id') id: string) {
     return this.languageService.delete(id);

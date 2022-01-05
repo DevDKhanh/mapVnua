@@ -51,9 +51,8 @@ export class SettingController {
   }
 
   @Get('/')
-  @UseGuards(AdminAuthGuard)
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get list setting . Admin' })
+  @ApiOperation({ summary: 'Get list setting . Public' })
   @ApiOkResponse({ type: CreateSettingDto, status: 200 })
   async getList(@Query() getListDto: GetListDto) {
     return this.settingService.getList(getListDto);
@@ -61,7 +60,7 @@ export class SettingController {
 
   @Get('/:id')
   @HttpCode(200)
-  @ApiOperation({ summary: 'Get detail setting . Admin' })
+  @ApiOperation({ summary: 'Get detail setting . Public' })
   @ApiOkResponse({ type: CreateSettingDto, status: 200 })
   async getDetail(@Param() id: number) {
     return this.settingService.getDetail(id);
