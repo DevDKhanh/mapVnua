@@ -104,7 +104,7 @@ export class ClassifyService {
     const result = await this.classifyRepository
       .createQueryBuilder('classify')
       .leftJoinAndSelect('classify.language', 'language')
-      .innerJoinAndSelect('classify.layers', 'layers')
+      .leftJoinAndSelect('classify.layers', 'layers')
       .skip((+getListDto.page - 1) * getListDto.pageSize)
       .take(+getListDto.pageSize)
       .getManyAndCount();

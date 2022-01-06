@@ -1,12 +1,10 @@
 import {
   Controller,
-  Delete,
   Get,
   HttpException,
   HttpStatus,
   Param,
   Post,
-  Query,
   Res,
   UploadedFile,
   UseGuards,

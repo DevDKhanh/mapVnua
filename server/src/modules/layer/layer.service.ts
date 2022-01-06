@@ -210,8 +210,8 @@ export class LayerService {
 
   async delete(id: string) {
     try {
-      const Layer = await this.layerRepository.findOne(id);
-      if (!Layer) {
+      const layer = await this.layerRepository.findOne(id);
+      if (!layer) {
         return new HttpException(
           await this.i18n.translate('site.IS_NOT_EXISTS', {
             args: { name: 'lớp' },
@@ -220,6 +220,7 @@ export class LayerService {
         );
       }
 
+      await this.removeFile(layer);
       await this.layerRepository.delete(id);
       return resultData(await this.i18n.translate('site.SUCCESS_DELETE'), id);
     } catch (err) {
