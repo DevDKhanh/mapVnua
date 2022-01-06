@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { domainToUnicode } from 'url';
+var fs = require('fs');
+var { promisify } = require('util');
 
 export function radomText(length: number): string {
   var result = '';
@@ -51,3 +53,10 @@ export function resultData(message: string, data: any) {
     data,
   };
 }
+
+export const deleteFile = async file => {
+  try {
+    const unlickSync = promisify(fs.unlink);
+    await unlickSync(`./uploads/${file}`);
+  } catch (err) {}
+};

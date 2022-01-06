@@ -1,6 +1,8 @@
+import { UploadModule } from './modules/upload/upload.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MulterModule } from '@nestjs/platform-express';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,7 +17,6 @@ import { AreaModule } from './modules/area/area.module';
 import { LayerModule } from './modules/layer/layer.module';
 @Module({
   imports: [
-    SharedModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -34,12 +35,14 @@ import { LayerModule } from './modules/layer/layer.module';
         retryAttempts: 5,
       }),
     }),
+    SharedModule,
     AuthModule,
     SettingModule,
     LanguageModule,
     ClassifyModule,
     AreaModule,
     LayerModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
