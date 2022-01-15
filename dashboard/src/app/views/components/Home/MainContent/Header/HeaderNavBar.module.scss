@@ -7,6 +7,17 @@
     .wrapper_header_navBarLeft {
         display    : flex;
         align-items: center;
+        flex       : 1;
+
+        i {
+            color           : #2a3f54;
+            margin-left     : 20px;
+            background-color: #fff;
+            border-radius   : 50%;
+            padding         : 10px 12px;
+            filter          : drop-shadow(2px 3px 4px #ddd);
+            cursor          : pointer;
+        }
 
         h2 {
             padding-left: 30px;

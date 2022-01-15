@@ -1,5 +1,29 @@
 .wrapper_panel_content {
 
+    &>button {
+        background-color: #fff;
+        margin-bottom   : 30px;
+        border          : none;
+
+        &>a {
+            text-decoration : none;
+            color           : #fff;
+            padding         : 10px 25px;
+            background-color: #2a3f54;
+            text-transform  : uppercase;
+            font-size       : .8rem;
+            font-weight     : bold;
+            cursor          : pointer;
+            box-shadow      : -4px -1px 5px rgb(179 179 179 / 90%),
+                3px 3px 5px rgb(0 0 0 / 50%);
+            border-radius: 20px;
+
+            &:visited {
+                color: #fff;
+            }
+        }
+    }
+
     .wrapper_panel {
         max-height      : 400px;
         overflow        : auto;
@@ -29,6 +53,10 @@
             }
 
             thead {
+                tr {
+                    text-align: center;
+                }
+
                 th {
                     color    : #fff;
                     font-size: .9rem;
@@ -37,6 +65,7 @@
 
             tbody {
                 tr {
+
                     &:hover {
                         background-color: #2a3f54a6;
                     }

@@ -1,5 +1,4 @@
 .wrapper_menu_section_children {
-
     display      : flex;
     padding      : 15px 5px;
     border-radius: 8px;
@@ -41,41 +40,19 @@
 //MenuSectionChildrenSecond
 .wrapper_children_second {
     padding-left: 20px;
+    opacity     : 0;
+    animation   : animateOpacity .3s linear 1 normal forwards !important;
+    transform   : translateY(-4px);
 
-    &>p {
-        padding   : 10px 20px;
-        font-size : .9rem;
-        color     : #ddd;
-        position  : relative;
-        cursor    : pointer;
-        transition: color .4s, font-weight .4s !important;
-
-        &:hover {
-            color      : #fff;
-            font-weight: 600;
+    @keyframes animateOpacity {
+        0% {
+            opacity  : 0;
+            transform: translateY(-4px);
         }
 
-        &::before {
-            background   : #425668;
-            bottom       : 40%;
-            content      : "";
-            height       : 8px;
-            left         : -2%;
-            margin-top   : 15px;
-            position     : absolute;
-            right        : auto;
-            width        : 8px;
-            z-index      : 1;
-            border-radius: 50%;
-        }
-
-        &::after {
-            border-left: 1px solid #425668;
-            bottom     : 0;
-            content    : "";
-            left       : 0;
-            position   : absolute;
-            top        : 0;
+        100% {
+            opacity  : 1;
+            transform: translateY(0);
         }
     }
 }

@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from 'react'
 
 // Thư mục
-import styles from "./MenuSection.module.scss";
-import MenuSectionChildrenSecond from "./MenuSectionChildrenSecond";
+import styles from './MenuSection.module.scss'
+import MenuSectionChildrenSecond from './MenuSectionChildrenSecond'
 
-function MenuSectionChildren({ icon, text, iconArrowDown, children }) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const handleChildrenSecond = () => {
-    setIsVisible(!isVisible);
-  };
-
+function MenuSectionChildren({
+  icon,
+  text,
+  iconArrowDown,
+  children,
+  dataParam,
+  setIndexFocus,
+  indexFocus,
+  index,
+}) {
   return (
     <>
       <div
-        onClick={handleChildrenSecond}
+        onClick={() => {
+          setIndexFocus(index !== indexFocus && index)
+        }}
         className={styles.wrapper_menu_section_children}
       >
         {/* tab i */}
@@ -22,12 +27,11 @@ function MenuSectionChildren({ icon, text, iconArrowDown, children }) {
         <p>{text}</p>
         {children && iconArrowDown}
       </div>
-
-      {children && isVisible && (
-        <MenuSectionChildrenSecond children={children} />
+      {index === indexFocus && children && (
+        <MenuSectionChildrenSecond dataParam={dataParam} children={children} />
       )}
     </>
-  );
+  )
 }
 
-export default MenuSectionChildren;
+export default MenuSectionChildren

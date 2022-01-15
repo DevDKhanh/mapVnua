@@ -1,9 +1,0 @@
-{
-  "SETTING_CREATE_SUCCESS": "Tạo cấu hình thành công",
-  "SETTING_DATA": "Dữ liệu cấu hình",
-  "SETTING_CREATEFAILED": "Tạo cấu hình thất bại",
-  "SETTING_NOT_FOUND": "Không tìm thấy cấu hình",
-  "SETTING_UPDATE_SUCCESS": "Cập nhật cấu hình thành công",
-  "SETTING_DELETE_SUCCESS": "Xóa cấu hình thành công",
-  "SETTTING_NOT_BLANK": "Nhập đầy đủ các mục"
-}

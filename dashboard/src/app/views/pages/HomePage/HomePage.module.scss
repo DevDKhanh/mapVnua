@@ -1,4 +1,8 @@
 .container {
     display   : flex;
     min-height: 100vh;
+
+    .wrapper_mainContent {
+        flex: 80%;
+    }
 }

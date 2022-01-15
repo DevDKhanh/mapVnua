@@ -1,172 +1,49 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from 'react'
+import {Link} from 'react-router-dom'
+import PanelHeadTable from './PanelHeadTable'
 
 // Thư mục
-import styles from "./PanelMainContent.module.scss";
+import styles from './PanelMainContent.module.scss'
+import dataHead from 'app/constants/dataHead'
 
-function PanelMainContent({ data }) {
+function PanelMainContent({nameHead, dataTable}) {
+  console.log(dataTable) //dữ liệu
+
   return (
     <div className={styles.wrapper_panel_content}>
+      <button>
+        <Link to={`/home/new_create/${nameHead}`}>Tạo mới</Link>
+      </button>
       <div className={styles.wrapper_panel}>
         <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tên khu vực</th>
-              <th>Tọa độ lat</th>
-              <th>Tọa độ lng</th>
-              <th>Zoom</th>
-              <th>Tên ngôn ngữ</th>
-              <th>Hiển thị</th>
-              <th>Hành động</th>
-            </tr>
-          </thead>
+          <PanelHeadTable dataHead={dataHead[nameHead]} />
           <tbody>
-            <tr>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>
-                <Link to="/">
-                  <i class="far fa-eye"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-edit"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-trash-alt"></i>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>
-                <Link to="/">
-                  <i class="far fa-eye"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-edit"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-trash-alt"></i>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>
-                <Link to="/">
-                  <i class="far fa-eye"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-edit"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-trash-alt"></i>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>
-                <Link to="/">
-                  <i class="far fa-eye"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-edit"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-trash-alt"></i>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>
-                <Link to="/">
-                  <i class="far fa-eye"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-edit"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-trash-alt"></i>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>
-                <Link to="/">
-                  <i class="far fa-eye"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-edit"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-trash-alt"></i>
-                </Link>
-              </td>
-            </tr>
-            <tr>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>Dữ liệu</td>
-              <td>
-                <Link to="/">
-                  <i class="far fa-eye"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-edit"></i>
-                </Link>
-                <Link to="/">
-                  <i class="far fa-trash-alt"></i>
-                </Link>
-              </td>
-            </tr>
+            {dataTable.map((item, index) => (
+              <tr key={index}>
+                <td>{index}</td>
+                {Object.values(item).map((itemValue, index) => (
+                  <React.Fragment key={index}>
+                    (<td>{itemValue}</td>
+                  </React.Fragment>
+                ))}
+                <td>
+                  <Link to={`/home/see_detail/${nameHead}`}>
+                    <i className='far fa-eye'></i>
+                  </Link>
+                  <Link to={`/home/edit/${nameHead}`}>
+                    <i className='far fa-edit'></i>
+                  </Link>
+                  <Link to='/'>
+                    <i className='far fa-trash-alt'></i>
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
     </div>
-  );
+  )
 }
 
-export default PanelMainContent;
+export default PanelMainContent

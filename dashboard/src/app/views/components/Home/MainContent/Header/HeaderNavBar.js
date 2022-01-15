@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 // Thư viện
 import styles from "./HeaderNavBar.module.scss";
@@ -7,16 +8,23 @@ import styles from "./HeaderNavBar.module.scss";
 import Avatar from "../../../Avatar/Avatar";
 import Logout from "../Logout/Logout";
 
-function HeaderNavBar({ text, isVisible, setIsVisible }) {
+function HeaderNavBar({ icon, text, isVisible, setIsVisible }) {
+  //navigate
+  const navigate = useNavigate();
+
   return (
-    <div
-      className={styles.wrapper_header_navBar}
-      onClick={() => setIsVisible(!isVisible)}
-    >
-      <div className={styles.wrapper_header_navBarLeft}>
-        <h2>{text}</h2>
+    <div className={styles.wrapper_header_navBar}>
+      <div
+        className={styles.wrapper_header_navBarLeft}
+        onClick={() => setIsVisible(false)}
+      >
+        {icon && <div onClick={() => navigate(-1)}>{icon.arrowLeft}</div>}
+        {text && <h2>{text}</h2>}
       </div>
-      <div className={styles.wrapper_header_navBarRight}>
+      <div
+        onClick={() => setIsVisible(!isVisible)}
+        className={styles.wrapper_header_navBarRight}
+      >
         <Avatar size={40} />
         <p>Thanh</p>
         <i className="fas fa-caret-down"></i>

@@ -1,0 +1,43 @@
+// Input text
+.wrapperInputText {
+    width  : 90%;
+    margin : 20px auto;
+    display: block;
+
+    &>label {
+        color  : #2a3f54;
+        display: block;
+    }
+
+    .wrapper_input_picker {
+        display    : flex;
+        align-items: center;
+
+        &>span {
+            flex: 10%;
+        }
+    }
+}
+
+.wrapper_input_color {
+    margin: 0 40px;
+
+    &>label {
+        color  : #2a3f54;
+        display: block;
+    }
+
+    .wrapper_input_picker {
+        display    : flex;
+        align-items: center;
+
+        &>span {
+            flex  : 10%;
+            height: 37px;
+        }
+
+        &>div:last-child {
+            margin: 0;
+        }
+    }
+}

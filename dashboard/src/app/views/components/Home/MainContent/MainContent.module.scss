@@ -1,23 +1,5 @@
 .wrapper_mainContent {
-    flex: 80%;
-
-    .wapper_panelTitle {
-        padding: 30px;
-
-        &>button {
-            background-color: #2a3f54;
-            padding         : 10px 25px;
-            color           : #fff;
-            text-transform  : uppercase;
-            font-size       : .8rem;
-            font-weight     : bold;
-            border          : none;
-            border-radius   : 20px;
-            margin-bottom   : 30px;
-            cursor          : pointer;
-
-            box-shadow: -4px -1px 5px rgb(179 179 179 / 90%),
-                3px 3px 5px rgb(0 0 0 / 50%)
-        }
-    }
+    flex  : 80%;
+    margin: 40px 20px;
+    height: 80%;
 }

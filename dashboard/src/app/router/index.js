@@ -1,17 +1,36 @@
-import { lazy } from "react";
-import { Routes, Route } from "react-router-dom";
+import {lazy} from 'react'
+import {Routes, Route} from 'react-router-dom'
 
-const LoginPage = lazy(() => import("../views/pages/LoginPage"));
-const HomePage = lazy(() => import("../views/pages/HomePage"));
+// path of folder
+import ProtectedRouter from './ProtectedRouter'
+const LoginPage = lazy(() => import('../views/pages/LoginPage'))
+const HomePage = lazy(() => import('../views/pages/HomePage'))
+const NewCreatePage = lazy(() =>
+  import('../views/pages/ActionFormPage/NewCreate/NewCreatePage')
+)
+const SeeDetailPage = lazy(() =>
+  import('../views/pages/ActionFormPage/SeeDetail/SeeDetailPage')
+)
+const EditPage = lazy(() =>
+  import('../views/pages/ActionFormPage/Edit/EditPage')
+)
+const HomeContent = lazy(() => import('../views/pages/HomePage/HomePage'))
 
 function Routers() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="*" element={<h2>Trang không tồn tại</h2>} />
+      <Route path='/' element={<LoginPage />} />
+      <Route element={<ProtectedRouter />}>
+        <Route path='/home' element={<HomePage />}>
+          <Route path='/home' element={<HomeContent />} />
+          <Route path='/home/new_create/:name' element={<NewCreatePage />} />
+          <Route path='/home/see_detail/:name' element={<SeeDetailPage />} />
+          <Route path='/home/edit/:name' element={<EditPage />} />
+        </Route>
+      </Route>
+      <Route path='*' element={<h2>Trang không tồn tại</h2>} />
     </Routes>
-  );
+  )
 }
 
-export default Routers;
+export default Routers
