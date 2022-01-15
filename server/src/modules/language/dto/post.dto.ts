@@ -10,7 +10,7 @@ export class CreateLanguageDto {
   @IsString()
   nameLanguage: string;
 
-  @ApiProperty({ example: 'image.jpg' })
+  @ApiProperty({ example: 'abc.jpg' })
   @IsString()
   icon: string;
 }

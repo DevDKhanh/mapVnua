@@ -10,7 +10,11 @@ import { ClassifyEntity } from './../classify/entities/classify.entity';
 import { LayerEntity } from './entities/layer.entity';
 import { LanguageEntity } from '../language/entities/language.entity';
 import { AreaEntity } from './../area/entities/area.entity';
-import { createPagination, resultData } from '../../common/text.helper';
+import {
+  createPagination,
+  deleteFile,
+  resultData,
+} from '../../common/text.helper';
 
 @Injectable()
 export class LayerService {
@@ -30,6 +34,13 @@ export class LayerService {
     private readonly i18n: I18nRequestScopeService,
   ) {}
 
+  /********** Xóa file trong thư mục update **********/
+  private async removeFile(data: any) {
+    const { path, icon } = data;
+    path && (await deleteFile(path));
+    icon && (await deleteFile(icon));
+  }
+
   async create(createLayerDto: CreateLayerDto) {
     const createNew = await this.layerRepository.create({
       ...createLayerDto,
@@ -45,6 +56,7 @@ export class LayerService {
     const checkLayerId = await this.layerRepository.findOne(createLayerDto.id);
 
     if (checkLayerId) {
+      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_EXISTS', {
           args: { name: 'Id lớp' },
@@ -53,7 +65,9 @@ export class LayerService {
       );
     }
 
+    /********** Kiểm tra dữ liệu ngôn ngữ có tồn tại không **********/
     if (!checkLanguage) {
+      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id ngôn ngữ' },
@@ -61,7 +75,9 @@ export class LayerService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    /********** Kiểm tra dữ liệu phân loại có tồn tại không **********/
     if (!checkClassify) {
+      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id phân loại' },
@@ -69,7 +85,9 @@ export class LayerService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    /********** Kiểm tra dữ liệu khu vực có tồn tại không **********/
     if (!checkArea) {
+      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id lớp' },
@@ -96,6 +114,7 @@ export class LayerService {
     );
 
     if (!checkLayerId) {
+      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id lớp' },
@@ -104,6 +123,7 @@ export class LayerService {
       );
     }
     if (!checkLanguage) {
+      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id ngôn ngữ' },
@@ -112,6 +132,7 @@ export class LayerService {
       );
     }
     if (!checkClassify) {
+      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id phân loại' },
@@ -120,6 +141,7 @@ export class LayerService {
       );
     }
     if (!checkArea) {
+      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id lớp' },
@@ -128,13 +150,17 @@ export class LayerService {
       );
     }
 
+    await this.removeFile(checkLayerId);
     await this.layerRepository.update({ id }, { ...updateLayerDto });
-    const Layer = await this.layerRepository.findOne(id);
-    const language = await this.languageRepository.findOne(Layer.languageId);
-    const area = await this.areaRepository.findOne(Layer.areaId);
-    const classify = await this.classRepository.findOne(Layer.classifyId);
+
+    /********** Trả về thông tin chi tiết sau khi cập nhật của lớp**********/
+    const layer = await this.layerRepository.findOne(id);
+    const language = await this.languageRepository.findOne(layer.languageId);
+    const area = await this.areaRepository.findOne(layer.areaId);
+    const classify = await this.classRepository.findOne(layer.classifyId);
+
     return resultData(await this.i18n.translate('site.SUCCESS_UPDATE'), {
-      ...Layer,
+      ...layer,
       language,
       area,
       classify,
@@ -184,8 +210,8 @@ export class LayerService {
 
   async delete(id: string) {
     try {
-      const Layer = await this.layerRepository.findOne(id);
-      if (!Layer) {
+      const layer = await this.layerRepository.findOne(id);
+      if (!layer) {
         return new HttpException(
           await this.i18n.translate('site.IS_NOT_EXISTS', {
             args: { name: 'lớp' },
@@ -194,6 +220,7 @@ export class LayerService {
         );
       }
 
+      await this.removeFile(layer);
       await this.layerRepository.delete(id);
       return resultData(await this.i18n.translate('site.SUCCESS_DELETE'), id);
     } catch (err) {

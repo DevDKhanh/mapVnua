@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
 import { I18nRequestScopeService } from 'nestjs-i18n';
 import { Repository } from 'typeorm';
 
@@ -8,7 +8,11 @@ import { CreateLanguageDto } from './dto/post.dto';
 import { UpdateLanguageDto } from './dto/put.dto';
 import { GetListDto } from '../../common/dto/index.dto';
 import { LanguageEntity } from './entities/language.entity';
-import { createPagination, resultData } from '../../common/text.helper';
+import {
+  createPagination,
+  deleteFile,
+  resultData,
+} from '../../common/text.helper';
 
 @Injectable()
 export class LanguageService {
@@ -18,7 +22,7 @@ export class LanguageService {
     private readonly i18n: I18nRequestScopeService,
   ) {}
 
-  async create(createLanguageDto: CreateLanguageDto) {
+  async create(createLanguageDto: CreateLanguageDto, file: any, header: any) {
     const idLength: number = 2;
     const languageNew = await this.languageRepository.create({
       ...createLanguageDto,
@@ -30,6 +34,7 @@ export class LanguageService {
     });
 
     if (checkId) {
+      await deleteFile(createLanguageDto.icon);
       throw new HttpException(
         await this.i18n.translate('site.IS_EXISTS', {
           args: { name: 'id' },
@@ -39,6 +44,7 @@ export class LanguageService {
     }
 
     if (createLanguageDto.id.length > idLength) {
+      await deleteFile(createLanguageDto.icon);
       throw new HttpException(
         await this.i18n.translate('site.LENGHT_IS_MAX', {
           args: { name: 'id', max: idLength },
@@ -62,6 +68,7 @@ export class LanguageService {
     });
 
     if (!checkId) {
+      await deleteFile(updateLanguageDto.icon);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Ngôn ngữ' },
@@ -70,6 +77,7 @@ export class LanguageService {
       );
     }
 
+    await deleteFile(checkId.icon);
     await this.languageRepository.update({ id }, { ...updateLanguageDto });
     const data = await this.languageRepository.findOne(id);
     return resultData(await this.i18n.translate('site.SUCCESS_UPDATE'), data);
@@ -119,6 +127,7 @@ export class LanguageService {
         );
       }
 
+      await deleteFile(language.icon);
       await this.languageRepository.delete(id);
       return resultData(await this.i18n.translate('site.SUCCESS_DELETE'), id);
     } catch (err) {
