@@ -1,20 +1,20 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React from 'react'
+import {useDispatch} from 'react-redux'
 
 // path of folder
-import styles from "./MenuSection.module.scss";
-import { reqDisplay } from "../../../../../redux/action/action.componentDisplay";
+import styles from './MenuSection.module.scss'
+import {reqDisplay} from '../../../../../redux/action/action.componentDisplay'
 
-const HomeChildren = ({ icon, text }) => {
-  const dispatch = useDispatch();
+const HomeChildren = ({icon, text}) => {
+  const dispatch = useDispatch()
 
   const handleClickHome = () => {
     dispatch(
       reqDisplay({
-        text: text,
+        text: 'home',
       })
-    );
-  };
+    )
+  }
 
   return (
     <div
@@ -25,7 +25,7 @@ const HomeChildren = ({ icon, text }) => {
       {icon}
       <p>{text}</p>
     </div>
-  );
-};
+  )
+}
 
-export default HomeChildren;
+export default HomeChildren

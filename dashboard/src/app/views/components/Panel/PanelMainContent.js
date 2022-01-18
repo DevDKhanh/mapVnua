@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
-import PanelHeadTable from './PanelHeadTable'
 
 // Thư mục
 import styles from './PanelMainContent.module.scss'
-import dataHead from 'app/constants/dataHead'
+import PanelHeadTable from './PanelHeadTable'
+import dataHead from 'app/config/dataHead'
 
 function PanelMainContent({nameHead, dataTable}) {
-  console.log(dataTable) //dữ liệu
-
+  // console.log(dataTable[nameHead]) //dữ liệu
   return (
     <div className={styles.wrapper_panel_content}>
       <button>
@@ -16,21 +15,23 @@ function PanelMainContent({nameHead, dataTable}) {
       </button>
       <div className={styles.wrapper_panel}>
         <table>
-          <PanelHeadTable dataHead={dataHead[nameHead]} />
+          {nameHead !== 'home' && (
+            <PanelHeadTable dataHead={dataHead[nameHead]} />
+          )}
           <tbody>
-            {dataTable.map((item, index) => (
+            {dataTable[nameHead].map((item, index) => (
               <tr key={index}>
                 <td>{index}</td>
                 {Object.values(item).map((itemValue, index) => (
                   <React.Fragment key={index}>
-                    (<td>{itemValue}</td>
+                    <td>{itemValue}</td>
                   </React.Fragment>
                 ))}
                 <td>
-                  <Link to={`/home/see_detail/${nameHead}`}>
+                  <Link to={`/home/see_detail/${nameHead}/${item['id']}`}>
                     <i className='far fa-eye'></i>
                   </Link>
-                  <Link to={`/home/edit/${nameHead}`}>
+                  <Link to={`/home/edit/${nameHead}/${item['id']}`}>
                     <i className='far fa-edit'></i>
                   </Link>
                   <Link to='/'>

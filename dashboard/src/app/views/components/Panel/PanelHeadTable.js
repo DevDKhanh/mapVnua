@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-function PanelHeadTable({ dataHead }) {
+function PanelHeadTable({dataHead}) {
   return (
     <thead>
       <tr>
@@ -10,7 +10,7 @@ function PanelHeadTable({ dataHead }) {
         <th>Hành động</th>
       </tr>
     </thead>
-  );
+  )
 }
 
-export default PanelHeadTable;
+export default PanelHeadTable

@@ -1,35 +1,44 @@
-import React from "react";
-import clsx from "clsx";
+import React from 'react'
+import clsx from 'clsx'
 
 // Thư mục
-import styles from "./Input.module.scss";
+import styles from './Input.module.scss'
 
-function InputFile({ id, textLabel, value, onChange, checkInput }) {
+function InputFile({
+  id,
+  textLabel,
+  name,
+  inputForm,
+  setInputForm,
+  onChange,
+  checkInput,
+}) {
   const handleOnchange = (e) => {
-    e.target.files[0].name &&
-      onChange({ ...value, [id]: e.target.files[0].name });
-  };
+    let {name} = e.target
+    setInputForm({...inputForm, [name]: e.target.files[0].name.trim()})
+  }
 
   return (
-    <div className={clsx("form-group", styles.wrapperInputText)}>
+    <div className={clsx('form-group', styles.wrapperInputText)}>
       <label htmlFor={id}>{textLabel}:</label>
-      <div className={clsx("custom-file")}>
+      <div className={clsx('custom-file')}>
         <input
-          type="file"
+          name={name}
+          type='file'
           className={clsx(
-            "custom-file-input",
-            !value.id && checkInput && "is-invalid"
+            'custom-file-input',
+            !inputForm[name] && checkInput && 'is-invalid'
           )}
           id={id}
-          accept="image/png, image/jpeg"
+          accept='image/png, image/jpeg'
           onChange={handleOnchange}
         />
-        <label className="custom-file-label" htmlFor={id}>
-          {value[id]}
+        <label className='custom-file-label' htmlFor={id}>
+          {inputForm[name]}
         </label>
       </div>
     </div>
-  );
+  )
 }
 
-export default InputFile;
+export default InputFile

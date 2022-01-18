@@ -1,0 +1,10 @@
+{
+  "SUCCESS_SIGNUP": "Tạo tài khoản thành công.",
+  "USER_IS_EXIST": "Tên tài khoản này đã tồn tại.",
+  "USER_IS_NOT_EXIST": "Tên tài khoản chưa tồn tại.",
+  "EMAIL_IS_EXIST": "Email này đã tồn tại.",
+  "EMAIL_IS_NOT_EXIST": "Email chưa tồn tại.",
+  "PASSWORD_IS_INCORRECT": "Mật khẩu chưa chính xác.",
+  "USER_NOT_FOUND": "Người dùng không tồn tại.",
+  "USER_NOT_ACTIVED": "Người dùng chưa kích hoạt. Vui lòng kiểm tra mail và kích hoạt tài khoản"
+}

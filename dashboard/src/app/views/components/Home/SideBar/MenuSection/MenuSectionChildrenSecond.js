@@ -1,16 +1,13 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import styled from 'styled-components'
 
 // Thư mục
 import styles from './MenuSection.module.scss'
-import tableDataAPI from 'app/api/tableData'
-import dataFormTable from 'app/config/dataForm'
-import {reqDisplay} from 'app/redux/action/action.componentDisplay'
-import {Link} from 'react-router-dom'
+import getTableList from 'app/common/covertData'
 
 //styled
-const LinkElement = styled(Link)`
+const PElement = styled.p`
   display: block;
   padding: 10px 20px;
   font-size: 0.9rem;
@@ -23,8 +20,9 @@ const LinkElement = styled(Link)`
     color: #fff;
     font-weight: 600;
   }
-  ${({isForcus}) =>
-    isForcus &&
+
+  ${(props) =>
+    props.clickItem &&
     `color: #fff;
     font-weight: 600;
     background-color: rgba(0, 0, 0, 0.342);
@@ -62,77 +60,48 @@ function MenuSectionChildrenSecond({children, dataParam}) {
   const handleComponent = (item, index) => {
     switch (dataParam[index]) {
       case 'area':
-        getTableList('area', item)
+        getTableList('area', item, dispatch)
         break
       case 'classify':
-        getTableList('classify', item)
+        getTableList('classify', item, dispatch)
         break
       case 'layer':
-        getTableList('layer', item)
+        getTableList('layer', item, dispatch)
         break
       case 'document':
-        getTableList('document', item)
+        getTableList('document', item, dispatch)
         break
       case 'setting':
-        getTableList('setting', item)
+        getTableList('setting', item, dispatch)
         break
       case 'interface':
-        getTableList('interface', item)
+        getTableList('interface', item, dispatch)
         break
       case 'language':
-        getTableList('language', item)
+        getTableList('language', item, dispatch)
         break
       case 'account':
-        getTableList('account', item)
+        getTableList('account', item, dispatch)
         break
-    }
-  }
-
-  const getTableList = async (paramName, item) => {
-    let objectData = {}
-    let arrData = []
-    try {
-      const tableList = await tableDataAPI.getList(paramName, 1, 100)
-      const records = tableList[0]['records']
-      records.map((item) => {
-        Object.keys(dataFormTable[paramName]).map((keys) => {
-          objectData[keys] =
-            typeof item[keys] === 'object'
-              ? item[keys]['name' + keys[0].toUpperCase() + keys.slice(1)]
-              : item[keys]
-        })
-        arrData.push(objectData)
-        objectData = {}
-      })
-      // console.log(records);
-
-      dispatch(
-        reqDisplay({
-          text: item,
-          data: arrData,
-          theadTable: paramName,
-        })
-      )
-    } catch (e) {
-      console.error(e)
+      default:
+        return
     }
   }
 
   return (
     <div className={styles.wrapper_children_second}>
       {children.map((item, index) => (
-        <LinkElement
-          to='/home'
+        <PElement
           tabIndex='0'
           onClick={() => {
             setIndexFocus(index)
             handleComponent(item, index)
           }}
           key={index}
-          isForcus={indexFocus === index && true}
+          clickItem={indexFocus === index && true}
         >
           {item}
-        </LinkElement>
+        </PElement>
       ))}
     </div>
   )

@@ -24,8 +24,11 @@ function Routers() {
         <Route path='/home' element={<HomePage />}>
           <Route path='/home' element={<HomeContent />} />
           <Route path='/home/new_create/:name' element={<NewCreatePage />} />
-          <Route path='/home/see_detail/:name' element={<SeeDetailPage />} />
-          <Route path='/home/edit/:name' element={<EditPage />} />
+          <Route
+            path='/home/see_detail/:name/:id'
+            element={<SeeDetailPage />}
+          />
+          <Route path='/home/edit/:name/:id' element={<EditPage />} />
         </Route>
       </Route>
       <Route path='*' element={<h2>Trang không tồn tại</h2>} />
