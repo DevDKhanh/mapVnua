@@ -1,72 +1,113 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useEffect, useState} from 'react'
+import {Link} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 
 //Thư mục
-import styles from "./form.module.scss";
-import InputText from "../FormAction/InputForm/InputText";
-import InputFile from "../FormAction/InputForm/InputFile";
+import styles from './form.module.scss'
+import InputText from '../FormAction/InputForm/InputText'
+import InputFile from '../FormAction/InputForm/InputFile'
+import tableDataAPI from 'app/api/tableData'
+import {PElement} from './element'
+import {useSelector} from 'react-redux'
 
-function LanguageForm({ text, paramName, dataItem }) {
+// call api
+const callAPI = async (data, paramName) => {
+  try {
+    return await tableDataAPI['create'](JSON.stringify(data), null, paramName)
+  } catch (error) {
+    return error.message
+  }
+}
+
+function LanguageForm({text, paramName, isEdit}) {
   // catch the first time button click event
-  const [checkInput, setCheckInput] = useState(false);
+  const [checkInput, setCheckInput] = useState(false)
+  const [isSuccessful, setIsSuccessful] = useState()
 
   //state stores all input's data
-  const [input1, setInput1] = useState("");
-  const [input2, setInput2] = useState("");
-  const [input3, setInput3] = useState("");
+  const [inputForm, setInputForm] = useState({})
 
-  //array the stores all the state of the input
-  let stateArray = [input1, input2, input3];
+  const {id} = useParams()
+
+  const data = useSelector((state) => state['displayMainContent']['data'])
+
+  useEffect(() => {
+    let objectEdit
+
+    if (isEdit) {
+      objectEdit = data[paramName].find((item) => item['id'] === id)
+      setInputForm(objectEdit)
+    }
+  }, [])
 
   //handle click of button to create new
-  const handleClickCreateNew = () => {
-    setCheckInput(true);
-    console.log(stateArray);
-  };
+  const handleClickCreateNew = async () => {
+    setCheckInput(true)
+    const resAPI = await callAPI(inputForm, paramName)
+    if (typeof resAPI === 'string') {
+      setIsSuccessful(0)
+    } else {
+      setIsSuccessful(1)
+    }
+  }
 
   return (
     <div className={styles.wrapperCreateNew}>
       <div className={styles.wrapper_main_form}>
         <h2>{text}</h2>
+
         <div className={styles.wrapperForm}>
           <InputText
-            id="input1"
-            textLabel="ID ngôn ngữ"
-            value={input1}
-            onChange={setInput1}
+            id='1'
+            name='id'
+            textLabel='ID ngôn ngữ'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputText
-            id="input2"
-            textLabel="Tên ngôn ngữ"
-            value={input2}
-            onChange={setInput2}
+            id='2'
+            name='nameLanguage'
+            textLabel='Tên ngôn ngữ'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputFile
-            id="input3"
-            textLabel="Icon"
-            value={input3}
-            onChange={setInput3}
+            id='3'
+            name='icon'
+            textLabel='Icon'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <div className={styles.wrapper_button}>
+            {isSuccessful === 1 && (
+              <PElement color='green'>
+                {`${!isEdit ? 'Tạo mới' : 'Chỉnh sửa'} thành công`}
+              </PElement>
+            )}
+            {isSuccessful === 0 && (
+              <PElement color='red'>
+                {`${!isEdit ? 'Tạo mới' : 'Chỉnh sửa'} thất bại`}
+              </PElement>
+            )}
             <button onClick={handleClickCreateNew}>
               <Link
                 to={
-                  stateArray.every((state) => state !== "")
-                    ? `/`
-                    : `/new_create/${paramName}`
+                  Object.keys(inputForm).length === 3 && isSuccessful === 1
+                    ? '/'
+                    : ''
                 }
               >
-                Tạo mới
+                {!isEdit ? 'Tạo mới' : 'Chỉnh sửa'}
               </Link>
             </button>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default LanguageForm;
+export default LanguageForm

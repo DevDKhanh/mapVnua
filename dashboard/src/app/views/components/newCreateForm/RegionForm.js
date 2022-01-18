@@ -1,86 +1,131 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState, useEffect} from 'react'
+import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 
 //Thư mục
-import styles from "./form.module.scss";
-import InputText from "../FormAction/InputForm/InputText";
-import InputNumber from "../FormAction/InputForm/InputNumber";
-import InputDeps from "../FormAction/InputForm/InputDeps";
+import styles from './form.module.scss'
+import InputText from '../FormAction/InputForm/InputText'
+import InputNumber from '../FormAction/InputForm/InputNumber'
+import InputDeps from '../FormAction/InputForm/InputDeps'
+import tableDataAPI from 'app/api/tableData'
+import {PElement} from './element'
 
-function RegionForm({ text, paramName, dataItem }) {
+// call api
+const callAPI = async (data, paramName) => {
+  try {
+    return await tableDataAPI['create'](JSON.stringify(data), null, paramName)
+  } catch (error) {
+    return error.message
+  }
+}
+
+function RegionForm({text, paramName, id}) {
   // catch the first time button click event
-  const [checkInput, setCheckInput] = useState(false);
+  const [checkInput, setCheckInput] = useState(false)
+  const [isSuccessful, setIsSuccessful] = useState()
 
-  let arrayDeps = ["Tiếng Việt", "Tiếng Anh", "Tiếng Trung", "Tiếng Pháp"];
+  // useEffect(() => {
+  //   id && console.log(data[paramName].find((item) => item['id'] === id))
+  // }, [id])
+
+  // lấy dữ liệu redux
+  const data = useSelector((state) => state['displayMainContent']['data'])
+  let arrayDeps = data['language'].map((item) => item['id'])
+  let arrayDeps1 = ['Có', 'Không']
+
   //state stores all input's data
-  const [input1, setInput1] = useState("");
-  const [input2, setInput2] = useState("");
-  const [input3, setInput3] = useState("");
-  const [input4, setInput4] = useState("");
-  const [input5, setInput5] = useState("");
-  const [input6, setInput6] = useState(arrayDeps[0]);
+  const [inputForm, setInputForm] = useState({
+    active: 1,
+    languageId: arrayDeps[0],
+  })
 
-  //array the stores all the state of the input
-  let stateArray = [input1, input2, input3, input4, input5, input6];
-
-  //handle click of button to create new
-  const handleClickCreateNew = () => {
-    setCheckInput(true);
-  };
+  const handleClickCreateNew = async () => {
+    setCheckInput(true)
+    const resAPI = await callAPI(inputForm, paramName)
+    if (typeof resAPI === 'string') {
+      setIsSuccessful(0)
+    } else {
+      setIsSuccessful(1)
+    }
+  }
   return (
     <div className={styles.wrapperCreateNew}>
       <div className={styles.wrapper_main_form}>
         <h2>{text}</h2>
         <div className={styles.wrapperForm}>
           <InputText
-            id="input1"
-            textLabel="ID khu vực"
-            value={input1}
-            onChange={setInput1}
+            id='1'
+            textLabel='ID khu vực'
+            name='id'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputText
-            id="input2"
-            textLabel="Tên khu vực"
-            value={input2}
-            onChange={setInput2}
+            id='2'
+            textLabel='Tên khu vực'
+            name='nameArea'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputText
-            id="input3"
-            textLabel="Tọa độ Lat"
-            value={input3}
-            onChange={setInput3}
+            id='3'
+            textLabel='Tọa độ Lat'
+            name='lat'
+            isNumber={true}
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputText
-            id="input4"
-            textLabel="Tọa độ Lng"
-            value={input4}
-            onChange={setInput4}
+            id='4'
+            textLabel='Tọa độ Lng'
+            name='lng'
+            isNumber={true}
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputNumber
-            id="input5"
-            textLabel="Zoom"
-            value={input5}
-            onChange={setInput5}
+            id='5'
+            textLabel='Zoom'
+            name='zoom'
+            isNumber={true}
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputDeps
-            id="input6"
-            textLabel="Tên ngôn ngữ"
+            id='6'
+            textLabel='ID ngôn ngữ'
             arrayDeps={arrayDeps}
-            value={input6}
-            onChange={setInput6}
+            name='languageId'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
+          />
+          <InputDeps
+            id='7'
+            textLabel='Hiển thị'
+            arrayDeps={arrayDeps1}
+            name='active'
+            isNumber={true}
+            inputForm={inputForm}
+            setInputForm={setInputForm}
           />
           <div className={styles.wrapper_button}>
+            {isSuccessful === 1 && (
+              <PElement color='green'>Tạo mới thành công</PElement>
+            )}
+            {isSuccessful === 0 && (
+              <PElement color='red'>Tạo mới thất bại</PElement>
+            )}
             <button onClick={handleClickCreateNew}>
               <Link
                 to={
-                  stateArray.every((state) => state !== "")
-                    ? `/`
-                    : `/new_create/${paramName}`
+                  Object.keys(inputForm).length === 7 && isSuccessful === 1
+                    ? '/'
+                    : ''
                 }
               >
                 Tạo mới
@@ -90,7 +135,7 @@ function RegionForm({ text, paramName, dataItem }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default RegionForm;
+export default RegionForm

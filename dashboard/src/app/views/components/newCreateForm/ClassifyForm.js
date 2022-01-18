@@ -1,32 +1,51 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from 'react'
+import {Link} from 'react-router-dom'
 
 //Thư mục
-import styles from "./form.module.scss";
-import InputText from "../FormAction/InputForm/InputText";
-import InputDeps from "../FormAction/InputForm/InputDeps";
+import styles from './form.module.scss'
+import InputText from '../FormAction/InputForm/InputText'
+import InputDeps from '../FormAction/InputForm/InputDeps'
+import tableDataAPI from 'app/api/tableData'
+import {useSelector} from 'react-redux'
+import {PElement} from './element'
 
-function ClassifyForm({ text, paramName, dataItem }) {
+// call api
+const callAPI = async (data, paramName) => {
+  try {
+    return await tableDataAPI['create'](JSON.stringify(data), null, paramName)
+  } catch (error) {
+    return error.message
+  }
+}
+
+function ClassifyForm({text, paramName, dataItem}) {
   // catch the first time button click event
-  const [checkInput, setCheckInput] = useState(false);
+  const [checkInput, setCheckInput] = useState(false)
+  const [isSuccessful, setIsSuccessful] = useState()
 
-  let arrayDeps = ["Tiếng Việt", "Tiếng Anh", "Tiếng Trung", "Tiếng Pháp"];
-  let arrayDeps1 = ["Có", "Không"];
+  // lấy dữ liệu redux
+  const data = useSelector((state) => state['displayMainContent']['data'])
+  let arrayDeps = data['language'].map((item) => item['id'])
+  let arrayDeps1 = ['Có', 'Không']
 
   //state stores all input's data
-  const [input1, setInput1] = useState("");
-  const [input2, setInput2] = useState("");
-  const [input3, setInput3] = useState(arrayDeps[0]);
-  const [input4, setInput4] = useState(arrayDeps1[0]);
+  const [inputForm, setInputForm] = useState({
+    active: 1,
+    languageId: arrayDeps[0],
+    no: 0,
+  })
 
-  //array the stores all the state of the input
-  let stateArray = [input1, input2, input3, input4];
+  console.log(inputForm)
 
-  //handle click of button to create new
-  const handleClickCreateNew = () => {
-    setCheckInput(true);
-    console.log(stateArray);
-  };
+  const handleClickCreateNew = async () => {
+    setCheckInput(true)
+    const resAPI = await callAPI(inputForm, paramName)
+    if (typeof resAPI === 'string') {
+      setIsSuccessful(0)
+    } else {
+      setIsSuccessful(1)
+    }
+  }
 
   return (
     <div className={styles.wrapperCreateNew}>
@@ -34,40 +53,50 @@ function ClassifyForm({ text, paramName, dataItem }) {
         <h2>{text}</h2>
         <div className={styles.wrapperForm}>
           <InputText
-            id="input1"
-            textLabel="ID phân loại"
-            value={input1}
-            onChange={setInput1}
+            id='1'
+            textLabel='ID phân loại'
+            name='id'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputText
-            id="input2"
-            textLabel="Tên phân loại"
-            value={input2}
-            onChange={setInput2}
+            id='2'
+            textLabel='Tên phân loại'
+            name='nameClassify'
+            inputForm={inputForm}
+            setInputForm={setInputForm}
             checkInput={checkInput}
           />
           <InputDeps
-            id="input3"
-            textLabel="Tên ngôn ngữ"
+            id='3'
+            textLabel='Tên ngôn ngữ'
+            name='languageId'
             arrayDeps={arrayDeps}
-            value={input3}
-            onChange={setInput3}
+            inputForm={inputForm}
+            setInputForm={setInputForm}
           />
           <InputDeps
-            id="input4"
-            textLabel="Hiển thị"
+            id='4'
+            textLabel='Hiển thị'
+            name='active'
             arrayDeps={arrayDeps1}
-            value={input4}
-            onChange={setInput4}
+            inputForm={inputForm}
+            setInputForm={setInputForm}
           />
           <div className={styles.wrapper_button}>
+            {isSuccessful === 1 && (
+              <PElement color='green'>Tạo mới thành công</PElement>
+            )}
+            {isSuccessful === 0 && (
+              <PElement color='red'>Tạo mới thất bại</PElement>
+            )}
             <button onClick={handleClickCreateNew}>
               <Link
                 to={
-                  stateArray.every((state) => state !== "")
-                    ? `/`
-                    : `/new_create/${paramName}`
+                  Object.keys(inputForm).length === 7 && isSuccessful === 1
+                    ? '/'
+                    : ''
                 }
               >
                 Tạo mới
@@ -77,7 +106,7 @@ function ClassifyForm({ text, paramName, dataItem }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default ClassifyForm;
+export default ClassifyForm

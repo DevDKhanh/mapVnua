@@ -1,0 +1,12 @@
+{
+  "SUCCESS_CREATE": "Tạo mới thành công",
+  "FAILED_CREATE": "Tạo mới thất bại",
+  "SUCCESS_UPDATE": "Cập nhật dữ liệu thành công",
+  "FAILED_UPDATE": "Cập nhật dữ liệu thất bại",
+  "FAILED_DELETE": "Xóa dữ liệu thất bại",
+  "SUCCESS_DELETE": "Xóa dữ liệu thành công",
+  "LENGHT_IS_MAX": "Độ dài {name} tối đa {max} kí tự",
+  "DETAIL_DATA": "Dữ liệu chi tiết {name}",
+  "IS_EXISTS": "{name} Đã tồn tại",
+  "IS_NOT_EXISTS": "{name} không tồn tại"
+}

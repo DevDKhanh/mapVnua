@@ -1,4 +1,5 @@
 import React from 'react'
+import {useParams} from 'react-router-dom'
 
 //path of folder
 import styles from './EditForm.module.scss'
@@ -10,60 +11,83 @@ import FormInterface from '../newCreateForm/InterfaceForm'
 import FormAccount from '../newCreateForm/AccountForm'
 import ClassForm from '../newCreateForm/ClassForm'
 
-function EditForm({paramName, setIsVisible, dataItem}) {
+function EditForm({setIsVisible, dataItem}) {
+  const {name, id} = useParams()
+
   return (
     <div
       className={styles.wrapper_main_form}
       onClick={() => setIsVisible(false)}
     >
       {/* content of main */}
-      {paramName === 'language' && (
+      {name === 'language' && (
         <FormLanguage
+          id={id}
+          paramName={name}
           text='Chỉnh sửa'
           dataItem={dataItem}
           setIsVisible={setIsVisible}
+          isEdit={true}
         />
       )}
-      {paramName === 'region' && (
+      {name === 'area' && (
         <FormRegion
+          id={id}
+          paramName={name}
           text='Chỉnh sửa'
           dataItem={dataItem}
           setIsVisible={setIsVisible}
+          isEdit={true}
         />
       )}
-      {paramName === 'classify' && (
+      {name === 'classify' && (
         <FormClassify
+          id={id}
+          paramName={name}
           text='Chỉnh sửa'
           dataItem={dataItem}
           setIsVisible={setIsVisible}
+          isEdit={true}
         />
       )}
-      {paramName === 'config' && (
+      {name === 'setting' && (
         <FormConfig
+          id={id}
+          paramName={name}
           text='Chỉnh sửa'
           dataItem={dataItem}
           setIsVisible={setIsVisible}
+          isEdit={true}
         />
       )}
-      {paramName === 'interface' && (
+      {name === 'interface' && (
         <FormInterface
+          id={id}
+          paramName={name}
           text='Chỉnh sửa'
           dataItem={dataItem}
           setIsVisible={setIsVisible}
+          isEdit={true}
         />
       )}
-      {paramName === 'account' && (
+      {name === 'account' && (
         <FormAccount
+          id={id}
+          paramName={name}
           text='Chỉnh sửa'
           dataItem={dataItem}
           setIsVisible={setIsVisible}
+          isEdit={true}
         />
       )}
-      {paramName === 'class' && (
+      {name === 'layer' && (
         <ClassForm
+          id={id}
+          paramName={name}
           text='Chỉnh sửa'
           dataItem={dataItem}
           setIsVisible={setIsVisible}
+          isEdit={true}
         />
       )}
     </div>

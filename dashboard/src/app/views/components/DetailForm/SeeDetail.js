@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react'
 
 // path of folder
-import styles from "./SeeDetail.module.scss";
+import styles from './SeeDetail.module.scss'
 
 // objectDataItem = lưu trữ dữ liệu item để hiển thị ra đúng số dòng
-function SeeDetail({ setIsVisible, objectDataItem }) {
+function SeeDetail({setIsVisible, objectDataItem}) {
   // check state of button
-  const [onClickBtn, setOnClickBtn] = useState(false);
+  const [onClickBtn, setOnClickBtn] = useState(false)
 
   const handleClick = () => {
-    setIsVisible(false);
-  };
+    setIsVisible(false)
+  }
 
   return (
     <div onClick={handleClick} className={styles.container_see_detail}>
@@ -24,11 +24,14 @@ function SeeDetail({ setIsVisible, objectDataItem }) {
             {Object.keys(objectDataItem).map((item, index) => (
               <tr key={index}>
                 <td>{item}</td>
-                {Object.values(objectDataItem)[index].includes(".") ? (
-                  <td>
-                    <img src={Object.values(objectDataItem)[index]} />
-                  </td>
+                {Object.values(objectDataItem)
+                  [index].toString()
+                  .includes('.') ? (
+                  <td>{Object.values(objectDataItem)[index]}</td>
                 ) : (
+                  // <td>
+                  //   <img src={Object.values(objectDataItem)[index]} />
+                  // </td>
                   <td>{Object.values(objectDataItem)[index]}</td>
                 )}
               </tr>
@@ -40,19 +43,19 @@ function SeeDetail({ setIsVisible, objectDataItem }) {
         {onClickBtn && (
           <div className={styles.wrapper_button_children}>
             <button>
-              <i className="far fa-edit"></i>
+              <i className='far fa-edit'></i>
             </button>
             <button>
-              <i className="far fa-trash-alt"></i>
+              <i className='far fa-trash-alt'></i>
             </button>
           </div>
         )}
         <button onClick={() => setOnClickBtn(!onClickBtn)}>
-          <i className="fas fa-plus"></i>
+          <i className='fas fa-plus'></i>
         </button>
       </div>
     </div>
-  );
+  )
 }
 
-export default SeeDetail;
+export default SeeDetail
