@@ -20,4 +20,8 @@ export class CreateSettingDto {
   @ApiProperty({ example: 6 })
   @IsNumber()
   zoom: number;
+
+  @ApiProperty({ example: 'image.jpg' })
+  @IsString()
+  icon: string;
 }

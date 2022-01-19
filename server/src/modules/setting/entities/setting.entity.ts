@@ -57,6 +57,14 @@ export class SettingEntity {
   })
   lng: number;
 
+  @ApiProperty({ example: 'image.jpg' })
+  @Column({
+    type: 'varchar',
+    nullable: false,
+    length: 200,
+  })
+  icon: string;
+
   @ApiProperty({ example: 6 })
   @Column({ type: 'int', default: 6 })
   zoom: number;
