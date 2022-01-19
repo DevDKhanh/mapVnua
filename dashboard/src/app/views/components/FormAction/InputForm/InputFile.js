@@ -15,7 +15,7 @@ function InputFile({
 }) {
   const handleOnchange = (e) => {
     let {name} = e.target
-    setInputForm({...inputForm, [name]: e.target.files[0].name.trim()})
+    setInputForm({...inputForm, [name]: e.target.files[0]})
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
 //Thư mục
@@ -35,7 +35,13 @@ function ClassifyForm({text, paramName, dataItem}) {
     no: 0,
   })
 
-  console.log(inputForm)
+  useEffect(() => {
+    Object.keys(inputForm).forEach((item) => {
+      console.log(inputForm[item] === '')
+      inputForm[item] === '' && delete inputForm[item]
+    })
+    console.log(inputForm)
+  }, [inputForm])
 
   const handleClickCreateNew = async () => {
     setCheckInput(true)

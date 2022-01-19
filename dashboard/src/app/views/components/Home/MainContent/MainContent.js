@@ -26,10 +26,12 @@ function MainContent() {
       {dataDisplayComponent['textComponentDisplay'] === 'home' ? (
         <H2Element>Chào mừng bạn đến với trang quản trị bản đồ !</H2Element>
       ) : (
-        <PanelMainContent
-          nameHead={dataDisplayComponent.theadTable}
-          dataTable={dataDisplayComponent.data}
-        />
+        <React.Fragment>
+          <PanelMainContent
+            nameHead={dataDisplayComponent.theadTable}
+            dataTable={dataDisplayComponent.data}
+          />
+        </React.Fragment>
       )}
     </div>
   )
