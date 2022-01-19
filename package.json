@@ -1,15 +1,16 @@
 {
-  "name": "novi",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "serverDev": "npm run dev --prefix server",
-    "client": "npm run start --prefix client",
-    "dev": "concurrently \"npm run serverDev\" \"npm run client\""
-  },
-  "author": "",
-  "description": "",
-  "dependencies": {}
+	"name": "novi",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"serverDev": "npm run dev --prefix server",
+		"dashboard": "npm run start --prefix dashboard",
+		"client": "npm run start --prefix client",
+		"dev": "concurrently \"npm run serverDev\" \"npm run client\" \"npm run dashboard\""
+	},
+	"author": "",
+	"description": "",
+	"dependencies": {}
 }
