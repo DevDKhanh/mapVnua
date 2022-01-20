@@ -7,14 +7,14 @@ import InputText from '../FormAction/InputForm/InputText'
 import InputDeps from '../FormAction/InputForm/InputDeps'
 import tableDataAPI from 'app/api/tableData'
 import {useSelector} from 'react-redux'
-import {PElement} from './element'
+import {toast} from 'react-toastify'
 
 // call api
 const callAPI = async (data, paramName) => {
   try {
-    return await tableDataAPI['create'](JSON.stringify(data), null, paramName)
+    return await tableDataAPI['create'](data, null, paramName)
   } catch (error) {
-    return error.message
+    return error
   }
 }
 
@@ -30,26 +30,82 @@ function ClassifyForm({text, paramName, dataItem}) {
 
   //state stores all input's data
   const [inputForm, setInputForm] = useState({
+    id: '',
+    nameClassify: '',
     active: 1,
     languageId: arrayDeps[0],
     no: 0,
   })
 
-  useEffect(() => {
-    Object.keys(inputForm).forEach((item) => {
-      console.log(inputForm[item] === '')
-      inputForm[item] === '' && delete inputForm[item]
-    })
-    console.log(inputForm)
-  }, [inputForm])
+  // useEffect(() => {
+  //   Object.keys(inputForm).forEach((item) => {
+  //     console.log(inputForm[item] === '')
+  //     inputForm[item] === '' && delete inputForm[item]
+  //   })
+  //   console.log(inputForm)
+  // }, [inputForm])
 
   const handleClickCreateNew = async () => {
     setCheckInput(true)
-    const resAPI = await callAPI(inputForm, paramName)
-    if (typeof resAPI === 'string') {
-      setIsSuccessful(0)
+    const checkInputForm = Object.values(inputForm).every((item) => item !== '')
+    if (checkInputForm) {
+      const resAPI = await callAPI(inputForm, paramName)
+      if (resAPI['code'] === 400) {
+        toast.error(`${resAPI['message']}`, {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setIsSuccessful(false)
+      } else if (resAPI[0]['code'] === 200) {
+        toast.success('Tạo mới thành công', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setIsSuccessful(true)
+      } else if (resAPI[0]['code'] === 400) {
+        toast.error('Tạo mới thất bại', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setIsSuccessful(false)
+      }
+
+      console.log(resAPI)
     } else {
-      setIsSuccessful(1)
+      console.log('vao day')
+      toast.error('Tạo mới thất bại', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+      setIsSuccessful(false)
+    }
+  }
+
+  const handleCheckSubmit = () => {
+    if (isSuccessful) {
+      return '/'
+    } else {
+      return ''
     }
   }
 
@@ -91,22 +147,8 @@ function ClassifyForm({text, paramName, dataItem}) {
             setInputForm={setInputForm}
           />
           <div className={styles.wrapper_button}>
-            {isSuccessful === 1 && (
-              <PElement color='green'>Tạo mới thành công</PElement>
-            )}
-            {isSuccessful === 0 && (
-              <PElement color='red'>Tạo mới thất bại</PElement>
-            )}
             <button onClick={handleClickCreateNew}>
-              <Link
-                to={
-                  Object.keys(inputForm).length === 7 && isSuccessful === 1
-                    ? '/'
-                    : ''
-                }
-              >
-                Tạo mới
-              </Link>
+              <Link to={handleCheckSubmit}>Tạo mới</Link>
             </button>
           </div>
         </div>

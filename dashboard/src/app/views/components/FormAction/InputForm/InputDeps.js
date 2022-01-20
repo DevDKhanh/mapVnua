@@ -13,19 +13,19 @@ function InputDeps({
   isNumber,
   name,
 }) {
+  const handleCheckActive = (value) => {
+    if (value === 'Có') {
+      return 1
+    } else if (value === 'Không') {
+      return 0
+    } else {
+      return value
+    }
+  }
+
   const handleChange = (e) => {
     let {name, value} = e.target
-    if (value) {
-      if (isNumber) {
-        setInputForm({...inputForm, [name]: Number(value.trim())})
-        if (value === 'Có') {
-          setInputForm({...inputForm, [name]: 1})
-        }
-        if (value === 'Không') {
-          setInputForm({...inputForm, [name]: 0})
-        }
-      } else setInputForm({...inputForm, [name]: value.trim()})
-    } else delete inputForm[name]
+    setInputForm({...inputForm, [name]: handleCheckActive(value)})
   }
   return (
     <div className={clsx('form-group', styles.wrapperInputText)}>

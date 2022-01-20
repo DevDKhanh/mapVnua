@@ -8,115 +8,182 @@ import InputText from '../FormAction/InputForm/InputText'
 import InputDeps from '../FormAction/InputForm/InputDeps'
 import InputFile from '../FormAction/InputForm/InputFile'
 import InputNumber from '../FormAction/InputForm/InputNumber'
+import {ButtonElement} from './element'
+import {toast} from 'react-toastify'
+import {useSelector} from 'react-redux'
+import MapLeaflet from '../Map/MapLeafLet'
+import tableDataAPI from 'app/api/tableData'
 
-//styled
-//button
-const BtnElement = styled.button`
-  margin-left: 40px;
-  background-color: #2a3f54;
-  border: none;
-  color: #fff;
-  padding: 10px 25px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
-
-  box-shadow: -4px -1px 5px rgb(179 179 179 / 90%), 3px 3px 5px rgb(0 0 0 / 50%);
-  border-radius: 20px;
-
-  &:focus {
-    outline: 0;
+// call api
+const callAPI = async (data, paramName) => {
+  try {
+    return await tableDataAPI['create'](data, null, paramName)
+  } catch (error) {
+    return error
   }
-`
+}
 
 function ConfigForm({text, paramName, dataItem}) {
   // catch the first time button click event
   const [checkInput, setCheckInput] = useState(false)
+  const [isSuccessful, setIsSuccessful] = useState()
 
-  let arrayDeps = ['Tiếng Việt', 'Tiếng Anh', 'Tiếng Trung', 'Tiếng Pháp']
+  // state check map on/off
+  const [isCheckMap, setIsCheckMap] = useState(false)
+
+  // get data redux
+  const data = useSelector((state) => state['displayMainContent']['data'])
+  let arrayDeps = data['language'].map((item) => item['id'])
 
   //state stores all input's data
-  const [input1, setInput1] = useState(arrayDeps[0])
-  const [input2, setInput2] = useState('')
-  const [input3, setInput3] = useState('')
-  const [input4, setInput4] = useState('')
-  const [input5, setInput5] = useState('')
-  const [input6, setInput6] = useState('')
+  const [inputForm, setInputForm] = useState({
+    title: '',
+    lat: '',
+    lng: '',
+    zoom: '',
+    languageId: arrayDeps[0],
+  })
 
-  //array the stores all the state of the input
-  let stateArray = [input1, input2, input3, input4, input5, input6]
-
-  //handle click of button to create new
-  const handleClickCreateNew = () => {
+  const handleClickCreateNew = async () => {
     setCheckInput(true)
-    console.log(stateArray)
+    const checkInputForm = Object.values(inputForm).every((item) => item !== '')
+    if (checkInputForm) {
+      const resAPI = await callAPI(inputForm, paramName)
+      if (resAPI['code'] === 400) {
+        toast.error(`${resAPI['message']}`, {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setIsSuccessful(false)
+      } else if (resAPI[0]['code'] === 200) {
+        toast.success('Tạo mới thành công', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setIsSuccessful(true)
+      } else if (resAPI[0]['code'] === 400) {
+        toast.error('Tạo mới thất bại', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        setIsSuccessful(false)
+      }
+
+      console.log(resAPI)
+    } else {
+      toast.error('Tạo mới thất bại', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+      setIsSuccessful(false)
+    }
+  }
+
+  const handleTurnOnMap = () => {
+    setIsCheckMap(true)
+  }
+
+  const handleCheckSubmit = () => {
+    if (isSuccessful) {
+      return '/'
+    } else {
+      return ''
+    }
   }
 
   return (
-    <div className={styles.wrapperCreateNew}>
-      <div className={styles.wrapper_main_form}>
-        <h2>{text}</h2>
-        <div className={styles.wrapperForm}>
-          <InputDeps
-            id='input1'
-            textLabel='Tên ngôn ngữ'
-            arrayDeps={arrayDeps}
-            value={input1}
-            onChange={setInput1}
-          />
-          <InputText
-            id='input2'
-            textLabel='Tiêu đề'
-            value={input2}
-            onChange={setInput2}
-            checkInput={checkInput}
-          />
-          <InputText
-            id='input3'
-            textLabel='Tọa độ lat'
-            value={input3}
-            onChange={setInput3}
-            checkInput={checkInput}
-          />
-          <InputText
-            id='input4'
-            textLabel='Tọa độ lng'
-            value={input4}
-            onChange={setInput4}
-            checkInput={checkInput}
-          />
-          <BtnElement>Lấy tọa độ</BtnElement>
-          <InputNumber
-            id='input5'
-            textLabel='Zoom'
-            value={input5}
-            onChange={setInput5}
-            checkInput={checkInput}
-          />
-          <InputFile
-            id='input6'
-            textLabel='Icon'
-            value={input6}
-            onChange={setInput6}
-            checkInput={checkInput}
-          />
+    <React.Fragment>
+      {isCheckMap && (
+        <MapLeaflet
+          setIsCheckMap={setIsCheckMap}
+          inputForm={inputForm}
+          setInputForm={setInputForm}
+        />
+      )}
+      <div className={styles.wrapperCreateNew}>
+        <div className={styles.wrapper_main_form}>
+          <h2>{text}</h2>
+          <div className={styles.wrapperForm}>
+            <InputDeps
+              id='1'
+              textLabel='ID ngôn ngữ'
+              name='languageId'
+              arrayDeps={arrayDeps}
+              inputForm={inputForm}
+              setInputForm={setInputForm}
+            />
+            <InputText
+              id='2'
+              textLabel='Tiêu đề'
+              name='title'
+              inputForm={inputForm}
+              setInputForm={setInputForm}
+              checkInput={checkInput}
+            />
+            <InputText
+              id='3'
+              textLabel='Tọa độ lat'
+              name='lat'
+              inputForm={inputForm}
+              setInputForm={setInputForm}
+              checkInput={checkInput}
+            />
+            <InputText
+              id='4'
+              textLabel='Tọa độ lng'
+              name='lng'
+              inputForm={inputForm}
+              setInputForm={setInputForm}
+              checkInput={checkInput}
+            />
+            <ButtonElement onClick={handleTurnOnMap}>
+              Chọn tọa độ trên bản đồ
+            </ButtonElement>
+            <InputNumber
+              id='5'
+              textLabel='Zoom'
+              name='zoom'
+              inputForm={inputForm}
+              setInputForm={setInputForm}
+              checkInput={checkInput}
+            />
+            {/* <InputFile
+              id='6'
+              textLabel='Icon'
+              inputForm={inputForm}
+              setInputForm={setInputForm}
+              checkInput={checkInput}
+            /> */}
 
-          <div className={styles.wrapper_button}>
-            <button onClick={handleClickCreateNew}>
-              <Link
-                to={
-                  stateArray.every((state) => state !== '')
-                    ? `/`
-                    : `/new_create/${paramName}`
-                }
-              >
-                Tạo mới
-              </Link>
-            </button>
+            <div className={styles.wrapper_button}>
+              <button onClick={handleClickCreateNew}>
+                <Link to={handleCheckSubmit}>Tạo mới</Link>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 

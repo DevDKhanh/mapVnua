@@ -1,5 +1,5 @@
-import React, {useRef, useEffect} from 'react'
 import clsx from 'clsx'
+import React from 'react'
 
 // Thư mục
 import styles from './Input.module.scss'

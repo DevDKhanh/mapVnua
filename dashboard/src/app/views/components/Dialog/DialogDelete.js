@@ -6,8 +6,14 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import tableDataAPI from 'app/api/tableData'
+import {toast} from 'react-toastify'
+import {useDispatch} from 'react-redux'
 
-const DialogDelete = ({isActive, infoItem, setIsActive, setFalseDelete}) => {
+import convertData from 'app/common/covertData'
+
+const DialogDelete = ({isActive, infoItem, setIsActive}) => {
+  const dispatch = useDispatch()
+
   const dialogCancel = () => {
     setIsActive(false)
   }
@@ -21,12 +27,35 @@ const DialogDelete = ({isActive, infoItem, setIsActive, setFalseDelete}) => {
     tableDataAPI.delete(name, id).then((res) => {
       console.log(res)
       if (res[0]['status'] === 400) {
-        console.log('Xóa dữ liệu thất bại')
-        setFalseDelete(false)
+        toast.error(
+          'Xóa thất bại, vui lòng kiểm tra các thành phần phụ thuộc',
+          {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          }
+        )
+        setIsActive(false)
       }
       if (res[0]['code'] === 200) {
         console.log('Xóa dữ liệu thành công')
-        setFalseDelete(true)
+        toast.success('Xóa thành công', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        // re-load table
+        convertData(infoItem['name'], null, dispatch)
+        // off dialog
+        setIsActive(false)
       }
     })
   }
