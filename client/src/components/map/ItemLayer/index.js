@@ -1,12 +1,29 @@
 import { memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { addLayer, removeLayer } from '../../../redux/action/dataMap';
 import style from './ItemLayer.module.scss';
 
-function ItemLayer() {
+function ItemLayer({ dataLayer }) {
+	const { layers } = useSelector(state => state.dataMap);
+	const dispatch = useDispatch();
+	const onChange = e => {
+		const { checked } = e.target;
+		if (checked) {
+			dispatch(addLayer(dataLayer));
+		} else {
+			dispatch(removeLayer(dataLayer.id));
+		}
+	};
 	return (
 		<li>
 			<label className={style.item}>
-				<span>Lowsp 1</span>
-				<input type={'checkbox'} />
+				<span>{dataLayer.nameLayer}</span>
+				<input
+					type={'checkbox'}
+					onChange={onChange}
+					checked={layers.some(item => item.id === dataLayer.id)}
+				/>
 			</label>
 		</li>
 	);

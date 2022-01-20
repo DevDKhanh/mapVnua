@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 
 import FullScreen from '../../components/map/FullScreen';
+import ListNote from '../../components/map/ListNote';
 import ButtonDisplayLayer from '../../components/map/ButtonDisplayLayer';
 import './styles.scss';
 
@@ -21,6 +22,7 @@ function Map() {
 				<FullScreen />
 			</MapContainer>
 			<ButtonDisplayLayer />
+			<ListNote />
 		</div>
 	);
 }
