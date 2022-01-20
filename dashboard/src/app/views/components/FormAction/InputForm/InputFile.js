@@ -5,10 +5,10 @@ import clsx from 'clsx'
 import styles from './Input.module.scss'
 
 function InputFile({id, textLabel, name, inputForm, setInputForm, checkInput}) {
-  console.log(inputForm)
+  // console.log(inputForm)
   const handleOnchange = (e) => {
     let {name} = e.target
-    console.log(e.target.files[0])
+    // console.log(e.target.files[0])
     name && setInputForm({...inputForm, [name]: e.target.files[0].name})
   }
 

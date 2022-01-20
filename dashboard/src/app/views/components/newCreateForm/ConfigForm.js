@@ -14,97 +14,141 @@ import {useSelector} from 'react-redux'
 import MapLeaflet from '../Map/MapLeafLet'
 import tableDataAPI from 'app/api/tableData'
 
-// call api
-const callAPI = async (data, paramName) => {
+const checkResData = (resData, setIsGetDataSuccessful) => {
+  const statusNotifications = {
+    success: 'success',
+    error: 'error',
+  }
+  const textnotifications = {
+    success: 'Tạo mới thành công',
+    error: 'Tạo mới thất bại',
+  }
+  const indexFirst = 0
+  const keys = {
+    code: 'code',
+  }
+  console.log(resData)
+  if (isResDataError(resData[keys.code])) {
+    textnotifications.error = resData.message
+    notifications(statusNotifications.error, textnotifications.error)
+    setIsGetDataSuccessful(false)
+  } else if (isResDataSuccess(resData[indexFirst][keys.code])) {
+    notifications(statusNotifications.success, textnotifications.success)
+    setIsGetDataSuccessful(true)
+  } else if (isResDataError(resData[indexFirst][keys.code])) {
+    notifications(statusNotifications.error, textnotifications.error)
+    setIsGetDataSuccessful(false)
+  }
+}
+
+const isResDataError = (codeFromData) => {
+  const indexError = 400
+  return codeFromData === indexError ? true : false
+}
+
+const isResDataSuccess = (codeFromData) => {
+  const indexSuccess = 200
+  return codeFromData === indexSuccess ? true : false
+}
+
+const checkNotificationStatus = (status) => {
+  if (status === 'success') {
+    return 'success'
+  } else {
+    return 'error'
+  }
+}
+
+const notifications = (status, textStatus) => {
+  const filterStatus = checkNotificationStatus(status)
+  toast[filterStatus](textStatus, {
+    position: 'top-right',
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+}
+
+const isEmptyValue = (valueInput) => {
+  const dataEmpty = ''
+  return valueInput !== dataEmpty
+}
+
+const isCheckDataEmptyFromForm = (dataFromForm) => {
+  return Object.values(dataFromForm).every((valueInput) =>
+    isEmptyValue(valueInput)
+  )
+}
+
+const getDataFromAPI = async (data, paramName) => {
+  const method = 'create'
+  const tokenAxios = null
   try {
-    return await tableDataAPI['create'](data, null, paramName)
+    return await tableDataAPI[method](data, tokenAxios, paramName)
   } catch (error) {
     return error
   }
 }
 
-function ConfigForm({text, paramName, dataItem}) {
-  // catch the first time button click event
-  const [checkInput, setCheckInput] = useState(false)
-  const [isSuccessful, setIsSuccessful] = useState()
+function ConfigForm({text, paramName}) {
+  const [isFirstClick, setIsFirstClick] = useState(false)
+  const [isGetDataSuccessful, setIsGetDataSuccessful] = useState()
+  const [isOnMap, setIsOnMap] = useState(false)
 
-  // state check map on/off
-  const [isCheckMap, setIsCheckMap] = useState(false)
+  const dataFromRedux = useSelector(
+    (state) => state['displayMainContent']['data']
+  )
 
-  // get data redux
-  const data = useSelector((state) => state['displayMainContent']['data'])
-  let arrayDeps = data['language'].map((item) => item['id'])
+  const keys = React.useRef({
+    language: 'language',
+    id: 'id',
+  })
+  let arrayIdLanguage = dataFromRedux[keys.current.language].map(
+    (infoLanguage) => infoLanguage[keys.current.id]
+  )
 
-  //state stores all input's data
-  const [inputForm, setInputForm] = useState({
+  const indexFirst = React.useRef(0)
+  const dataDefault = React.useRef({
     title: '',
     lat: '',
     lng: '',
     zoom: '',
-    languageId: arrayDeps[0],
+    icon: '',
+    languageId: arrayIdLanguage[indexFirst.current],
   })
+  const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
 
-  const handleClickCreateNew = async () => {
-    setCheckInput(true)
-    const checkInputForm = Object.values(inputForm).every((item) => item !== '')
-    if (checkInputForm) {
-      const resAPI = await callAPI(inputForm, paramName)
-      if (resAPI['code'] === 400) {
-        toast.error(`${resAPI['message']}`, {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-        setIsSuccessful(false)
-      } else if (resAPI[0]['code'] === 200) {
-        toast.success('Tạo mới thành công', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-        setIsSuccessful(true)
-      } else if (resAPI[0]['code'] === 400) {
-        toast.error('Tạo mới thất bại', {
-          position: 'top-right',
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-        setIsSuccessful(false)
-      }
+  const handleCreateNew = async () => {
+    setIsFirstClick(true)
 
-      console.log(resAPI)
+    const isFullData = isCheckDataEmptyFromForm(dataFromForm)
+
+    if (isFullData) {
+      const resData = await getDataFromAPI(dataFromForm, paramName)
+      checkResData(resData, setIsGetDataSuccessful)
     } else {
-      toast.error('Tạo mới thất bại', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      })
-      setIsSuccessful(false)
+      const statusNotifications = {
+        success: 'success',
+        error: 'error',
+      }
+      const textnotifications = {
+        success: 'Tạo mới thành công',
+        error: 'Tạo mới thất bại',
+      }
+      notifications(statusNotifications.error, textnotifications.error)
+      setIsGetDataSuccessful(false)
     }
   }
 
   const handleTurnOnMap = () => {
-    setIsCheckMap(true)
+    setIsOnMap(true)
   }
 
   const handleCheckSubmit = () => {
-    if (isSuccessful) {
+    if (isGetDataSuccessful) {
       return '/'
     } else {
       return ''
@@ -113,11 +157,11 @@ function ConfigForm({text, paramName, dataItem}) {
 
   return (
     <React.Fragment>
-      {isCheckMap && (
+      {isOnMap && (
         <MapLeaflet
-          setIsCheckMap={setIsCheckMap}
-          inputForm={inputForm}
-          setInputForm={setInputForm}
+          setIsCheckMap={setIsOnMap}
+          inputForm={dataFromForm}
+          setInputForm={setDataFromForm}
         />
       )}
       <div className={styles.wrapperCreateNew}>
@@ -128,33 +172,33 @@ function ConfigForm({text, paramName, dataItem}) {
               id='1'
               textLabel='ID ngôn ngữ'
               name='languageId'
-              arrayDeps={arrayDeps}
-              inputForm={inputForm}
-              setInputForm={setInputForm}
+              arrayDeps={arrayIdLanguage}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
             />
             <InputText
               id='2'
               textLabel='Tiêu đề'
               name='title'
-              inputForm={inputForm}
-              setInputForm={setInputForm}
-              checkInput={checkInput}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
             />
             <InputText
               id='3'
               textLabel='Tọa độ lat'
               name='lat'
-              inputForm={inputForm}
-              setInputForm={setInputForm}
-              checkInput={checkInput}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
             />
             <InputText
               id='4'
               textLabel='Tọa độ lng'
               name='lng'
-              inputForm={inputForm}
-              setInputForm={setInputForm}
-              checkInput={checkInput}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
             />
             <ButtonElement onClick={handleTurnOnMap}>
               Chọn tọa độ trên bản đồ
@@ -163,20 +207,21 @@ function ConfigForm({text, paramName, dataItem}) {
               id='5'
               textLabel='Zoom'
               name='zoom'
-              inputForm={inputForm}
-              setInputForm={setInputForm}
-              checkInput={checkInput}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
             />
-            {/* <InputFile
+            <InputFile
               id='6'
               textLabel='Icon'
-              inputForm={inputForm}
-              setInputForm={setInputForm}
-              checkInput={checkInput}
-            /> */}
+              name='icon'
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
+            />
 
             <div className={styles.wrapper_button}>
-              <button onClick={handleClickCreateNew}>
+              <button onClick={handleCreateNew}>
                 <Link to={handleCheckSubmit}>Tạo mới</Link>
               </button>
             </div>

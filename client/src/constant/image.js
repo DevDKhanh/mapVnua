@@ -1,7 +1,7 @@
-import iconMark from "../image/marker.svg";
+import iconMark from '../assets/image/marker.svg';
 
 const images = {
-  iconMark: iconMark,
+	iconMark: iconMark,
 };
 
 export default images;

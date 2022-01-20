@@ -1,79 +1,188 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {Link} from 'react-router-dom'
+import {toast} from 'react-toastify'
 
 //Thư mục
 import styles from './form.module.scss'
 import InputText from '../FormAction/InputForm/InputText'
 import InputDeps from '../FormAction/InputForm/InputDeps'
 import InputFile from '../FormAction/InputForm/InputFile'
-import InputRaster from '../FormAction/InputForm/InputRaster'
-import InputVector from '../FormAction/InputForm/InputVector'
 import tableDataAPI from 'app/api/tableData'
 import {useSelector} from 'react-redux'
-import {PElement} from './element'
 import InputColorPicker from '../FormAction/InputForm/InputColorPicker'
 import InputNumber from '../FormAction/InputForm/InputNumber'
 
-// call api
-const callAPI = async (data, paramName) => {
+const checkResData = (resData, setIsGetDataSuccessful) => {
+  const statusNotifications = {
+    success: 'success',
+    error: 'error',
+  }
+  const textnotifications = {
+    success: 'Tạo mới thành công',
+    error: 'Tạo mới thất bại',
+  }
+  const indexFirst = 0
+  const keys = {
+    code: 'code',
+  }
+  console.log(resData)
+  if (isResDataError(resData[keys.code])) {
+    textnotifications.error = resData.message
+    notifications(statusNotifications.error, textnotifications.error)
+    setIsGetDataSuccessful(false)
+  } else if (isResDataSuccess(resData[indexFirst][keys.code])) {
+    notifications(statusNotifications.success, textnotifications.success)
+    setIsGetDataSuccessful(true)
+  } else if (isResDataError(resData[indexFirst][keys.code])) {
+    notifications(statusNotifications.error, textnotifications.error)
+    setIsGetDataSuccessful(false)
+  }
+}
+
+const isResDataError = (codeFromData) => {
+  const indexError = 400
+  return codeFromData === indexError ? true : false
+}
+
+const isResDataSuccess = (codeFromData) => {
+  const indexSuccess = 200
+  return codeFromData === indexSuccess ? true : false
+}
+
+const checkNotificationStatus = (status) => {
+  if (status === 'success') {
+    return 'success'
+  } else {
+    return 'error'
+  }
+}
+
+const notifications = (status, textStatus) => {
+  const filterStatus = checkNotificationStatus(status)
+  toast[filterStatus](textStatus, {
+    position: 'top-right',
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  })
+}
+
+const isEmptyValue = (valueInput) => {
+  const dataEmpty = ''
+  return valueInput !== dataEmpty
+}
+
+const isCheckDataEmptyFromForm = (dataFromForm) => {
+  return Object.values(dataFromForm).every((valueInput) =>
+    isEmptyValue(valueInput)
+  )
+}
+
+const getDataFromAPI = async (data, paramName) => {
+  const method = 'create'
+  const tokenAxios = null
   try {
-    return await tableDataAPI['create'](JSON.stringify(data), null, paramName)
+    return await tableDataAPI[method](data, tokenAxios, paramName)
   } catch (error) {
-    return error.message
+    return error
   }
 }
 
 function ClassifyForm({text, paramName, dataItem}) {
-  // catch the first time button click event
-  const [checkInput, setCheckInput] = useState(false)
-  const [isSuccessful, setIsSuccessful] = useState()
+  const [isFirstClick, setIsFirstClick] = useState(false)
+  const [isGetDataSuccessful, setIsGetDataSuccessful] = useState()
+  // const [isOnMap, setIsOnMap] = useState(false)
 
-  // lấy dữ liệu redux
-  const data = useSelector((state) => state['displayMainContent']['data'])
-  const area = data['area'].map((item) => item)
-  const language = data['language'].map((item) => item)
-  const classify = data['classify'].map((item) => item)
+  const dataFromRedux = useSelector(
+    (state) => state['displayMainContent']['data']
+  )
 
-  let arrayDeps1 = area.map((item) => item['nameArea'])
-  let arrayDeps2 = language.map((item) => item['nameLanguage'])
-  let arrayDeps3 = classify.map((item) => item['nameClassify'])
-  let arrayDeps4 = ['Vector', 'Raster']
-  let arrayDeps5 = ['Có', 'Không']
+  const keys = React.useRef({
+    language: 'language',
+    id: 'id',
+    classify: 'classify',
+    area: 'area',
+  })
+  let arrayIdLanguage = dataFromRedux[keys.current.language].map(
+    (infoLanguage) => infoLanguage[keys.current.id]
+  )
+  let arrayIdClassify = dataFromRedux[keys.current.classify].map(
+    (infoClassify) => infoClassify[keys.current.id]
+  )
+  let arrayIdArea = dataFromRedux[keys.current.area].map(
+    (infoArea) => infoArea[keys.current.id]
+  )
+  let optionStyle = ['Vector', 'Raster']
+  let hidden = ['Có', 'Không']
 
-  //state stores all input's data
-  const [inputForm, setInputForm] = useState({
-    active: 1,
-    style: arrayDeps4[0],
-    areaId: arrayDeps1[0],
-    languageId: arrayDeps2[0],
-    classifyId: arrayDeps3[0],
+  const indexFirst = React.useRef(0)
+  const dataDefault = React.useRef({
+    id: '',
+    nameLayer: '',
+    classifyId: arrayIdClassify[indexFirst.current],
+    areaId: arrayIdArea[indexFirst.current],
+    style: optionStyle[indexFirst.current],
+    path: '',
+    icon: '',
     borderColor: '#333',
     backgroundColor: '#333',
+    widthBorder: '',
+    opacityBorder: '',
+    opacityBackground: '',
+    latSW: '',
+    lngSW: '',
+    latNE: '',
+    lngNE: '',
+    active: 1,
+    zIndex: '',
+    languageId: arrayIdLanguage[indexFirst.current],
   })
+  const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
 
-  // console.log(inputForm)
-
-  if (inputForm['style'] === 'Raster') {
-    inputForm['borderColor'] = '#333'
-    inputForm['widthBorder'] = ''
-    inputForm['opacityBorder'] = ''
-    inputForm['backgroundColor'] = '#333'
-    inputForm['opacityBackground'] = ''
+  if (dataFromForm['style'] === 'Raster') {
+    dataFromForm['borderColor'] = '#333'
+    dataFromForm['widthBorder'] = ''
+    dataFromForm['opacityBorder'] = ''
+    dataFromForm['backgroundColor'] = '#333'
+    dataFromForm['opacityBackground'] = ''
   } else {
-    inputForm['latSW'] = ''
-    inputForm['lngSW'] = ''
-    inputForm['latNE'] = ''
-    inputForm['lngNE'] = ''
+    dataFromForm['latSW'] = ''
+    dataFromForm['lngSW'] = ''
+    dataFromForm['latNE'] = ''
+    dataFromForm['lngNE'] = ''
   }
 
-  const handleClickCreateNew = async () => {
-    setCheckInput(true)
-    console.log(inputForm)
-    const resAPI = await callAPI(inputForm, paramName)
-    if (typeof resAPI === 'string') {
-      setIsSuccessful(0)
+  const handleCreateNew = async () => {
+    console.log(dataFromForm)
+    setIsFirstClick(true)
+
+    const isFullData = isCheckDataEmptyFromForm(dataFromForm)
+
+    if (isFullData) {
+      const resData = await getDataFromAPI(dataFromForm, paramName)
+      checkResData(resData, setIsGetDataSuccessful)
     } else {
-      setIsSuccessful(1)
+      const statusNotifications = {
+        success: 'success',
+        error: 'error',
+      }
+      const textnotifications = {
+        success: 'Tạo mới thành công',
+        error: 'Tạo mới thất bại',
+      }
+      notifications(statusNotifications.error, textnotifications.error)
+      setIsGetDataSuccessful(false)
+    }
+  }
+
+  const handleCheckSubmit = () => {
+    if (isGetDataSuccessful) {
+      return '/'
+    } else {
+      return ''
     }
   }
 
@@ -86,111 +195,111 @@ function ClassifyForm({text, paramName, dataItem}) {
             id='1'
             textLabel='ID lớp'
             name='id'
-            inputForm={inputForm}
-            setInputForm={setInputForm}
-            checkInput={checkInput}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
+            checkInput={isFirstClick}
           />
           <InputDeps
             id='2'
             textLabel='Tên khu vực'
             name='areaId'
-            arrayDeps={arrayDeps1}
-            inputForm={inputForm}
-            setInputForm={setInputForm}
+            arrayDeps={arrayIdArea}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
           />
           <InputDeps
             id='3'
             textLabel='Tên ngôn ngữ'
             name='languageId'
-            arrayDeps={arrayDeps2}
-            inputForm={inputForm}
-            setInputForm={setInputForm}
+            arrayDeps={arrayIdLanguage}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
           />
           <InputDeps
             id='4'
             textLabel='Tên phân loại'
             name='classifyId'
-            arrayDeps={arrayDeps3}
-            inputForm={inputForm}
-            setInputForm={setInputForm}
+            arrayDeps={arrayIdClassify}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
           />
           <InputText
             id='5'
             textLabel='Tên lớp'
             name='nameLayer'
-            inputForm={inputForm}
-            setInputForm={setInputForm}
-            checkInput={checkInput}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
+            checkInput={isFirstClick}
           />
           <InputFile
             id='6'
             textLabel='Đường dẫn'
             name='path'
-            inputForm={inputForm}
-            setInputForm={setInputForm}
-            checkInput={checkInput}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
+            checkInput={isFirstClick}
           />
           <InputFile
             id='7'
             textLabel='Icon'
             name='icon'
-            inputForm={inputForm}
-            setInputForm={setInputForm}
-            checkInput={checkInput}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
+            checkInput={isFirstClick}
           />
           <InputNumber
             id='19'
             textLabel='Xếp chồng lớp'
             name='zIndex'
-            inputForm={inputForm}
-            setInputForm={setInputForm}
-            checkInput={checkInput}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
+            checkInput={isFirstClick}
             isNumber={true}
           />
           <InputDeps
             id='8'
             textLabel='Kiểu'
             name='style'
-            arrayDeps={arrayDeps4}
-            inputForm={inputForm}
-            setInputForm={setInputForm}
+            arrayDeps={optionStyle}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
           />
-          {inputForm['style'] === 'Raster' ? (
+          {dataFromForm['style'] === 'Raster' ? (
             <React.Fragment>
               <InputText
                 id={10}
                 textLabel='Tọa độ latSW'
                 name='latSW'
-                inputForm={inputForm}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                inputForm={dataFromForm}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
                 isNumber={true}
               />
               <InputText
                 id={11}
                 textLabel='Tọa độ lngSW'
                 name='lngSW'
-                inputForm={inputForm}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                inputForm={dataFromForm}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
                 isNumber={true}
               />
               <InputText
                 id={12}
                 textLabel='Tọa độ latNE'
                 name='latNE'
-                inputForm={inputForm}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                inputForm={dataFromForm}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
                 isNumber={true}
               />
               <InputText
                 id={13}
                 textLabel='Tọa độ lngNE'
                 name='lngNE'
-                inputForm={inputForm}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                inputForm={dataFromForm}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
                 isNumber={true}
               />
             </React.Fragment>
@@ -199,44 +308,44 @@ function ClassifyForm({text, paramName, dataItem}) {
               <InputColorPicker
                 id={14}
                 textLabel='Màu viền'
-                inputForm={inputForm}
+                inputForm={dataFromForm}
                 name='borderColor'
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
               />
               <InputText
                 id={15}
                 textLabel='Độ rộng viền'
                 name='widthBorder'
-                inputForm={inputForm}
+                inputForm={dataFromForm}
                 isNumber={true}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
               />
               <InputText
                 id={16}
                 textLabel='Viền trong suốt'
                 name='opacityBorder'
-                inputForm={inputForm}
+                inputForm={dataFromForm}
                 isNumber={true}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
               />
               <InputColorPicker
                 id={17}
                 textLabel='Màu nền'
                 name='backgroundColor'
-                inputForm={inputForm}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                inputForm={dataFromForm}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
               />
               <InputText
                 id={18}
                 textLabel='Nền trong suốt'
                 name='opacityBackground'
-                inputForm={inputForm}
-                setInputForm={setInputForm}
-                checkInput={checkInput}
+                inputForm={dataFromForm}
+                setInputForm={setDataFromForm}
+                checkInput={isFirstClick}
               />
             </React.Fragment>
           )}
@@ -244,27 +353,13 @@ function ClassifyForm({text, paramName, dataItem}) {
             id='9'
             textLabel='Hiển thị'
             name='active'
-            arrayDeps={arrayDeps5}
-            inputForm={inputForm}
-            setInputForm={setInputForm}
+            arrayDeps={hidden}
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
           />
           <div className={styles.wrapper_button}>
-            {isSuccessful === 1 && (
-              <PElement color='green'>Tạo mới thành công</PElement>
-            )}
-            {isSuccessful === 0 && (
-              <PElement color='red'>Tạo mới thất bại</PElement>
-            )}
-            <button onClick={handleClickCreateNew}>
-              <Link
-                to={
-                  Object.keys(inputForm).length === 14 && isSuccessful === 1
-                    ? '/'
-                    : ''
-                }
-              >
-                Tạo mới
-              </Link>
+            <button onClick={handleCreateNew}>
+              <Link to={handleCheckSubmit}>Tạo mới</Link>
             </button>
           </div>
         </div>
