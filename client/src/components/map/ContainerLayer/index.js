@@ -1,26 +1,23 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import clsx from 'clsx';
 
-import ItemContainerLayer from '../ItemContainerLayer';
-import style from './ContainerLayer.module.scss';
+import Vector from '../../layers/Vector';
+import Raster from '../../layers/Raster';
 
-function ContainerLayer({ active = true, title = 'Các lớp bản đồ' }) {
-	const { classifys } = useSelector(state => state.dataMap);
-	return (
-		<div className={clsx([style.main, { [style.active]: active }])}>
-			<h3 className={style.title}>{title}</h3>
-			<ul className={style.list}>
-				{classifys.map(item => (
-					<ItemContainerLayer
-						key={item.id}
-						nameItem={item.nameClassify}
-						dataLayers={item.layers}
-					/>
-				))}
-			</ul>
-		</div>
-	);
+function ContainerLayer() {
+	const { layers } = useSelector(state => state.dataMap);
+	const render = useMemo(() => {
+		return layers.map(item => {
+			if (item.style === 'vector') {
+				return <Vector key={item.id} path={item.path} data={item} />;
+			}
+			if (item.style === 'raster') {
+				return <Raster key={item.id} data={item} />;
+			}
+			return null;
+		});
+	}, [layers]);
+	return <>{render}</>;
 }
 
 export default memo(ContainerLayer);

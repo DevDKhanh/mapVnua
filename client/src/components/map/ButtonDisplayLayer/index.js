@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react';
 import clsx from 'clsx';
-import ContainerLayer from '../ContainerLayer';
+import ListLayer from '../ListLayer';
 
 function ButtonDisplayLayer() {
 	const [toggle, setToggle] = useState(true);
@@ -21,7 +21,7 @@ function ButtonDisplayLayer() {
 			>
 				<i className="fas fa-layer-group"></i>
 			</div>
-			<ContainerLayer active={toggle} />
+			<ListLayer active={toggle} />
 		</>
 	);
 }

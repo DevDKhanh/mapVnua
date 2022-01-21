@@ -78,7 +78,6 @@ export class UploadController {
   @ApiOperation({ summary: 'Upload image Api ' })
   @UseInterceptors(FileInterceptor('file', optionsImage))
   async upload(@UploadedFile('file') file): Promise<{ filename: any }> {
-    console.log('run', file);
     return { filename: `/image/${file.filename}` };
   }
 
