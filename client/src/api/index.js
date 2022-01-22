@@ -1,11 +1,12 @@
 import axios from 'axios';
 import queryString from 'query-string';
+import { API } from '../constant/config';
 
 const axiosClient = axios.create({
 	headers: {
 		'content-type': 'application/json',
 	},
-	baseURL: 'http://localhost:3000',
+	baseURL: API,
 	paramsSerializer: params => queryString.stringify(params),
 });
 

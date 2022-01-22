@@ -37,11 +37,23 @@ export class ClassifyService {
     const checkClassId = await this.classifyRepository.findOne(
       createClassifyDto.id,
     );
+    const checkNo = await this.classifyRepository.findOne({
+      no: createClassifyDto.no,
+    });
 
     if (checkClassId) {
       throw new HttpException(
         await this.i18n.translate('site.IS_EXISTS', {
           args: { name: 'Id phân loại' },
+        }),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (checkNo) {
+      throw new HttpException(
+        await this.i18n.translate('site.IS_EXISTS', {
+          args: { name: 'Số thứ tự' },
         }),
         HttpStatus.BAD_REQUEST,
       );

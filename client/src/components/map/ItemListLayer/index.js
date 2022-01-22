@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import ItemLayer from '../ItemLayer';
 import style from './ItemContainerLayer.module.scss';
 
-function ItemContainerLayer({ nameItem }) {
+function ItemContainerLayer({ nameItem, dataLayers = [] }) {
 	const [toggle, setToggle] = useState(false);
 	return (
 		<li className={style.item}>
@@ -15,13 +15,9 @@ function ItemContainerLayer({ nameItem }) {
 				></div>
 			</div>
 			<ul className={clsx([style.list, { [style.show]: toggle }])}>
-				<ItemLayer />
-				<ItemLayer />
-				<ItemLayer />
-				<ItemLayer />
-				<ItemLayer />
-				<ItemLayer />
-				<ItemLayer />
+				{dataLayers.map(item => (
+					<ItemLayer key={item.id} dataLayer={item} />
+				))}
 			</ul>
 		</li>
 	);

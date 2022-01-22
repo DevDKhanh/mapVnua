@@ -1,10 +1,9 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-//reducer
-import classListReducer from "./classListReducer";
+import dataMap from './dataMap';
 
 const rootReducer = combineReducers({
-  classList: classListReducer,
+	dataMap: dataMap,
 });
 
 export default rootReducer;

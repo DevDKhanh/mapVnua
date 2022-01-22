@@ -1,10 +1,18 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import clsx from 'clsx';
-import ContainerLayer from '../ContainerLayer';
+import ListLayer from '../ListLayer';
 
 function ButtonDisplayLayer() {
-	const [toggle, setToggle] = useState(false);
+	const [toggle, setToggle] = useState(true);
+	useEffect(() => {
+		document.addEventListener('keypress', e => {
+			if (e.code === 'KeyL') {
+				setToggle(prev => !prev);
+			}
+		});
 
+		return () => document.removeEventListener('keypress');
+	}, []);
 	return (
 		<>
 			<div
@@ -13,7 +21,7 @@ function ButtonDisplayLayer() {
 			>
 				<i className="fas fa-layer-group"></i>
 			</div>
-			<ContainerLayer active={toggle} />
+			<ListLayer active={toggle} />
 		</>
 	);
 }
