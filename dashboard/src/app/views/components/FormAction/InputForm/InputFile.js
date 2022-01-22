@@ -4,18 +4,12 @@ import clsx from 'clsx'
 // Thư mục
 import styles from './Input.module.scss'
 
-function InputFile({
-  id,
-  textLabel,
-  name,
-  inputForm,
-  setInputForm,
-  onChange,
-  checkInput,
-}) {
+function InputFile({id, textLabel, name, inputForm, setInputForm, checkInput}) {
+  // console.log(inputForm)
   const handleOnchange = (e) => {
     let {name} = e.target
-    setInputForm({...inputForm, [name]: e.target.files[0].name.trim()})
+    // console.log(e.target.files[0])
+    name && setInputForm({...inputForm, [name]: e.target.files[0].name})
   }
 
   return (

@@ -24,6 +24,15 @@ const tableDataAPI = {
       cancelToken: tokenAxios,
     })
   },
+  delete: (nameParam, id, tokenAxios) => {
+    const url = `${nameParam}/${id}`
+    return axiosClient.delete(url, {
+      cancelToken: tokenAxios,
+      headers: {
+        Authorization: 'Bearer ' + getItem(keysLocal['token']),
+      },
+    })
+  },
 }
 
 export default tableDataAPI

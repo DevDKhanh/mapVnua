@@ -1,5 +1,5 @@
-import React, {useRef, useEffect} from 'react'
 import clsx from 'clsx'
+import React from 'react'
 
 // Thư mục
 import styles from './Input.module.scss'
@@ -16,11 +16,12 @@ function InputText({
 }) {
   const handleChange = (e) => {
     let {name, value} = e.target
-    if (value) {
-      if (isNumber) {
-        setInputForm({...inputForm, [name]: Number(value.trim())})
-      } else setInputForm({...inputForm, [name]: value.trim()})
-    } else delete inputForm[name]
+    if (isNumber) {
+      setInputForm({
+        ...inputForm,
+        [name]: Number(value),
+      })
+    } else setInputForm({...inputForm, [name]: value})
   }
 
   return (
