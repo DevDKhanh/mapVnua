@@ -14,6 +14,20 @@ function Vector({ path, data }) {
 		}
 	}, [path]);
 
+	const getInfo = data => {
+		const info = [];
+		for (let i in data) {
+			info.push(
+				<div key={i}>
+					<p>
+						<b>{i}: </b> {data[i]}
+					</p>
+				</div>,
+			);
+		}
+		return info;
+	};
+
 	const LayerVector = useMemo(() => {
 		return file.map((item, index) => {
 			if (item.geometry.type === 'Polygon') {
@@ -31,7 +45,9 @@ function Vector({ path, data }) {
 						}}
 						weight={data.widthBorder}
 						positions={polygon}
-					></Polygon>
+					>
+						<Popup>{getInfo(item.properties)}</Popup>
+					</Polygon>
 				);
 			} else if (item.geometry.type === 'LineString') {
 				const polygon = item.geometry.coordinates.map(x => [
@@ -49,7 +65,9 @@ function Vector({ path, data }) {
 						}}
 						weight={data.widthBorder}
 						positions={polygon}
-					></Polyline>
+					>
+						<Popup>{getInfo(item.properties)}</Popup>
+					</Polyline>
 				);
 			} else if (item.geometry.type === 'Point') {
 				const point = [
@@ -58,8 +76,7 @@ function Vector({ path, data }) {
 				];
 				return (
 					<Marker key={index} position={point}>
-						<Popup>Popup for Marker</Popup>
-						<Tooltip>Tooltip for Marker</Tooltip>
+						<Popup>{getInfo(item.properties)}</Popup>
 					</Marker>
 				);
 			}

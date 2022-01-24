@@ -23,7 +23,7 @@ function Map() {
 				<ContainerLayer />
 			</MapContainer>
 			<ButtonDisplayLayer />
-			<ListNote />
+			{/* <ListNote /> */}
 		</div>
 	);
 }

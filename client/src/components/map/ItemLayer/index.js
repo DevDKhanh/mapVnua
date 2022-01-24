@@ -18,7 +18,12 @@ function ItemLayer({ dataLayer }) {
 	return (
 		<li>
 			<label className={style.item}>
-				<span>{dataLayer.nameLayer}</span>
+				<div className={style.text}>
+					<span className={style.icon}>
+						<img src={dataLayer.icon} alt={dataLayer.nameLayer} />
+					</span>
+					<span>{dataLayer.nameLayer}</span>
+				</div>
 				<input
 					type={'checkbox'}
 					onChange={onChange}
