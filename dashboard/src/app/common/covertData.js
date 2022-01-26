@@ -19,11 +19,8 @@ const getTableList = async (paramName, item, dispatch) => {
       Object.keys(dataFormTable[paramName]).forEach((keys) => {
         switch (typeof item[keys]) {
           case 'object': {
-            objectData[keys] =
-              item[keys]['name' + keys[0].toUpperCase() + keys.slice(1)]
-            // if (item[keys]['icon']) {
-            //   objectData['icon'] = item[keys]['icon']
-            // }
+            const keyID = `${keys}Id`
+            objectData[keys] = item[keyID]
             break
           }
           default:

@@ -26,13 +26,17 @@ function SideBar() {
         </div>
       </div>
       <div className={styles.wrapper_menu_section}>
-        <HomeChildren icon={icons.iconHome} text='Trang chủ' />
+        <HomeChildren
+          icon={icons.iconHome}
+          text='Trang chủ'
+          setIndexFocus={setIndexFocus}
+        />
         <MenuSectionChildren
           icon={icons.iconEdit}
           text='Quản lý danh mục'
           iconArrowDown={icons.iconArrowDown}
-          dataParam={['area', 'classify', 'layer', 'document']}
-          children={['Khu vực', 'Phân loại', 'Lớp', 'Tài liệu']}
+          dataParam={['area', 'classify', 'layer']}
+          children={['Khu vực', 'Phân loại', 'Lớp']}
           setIndexFocus={setIndexFocus}
           indexFocus={indexFocus}
           index={1}

@@ -10,16 +10,11 @@ function InputNumber({
   inputForm,
   setInputForm,
   checkInput,
-  isNumber,
   name,
 }) {
-  const handleChange = (e) => {
-    let {name, value} = e.target
-    if (value) {
-      if (isNumber) {
-        setInputForm({...inputForm, [name]: Number(value.trim())})
-      } else setInputForm({...inputForm, [name]: value.trim()})
-    } else delete inputForm[name]
+  const handleChange = (event) => {
+    let {name, value} = event.target
+    setInputForm({...inputForm, [name]: value})
   }
 
   return (
@@ -28,13 +23,15 @@ function InputNumber({
       <input
         name={name}
         onChange={handleChange}
+        value={inputForm[name] || ''}
         type='number'
+        step={0.5}
+        min={0}
         className={clsx(
           'form-control',
           !inputForm[name] && checkInput && 'is-invalid'
         )}
         id={id}
-        min={0}
         placeholder={textLabel}
       />
     </div>

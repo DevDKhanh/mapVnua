@@ -1,10 +1,10 @@
-import clsx from "clsx";
-import style from "./Input.module.scss";
+import clsx from 'clsx'
+import style from './Input.module.scss'
 
 function Input({
-  type = "text",
+  type = 'text',
   label = null,
-  placeholder = "",
+  placeholder = '',
   className,
   onChange,
   value,
@@ -24,7 +24,7 @@ function Input({
         />
       </div>
     </div>
-  );
+  )
 }
 
-export default Input;
+export default Input

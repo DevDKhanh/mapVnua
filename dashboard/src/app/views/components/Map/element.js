@@ -8,4 +8,6 @@ export const WrapperCondinates = styled.div`
   height: 30vh;
   width: 70vh;
 `
-export const Input = styled.input``
+export const Input = styled.input`
+  outline: none;
+`

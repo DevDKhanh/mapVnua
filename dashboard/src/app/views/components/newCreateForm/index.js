@@ -1,43 +1,44 @@
 import React from 'react'
+import {useOutletContext} from 'react-router-dom'
 
 // path of folder
 import styles from './form.module.scss'
-import CreateNewLanguage from './LanguageForm'
-import CreateNewRegion from './RegionForm'
-import CreateNewClassify from './ClassifyForm'
-import CreateNewConfig from './ConfigForm'
-import CreateNewInterface from './InterfaceForm'
-import CreateNewAccount from './AccountForm'
-import CreateNewClass from './ClassForm'
+import FormLanguage from './LanguageForm'
+import FormRegion from './RegionForm'
+import FormClassify from './ClassifyForm'
+import FormConfig from './ConfigForm'
+import FormInterface from './InterfaceForm'
+import FormAccount from './AccountForm'
+import FormClass from './ClassForm'
 
-// paramName = name on param of url bar
-function NewCreateForm({paramName}) {
-  return (
-    <div className={styles.wrapper_main_form}>
-      {/* content of main */}
-      {paramName === 'language' && (
-        <CreateNewLanguage text='Tạo mới' paramName={paramName} />
-      )}
-      {paramName === 'area' && (
-        <CreateNewRegion text='Tạo mới' paramName={paramName} />
-      )}
-      {paramName === 'classify' && (
-        <CreateNewClassify text='Tạo mới' paramName={paramName} />
-      )}
-      {paramName === 'setting' && (
-        <CreateNewConfig text='Tạo mới' paramName={paramName} />
-      )}
-      {paramName === 'interface' && (
-        <CreateNewInterface text='Tạo mới' paramName={paramName} />
-      )}
-      {paramName === 'account' && (
-        <CreateNewAccount text='Tạo mới' paramName={paramName} />
-      )}
-      {paramName === 'layer' && (
-        <CreateNewClass text='Tạo mới' paramName={paramName} />
-      )}
-    </div>
-  )
+const formUpdate = (dataProps) => {
+  switch (dataProps.nameURL) {
+    case 'area':
+      return <FormRegion dataProps={dataProps} />
+    case 'classify':
+      return <FormClassify dataProps={dataProps} />
+    case 'layer':
+      return <FormClass dataProps={dataProps} />
+    case 'setting':
+      return <FormConfig dataProps={dataProps} />
+    case 'interface':
+      return <FormInterface dataProps={dataProps} />
+    case 'language':
+      return <FormLanguage dataProps={dataProps} />
+    case 'account':
+      return <FormAccount dataProps={dataProps} />
+    default:
+      return null
+  }
+}
+
+function NewCreateForm({nameUrl}) {
+  const dataProps = {
+    text: 'Tạo mới',
+    nameURL: nameUrl,
+  }
+
+  return <div className={styles.wrapper_main_form}>{formUpdate(dataProps)}</div>
 }
 
 export default NewCreateForm

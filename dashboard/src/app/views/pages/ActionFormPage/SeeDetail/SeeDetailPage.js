@@ -29,22 +29,26 @@ const covertAPI = (object, paramName, objectTemp, setData) => {
 }
 
 function SeeDetailPage() {
-  const [data, setData] = useState() // data get from server
+  const [resData, setresData] = useState() // data get from server
   const {name, id} = useParams()
-  let objectTemp = {}
 
   useEffect(() => {
     const callAPI = async () => {
-      const dataServer = await tableDataAPI['getDetail'](name, id)
-      covertAPI(dataServer[0]['data'], name, objectTemp, setData)
+      const [dataServer] = await tableDataAPI.getDetail(name, id)
+      const {data} = dataServer
+      Object.keys(data).forEach((key) => {
+        if (typeof data[key] === 'object') {
+          delete data[key]
+        }
+      })
+      setresData(data)
     }
     callAPI()
-  }, [])
+  }, [id, name])
 
   return (
     <div className={styles.container}>
-      {/* Dữ liệu đang fix cứng */}
-      <SeeDetail objectDataItem={data ? data : {name: 'name'}} />
+      <SeeDetail dataItem={resData ? resData : {}} />
     </div>
   )
 }

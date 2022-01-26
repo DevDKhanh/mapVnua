@@ -6,7 +6,7 @@ const dataHead = {
     'Tọa độ lat',
     'Tọa độ lng',
     'Zoom',
-    'Tên ngôn ngữ',
+    'ID ngôn ngữ',
     'Hiển thị',
   ],
   classify: [

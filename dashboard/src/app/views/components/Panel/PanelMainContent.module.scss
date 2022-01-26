@@ -1,5 +1,7 @@
 .wrapper_panel_content {
 
+    margin: 40px 40px;
+
     &>button {
         background-color: #fff;
         margin-bottom   : 30px;
@@ -50,6 +52,7 @@
                 border-collapse: collapse;
                 padding        : 5px 10px;
                 word-wrap      : break-word;
+                text-align     : center;
             }
 
             thead {

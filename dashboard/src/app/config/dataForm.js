@@ -5,7 +5,7 @@ const dataFormTable = {
     lat: '',
     lng: '',
     zoom: '',
-    language: '',
+    languageId: '',
     active: '',
   },
   classify: {
@@ -21,7 +21,6 @@ const dataFormTable = {
     area: '',
     nameLayer: '',
   },
-  document: {},
   setting: {
     id: '',
     language: '',

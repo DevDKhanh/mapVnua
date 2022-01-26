@@ -42,7 +42,7 @@
                 border          : none;
                 margin          : 20px 0;
 
-                &>a {
+                &>span {
                     text-decoration : none;
                     color           : #fff;
                     padding         : 20px 117px;
@@ -53,10 +53,11 @@
                     cursor          : pointer;
                     box-shadow      : -4px -1px 5px rgb(179 179 179 / 90%), 3px 3px 5px rgb(0 0 0 / 50%);
                     border-radius   : 30px;
+                }
 
-                    &:visited {
-                        color: #fff;
-                    }
+                &:focus {
+                    outline: none;
+                    border : none;
                 }
             }
         }

@@ -11,17 +11,13 @@ function InputText({
   setInputForm,
   checkInput,
   type,
-  isNumber,
   name,
+  disable,
 }) {
   const handleChange = (e) => {
     let {name, value} = e.target
-    if (isNumber) {
-      setInputForm({
-        ...inputForm,
-        [name]: Number(value),
-      })
-    } else setInputForm({...inputForm, [name]: value})
+
+    setInputForm({...inputForm, [name]: value})
   }
 
   return (
@@ -38,6 +34,7 @@ function InputText({
         )}
         id={id}
         placeholder={textLabel}
+        disabled={disable}
       />
     </div>
   )

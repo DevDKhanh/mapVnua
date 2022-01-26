@@ -5,11 +5,10 @@ import clsx from 'clsx'
 import styles from './Input.module.scss'
 
 function InputFile({id, textLabel, name, inputForm, setInputForm, checkInput}) {
-  // console.log(inputForm)
   const handleOnchange = (e) => {
-    let {name} = e.target
-    // console.log(e.target.files[0])
-    name && setInputForm({...inputForm, [name]: e.target.files[0].name})
+    // console.log(inputForm[name])
+    // console.log(inputForm[name].name)
+    name && setInputForm({...inputForm, [name]: e.target.files[0]})
   }
 
   return (
@@ -19,16 +18,18 @@ function InputFile({id, textLabel, name, inputForm, setInputForm, checkInput}) {
         <input
           name={name}
           type='file'
+          accept='image/*'
           className={clsx(
             'custom-file-input',
             !inputForm[name] && checkInput && 'is-invalid'
           )}
           id={id}
-          accept='image/png, image/jpeg'
           onChange={handleOnchange}
         />
         <label className='custom-file-label' htmlFor={id}>
-          {inputForm[name]}
+          {typeof inputForm[name] === 'object'
+            ? inputForm[name].name
+            : inputForm[name]}
         </label>
       </div>
     </div>

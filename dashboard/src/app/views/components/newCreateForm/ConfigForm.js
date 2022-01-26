@@ -14,41 +14,47 @@ import {useSelector} from 'react-redux'
 import MapLeaflet from '../Map/MapLeafLet'
 import tableDataAPI from 'app/api/tableData'
 
-const checkResData = (resData, setIsGetDataSuccessful) => {
+const checkResData = (
+  resData,
+  method,
+  setDataFromForm,
+  arrayIdLanguage,
+  setIsFirstClick,
+  dataFromForm
+) => {
+  console.log(arrayIdLanguage[0])
   const statusNotifications = {
     success: 'success',
     error: 'error',
   }
   const textnotifications = {
-    success: 'Tạo mới thành công',
-    error: 'Tạo mới thất bại',
+    success: method ? 'Chỉnh sửa thành công' : 'Tạo mới thành công',
+    error: method ? 'Chỉnh sửa thất bại' : 'Tạo mới thất bại',
   }
-  const indexFirst = 0
-  const keys = {
-    code: 'code',
-  }
-  console.log(resData)
-  if (isResDataError(resData[keys.code])) {
+
+  if (typeof resData === 'object' && resData.code === 400) {
     textnotifications.error = resData.message
     notifications(statusNotifications.error, textnotifications.error)
-    setIsGetDataSuccessful(false)
-  } else if (isResDataSuccess(resData[indexFirst][keys.code])) {
-    notifications(statusNotifications.success, textnotifications.success)
-    setIsGetDataSuccessful(true)
-  } else if (isResDataError(resData[indexFirst][keys.code])) {
-    notifications(statusNotifications.error, textnotifications.error)
-    setIsGetDataSuccessful(false)
   }
-}
+  if (Array.isArray(resData) && resData[0].code === 200) {
+    notifications(statusNotifications.success, textnotifications.success)
 
-const isResDataError = (codeFromData) => {
-  const indexError = 400
-  return codeFromData === indexError ? true : false
-}
-
-const isResDataSuccess = (codeFromData) => {
-  const indexSuccess = 200
-  return codeFromData === indexSuccess ? true : false
+    // !method = null not exits method
+    if (!method) {
+      setDataFromForm({
+        ...dataFromForm,
+        title: '',
+        lat: '',
+        lng: '',
+        zoom: '',
+        languageId: arrayIdLanguage[0],
+      })
+      setIsFirstClick(false)
+    }
+  }
+  if (Array.isArray(resData) && resData[0].code === 400) {
+    notifications(statusNotifications.error, textnotifications.error)
+  }
 }
 
 const checkNotificationStatus = (status) => {
@@ -83,20 +89,65 @@ const isCheckDataEmptyFromForm = (dataFromForm) => {
   )
 }
 
-const getDataFromAPI = async (data, paramName) => {
-  const method = 'create'
+const handleDataToAPI = async (dataForm, nameURL, method, idURL) => {
   const tokenAxios = null
-  try {
-    return await tableDataAPI[method](data, tokenAxios, paramName)
-  } catch (error) {
-    return error
+  const nameParam = nameURL
+  const data = dataForm
+  const id = idURL
+  switch (method) {
+    case 'create':
+      try {
+        return await tableDataAPI[method](nameParam, data, tokenAxios)
+      } catch (error) {
+        return error
+      }
+    case 'update':
+      try {
+        return await tableDataAPI[method](nameParam, data, id, tokenAxios)
+      } catch (error) {
+        return error
+      }
+    case 'getDetail':
+      try {
+        return await tableDataAPI[method](nameParam, id, tokenAxios)
+      } catch (error) {
+        return error
+      }
+    default:
+      return null
   }
 }
 
-function ConfigForm({text, paramName}) {
+const converByKeys = (dataFromForm, resLayerData) => {
+  const converData = {}
+
+  Object.keys(dataFromForm).map(
+    (key) => (converData[key] = resLayerData.data[key])
+  )
+  delete converData.id
+  return converData
+}
+
+function ConfigForm({dataProps}) {
   const [isFirstClick, setIsFirstClick] = useState(false)
-  const [isGetDataSuccessful, setIsGetDataSuccessful] = useState()
   const [isOnMap, setIsOnMap] = useState(false)
+
+  React.useEffect(() => {
+    ;(async () => {
+      const {idURL, isEdit, nameURL} = dataProps
+      if (isEdit) {
+        const [resLayerData] = await handleDataToAPI(
+          null,
+          nameURL,
+          'getDetail',
+          idURL
+        )
+
+        const convertedData = converByKeys(dataFromForm, resLayerData)
+        setDataFromForm(convertedData)
+      }
+    })()
+  }, [dataProps])
 
   const dataFromRedux = useSelector(
     (state) => state['displayMainContent']['data']
@@ -110,49 +161,87 @@ function ConfigForm({text, paramName}) {
     (infoLanguage) => infoLanguage[keys.current.id]
   )
 
-  const indexFirst = React.useRef(0)
   const dataDefault = React.useRef({
     title: '',
     lat: '',
     lng: '',
     zoom: '',
     icon: '',
-    languageId: arrayIdLanguage[indexFirst.current],
+    languageId: arrayIdLanguage[0],
   })
   const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
 
   const handleCreateNew = async () => {
     setIsFirstClick(true)
+    const formSubmit = {...dataFromForm}
 
-    const isFullData = isCheckDataEmptyFromForm(dataFromForm)
+    if (dataFromForm.icon) {
+      const formData = new FormData()
+      formData.append('file', dataFromForm.icon)
+      const [resImageUrl] = await tableDataAPI.upload(formData, 'image', null)
+      formSubmit.icon = resImageUrl.filename
+    }
+
+    const isFullData = isCheckDataEmptyFromForm(formSubmit)
 
     if (isFullData) {
-      const resData = await getDataFromAPI(dataFromForm, paramName)
-      checkResData(resData, setIsGetDataSuccessful)
+      const dataForm = formSubmit
+      const nameURL = dataProps.nameURL
+      const method = 'create'
+
+      const resData = await handleDataToAPI(dataForm, nameURL, method)
+      checkResData(
+        resData,
+        null,
+        setDataFromForm,
+        arrayIdLanguage,
+        setIsFirstClick,
+        dataFromForm
+      )
     } else {
       const statusNotifications = {
-        success: 'success',
         error: 'error',
       }
       const textnotifications = {
-        success: 'Tạo mới thành công',
         error: 'Tạo mới thất bại',
       }
       notifications(statusNotifications.error, textnotifications.error)
-      setIsGetDataSuccessful(false)
+    }
+  }
+
+  const handleEdit = async () => {
+    setIsFirstClick(true)
+    const formSubmit = {...dataFromForm}
+    if (dataFromForm.icon) {
+      const formData = new FormData()
+      formData.append('file', dataFromForm.icon)
+      const [resImageUrl] = await tableDataAPI.upload(formData, 'image')
+      formSubmit.icon = resImageUrl.filename
+    }
+
+    const isFullData = isCheckDataEmptyFromForm(formSubmit)
+
+    if (isFullData) {
+      const dataForm = formSubmit
+      const nameURL = dataProps.nameURL
+      const idURL = dataProps.idURL
+      const method = 'update'
+
+      const resData = await handleDataToAPI(dataForm, nameURL, method, idURL)
+      checkResData(resData, method)
+    } else {
+      const statusNotifications = {
+        error: 'error',
+      }
+      const textnotifications = {
+        error: 'Chỉnh sửa thất bại',
+      }
+      notifications(statusNotifications.error, textnotifications.error)
     }
   }
 
   const handleTurnOnMap = () => {
     setIsOnMap(true)
-  }
-
-  const handleCheckSubmit = () => {
-    if (isGetDataSuccessful) {
-      return '/'
-    } else {
-      return ''
-    }
   }
 
   return (
@@ -166,7 +255,7 @@ function ConfigForm({text, paramName}) {
       )}
       <div className={styles.wrapperCreateNew}>
         <div className={styles.wrapper_main_form}>
-          <h2>{text}</h2>
+          <h2>{dataProps.text}</h2>
           <div className={styles.wrapperForm}>
             <InputDeps
               id='1'
@@ -219,10 +308,9 @@ function ConfigForm({text, paramName}) {
               setInputForm={setDataFromForm}
               checkInput={isFirstClick}
             />
-
             <div className={styles.wrapper_button}>
-              <button onClick={handleCreateNew}>
-                <Link to={handleCheckSubmit}>Tạo mới</Link>
+              <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
+                <span>{dataProps.text}</span>
               </button>
             </div>
           </div>

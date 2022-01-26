@@ -1,22 +1,18 @@
-import React, { useState } from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import React from 'react'
+import {useParams} from 'react-router-dom'
 
 // Path of folder
-import styles from "./NewCreatePage.module.scss";
-import NewCreateForm from "../../../components/newCreateForm";
+import styles from './NewCreatePage.module.scss'
+import NewCreateForm from '../../../components/newCreateForm'
 
 function NewCreatePage() {
-  // dataDisplayComponent.textComponentDisplay
-  const { name } = useParams();
-
-  //get context from parent
-  const setIsVisible = useOutletContext();
+  const {name} = useParams()
 
   return (
-    <div className={styles.container} onClick={() => setIsVisible(false)}>
-      <NewCreateForm paramName={name} />
+    <div className={styles.container}>
+      <NewCreateForm nameUrl={name} />
     </div>
-  );
+  )
 }
 
-export default NewCreatePage;
+export default NewCreatePage

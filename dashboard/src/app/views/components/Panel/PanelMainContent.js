@@ -14,37 +14,57 @@ function PanelMainContent({nameHead, dataTable}) {
   const [isActive, setIsActive] = useState(false)
   // ID & name delete
   const [infoItem, setInfoItem] = useState()
-  //handle display dialog
+
   const handleDialog = (name, id) => {
     setInfoItem({name, id})
     setIsActive(true)
   }
 
-  // console.log(dataTable[nameHead]) //dữ liệu
+  const checkIsPathImage = (itemValue) => {
+    const baseURL = 'http://localhost:3000/upload'
+
+    if (itemValue.toString().includes('/image/')) {
+      return (
+        <td>
+          <img
+            src={`${baseURL}${itemValue}`}
+            alt=''
+            style={{width: '25px', height: '25px', margin: 'auto'}}
+          />
+        </td>
+      )
+    } else {
+      return <td>{itemValue}</td>
+    }
+  }
+
+  const RenderValue = ({itemValue}) => {
+    const htmlValue = checkIsPathImage(itemValue)
+    return htmlValue
+  }
+
   return (
     <div className={styles.wrapper_panel_content}>
       <button>
-        <Link to={`/home/new_create/${nameHead}`}>Tạo mới</Link>
+        <Link to='new_create'>Tạo mới</Link>
       </button>
       <div className={styles.wrapper_panel}>
         <table>
-          {nameHead !== 'home' && (
-            <PanelHeadTable dataHead={dataHead[nameHead]} />
-          )}
+          <PanelHeadTable dataHead={dataHead[nameHead]} />
           <tbody>
             {dataTable[nameHead].map((item, index) => (
               <tr key={index}>
                 <td>{index}</td>
                 {Object.values(item).map((itemValue, index) => (
                   <React.Fragment key={index}>
-                    <td>{itemValue}</td>
+                    <RenderValue itemValue={itemValue} />
                   </React.Fragment>
                 ))}
                 <td>
-                  <Link to={`/home/see_detail/${nameHead}/${item['id']}`}>
+                  <Link to={`see_detail/${item['id']}`}>
                     <i className='far fa-eye'></i>
                   </Link>
-                  <Link to={`/home/edit/${nameHead}/${item['id']}`}>
+                  <Link to={`edit/${item['id']}`}>
                     <i className='far fa-edit'></i>
                   </Link>
                   <Link

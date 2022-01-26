@@ -1,30 +1,24 @@
 import React from 'react'
-import {useDispatch} from 'react-redux'
 
 // path of folder
 import styles from './MenuSection.module.scss'
-import {reqDisplay} from '../../../../../redux/action/action.componentDisplay'
+import {Link} from 'react-router-dom'
 
-const HomeChildren = ({icon, text}) => {
-  const dispatch = useDispatch()
-
+const HomeChildren = ({icon, text, setIndexFocus}) => {
   const handleClickHome = () => {
-    dispatch(
-      reqDisplay({
-        text: 'home',
-      })
-    )
+    setIndexFocus()
   }
 
   return (
-    <div
+    <Link
+      to={'.'}
       onClick={handleClickHome}
       className={styles.wrapper_menu_section_children}
     >
       {/* tab i */}
       {icon}
       <p>{text}</p>
-    </div>
+    </Link>
   )
 }
 
