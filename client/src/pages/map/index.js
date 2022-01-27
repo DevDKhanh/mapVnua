@@ -3,8 +3,6 @@ import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import FullScreen from '../../components/map/FullScreen';
 import ButtonDisplayLayer from '../../components/map/ButtonDisplayLayer';
 import ContainerLayer from '../../components/map/ContainerLayer';
-import RasterForm from '../../components/layers/RasterForm';
-import EditSize from '../../components/layers/EditSize';
 import './styles.scss';
 
 function Map() {
@@ -22,9 +20,7 @@ function Map() {
                 <ZoomControl position="bottomright" />
                 <FullScreen />
                 <ContainerLayer />
-                <RasterForm />
             </MapContainer>
-            <EditSize />
             <ButtonDisplayLayer />
         </div>
     );
