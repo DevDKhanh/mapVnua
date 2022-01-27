@@ -9,6 +9,7 @@ import HeaderNavBar from 'app/views/components/Home/MainContent/Header/HeaderNav
 import dataFormTable from 'app/config/dataForm'
 import getTableList from 'app/common/covertData'
 import {reqDisplay} from 'app/redux/action/action.componentDisplay'
+import MainContent from '../../components/Home/MainContent/MainContent.js'
 
 const icon = {
   arrowLeft: <i className='fas fa-arrow-left'></i>,

@@ -1,59 +1,85 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react'
+import {Link, useOutletContext, useParams} from 'react-router-dom'
+import DialogDelete from '../Dialog/DialogDelete.js'
 
 // path of folder
 import styles from './SeeDetail.module.scss'
 
-// objectDataItem = lưu trữ dữ liệu item để hiển thị ra đúng số dòng
-function SeeDetail({setIsVisible, objectDataItem}) {
-  // check state of button
-  const [onClickBtn, setOnClickBtn] = useState(false)
+function SeeDetail({dataItem}) {
+  // state on/off dialog
+  const [isActive, setIsActive] = useState(false)
+  // ID & name delete
+  const [infoItem, setInfoItem] = useState()
 
-  const handleClick = () => {
-    setIsVisible(false)
+  const {name, id} = useParams()
+
+  // check state of button
+  const [onClick, setOnClick] = useState(false)
+
+  const checkIsPathImage = (valueOfKey) => {
+    const baseURL = 'http://localhost:3000/upload'
+
+    if (valueOfKey.toString().includes('/image/')) {
+      return (
+        <td>
+          <img src={`${baseURL}${valueOfKey}`} alt='' />
+        </td>
+      )
+    } else {
+      return <td>{valueOfKey}</td>
+    }
+  }
+
+  const RenderValue = ({dataItem, keyItem}) => {
+    const valueOfKey = dataItem[keyItem]
+
+    const htmlValue = checkIsPathImage(valueOfKey)
+    return htmlValue
+  }
+
+  const handleDialog = () => {
+    setInfoItem({name, id})
+    setIsActive(true)
   }
 
   return (
-    <div onClick={handleClick} className={styles.container_see_detail}>
+    <div className={styles.container_see_detail}>
       <h2>Xem chi tiết</h2>
-      <div
-        onClick={() => setOnClickBtn(false)}
-        className={styles.wrapper_table}
-      >
+      <div onClick={() => setOnClick(false)} className={styles.wrapper_table}>
         <table>
           <tbody>
-            {Object.keys(objectDataItem).map((item, index) => (
+            {Object.keys(dataItem).map((keyItem, index) => (
               <tr key={index}>
-                <td>{item}</td>
-                {Object.values(objectDataItem)
-                  [index].toString()
-                  .includes('.') ? (
-                  <td>{Object.values(objectDataItem)[index]}</td>
-                ) : (
-                  // <td>
-                  //   <img src={Object.values(objectDataItem)[index]} />
-                  // </td>
-                  <td>{Object.values(objectDataItem)[index]}</td>
-                )}
+                <td>{keyItem}</td>
+                <RenderValue dataItem={dataItem} keyItem={keyItem} />
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className={styles.wrapper_button}>
-        {onClickBtn && (
+        {onClick && (
           <div className={styles.wrapper_button_children}>
-            <button>
+            <Link to={`/home/${name}/edit/${id}`}>
               <i className='far fa-edit'></i>
-            </button>
-            <button>
+            </Link>
+            <Link to='' onClick={() => handleDialog()}>
               <i className='far fa-trash-alt'></i>
-            </button>
+            </Link>
           </div>
         )}
-        <button onClick={() => setOnClickBtn(!onClickBtn)}>
+        <Link to='' onClick={() => setOnClick(!onClick)}>
           <i className='fas fa-plus'></i>
-        </button>
+        </Link>
       </div>
+      {isActive && (
+        <DialogDelete
+          isActive={isActive}
+          infoItem={infoItem}
+          setIsActive={setIsActive}
+          isDetail
+        />
+      )}
     </div>
   )
 }

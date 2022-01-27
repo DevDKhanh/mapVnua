@@ -8,42 +8,46 @@ import InputDeps from '../FormAction/InputForm/InputDeps'
 import tableDataAPI from 'app/api/tableData'
 import {useSelector} from 'react-redux'
 import {toast} from 'react-toastify'
+import InputNumber from '../FormAction/InputForm/InputNumber.js'
 
-const checkResData = (resData, setIsGetDataSuccessful) => {
+const checkResData = (
+  resData,
+  method,
+  setDataFromForm,
+  arrayIdLanguage,
+  setIsFirstClick
+) => {
   const statusNotifications = {
     success: 'success',
     error: 'error',
   }
   const textnotifications = {
-    success: 'Tạo mới thành công',
-    error: 'Tạo mới thất bại',
+    success: method ? 'Chỉnh sửa thành công' : 'Tạo mới thành công',
+    error: method ? 'Chỉnh sửa thất bại' : 'Tạo mới thất bại',
   }
-  const indexFirst = 0
-  const keys = {
-    code: 'code',
-  }
-  console.log(resData)
-  if (isResDataError(resData[keys.code])) {
+
+  if (typeof resData === 'object' && resData.code === 400) {
     textnotifications.error = resData.message
     notifications(statusNotifications.error, textnotifications.error)
-    setIsGetDataSuccessful(false)
-  } else if (isResDataSuccess(resData[indexFirst][keys.code])) {
-    notifications(statusNotifications.success, textnotifications.success)
-    setIsGetDataSuccessful(true)
-  } else if (isResDataError(resData[indexFirst][keys.code])) {
-    notifications(statusNotifications.error, textnotifications.error)
-    setIsGetDataSuccessful(false)
   }
-}
+  if (Array.isArray(resData) && resData[0].code === 200) {
+    notifications(statusNotifications.success, textnotifications.success)
 
-const isResDataError = (codeFromData) => {
-  const indexError = 400
-  return codeFromData === indexError ? true : false
-}
-
-const isResDataSuccess = (codeFromData) => {
-  const indexSuccess = 200
-  return codeFromData === indexSuccess ? true : false
+    // !method = null not exits method
+    if (!method) {
+      setDataFromForm({
+        id: '',
+        nameClassify: '',
+        active: 1,
+        no: '',
+        languageId: arrayIdLanguage[0],
+      })
+      setIsFirstClick(false)
+    }
+  }
+  if (Array.isArray(resData) && resData[0].code === 400) {
+    notifications(statusNotifications.error, textnotifications.error)
+  }
 }
 
 const checkNotificationStatus = (status) => {
@@ -78,19 +82,64 @@ const isCheckDataEmptyFromForm = (dataFromForm) => {
   )
 }
 
-const getDataFromAPI = async (data, paramName) => {
-  const method = 'create'
+const handleDataToAPI = async (dataForm, nameURL, method, idURL) => {
   const tokenAxios = null
-  try {
-    return await tableDataAPI[method](data, tokenAxios, paramName)
-  } catch (error) {
-    return error
+  const nameParam = nameURL
+  const data = dataForm
+  const id = idURL
+  switch (method) {
+    case 'create':
+      try {
+        return await tableDataAPI[method](nameParam, data, tokenAxios)
+      } catch (error) {
+        return error
+      }
+    case 'update':
+      try {
+        return await tableDataAPI[method](nameParam, data, id, tokenAxios)
+      } catch (error) {
+        return error
+      }
+    case 'getDetail':
+      try {
+        return await tableDataAPI[method](nameParam, id, tokenAxios)
+      } catch (error) {
+        return error
+      }
+    default:
+      return null
   }
 }
 
-function ClassifyForm({text, paramName, dataItem}) {
+const converByKeys = (dataFromForm, resLayerData) => {
+  const converData = {}
+
+  Object.keys(dataFromForm).map(
+    (key) => (converData[key] = resLayerData.data[key])
+  )
+
+  return converData
+}
+
+function ClassifyForm({dataProps}) {
   const [isFirstClick, setIsFirstClick] = useState(false)
-  const [isGetDataSuccessful, setIsGetDataSuccessful] = useState()
+
+  React.useEffect(() => {
+    ;(async () => {
+      const {idURL, isEdit, nameURL} = dataProps
+      if (isEdit) {
+        const [resLayerData] = await handleDataToAPI(
+          null,
+          nameURL,
+          'getDetail',
+          idURL
+        )
+
+        const convertedData = converByKeys(dataFromForm, resLayerData)
+        setDataFromForm(convertedData)
+      }
+    })()
+  }, [dataProps])
 
   const dataFromRedux = useSelector(
     (state) => state['displayMainContent']['data']
@@ -105,58 +154,74 @@ function ClassifyForm({text, paramName, dataItem}) {
   )
   let hidden = ['Có', 'Không']
 
-  const indexFirst = React.useRef(0)
   const dataDefault = React.useRef({
     id: '',
     nameClassify: '',
     active: 1,
-    no: 0,
-    languageId: arrayIdLanguage[indexFirst.current],
+    no: '',
+    languageId: arrayIdLanguage[0],
   })
   const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
 
-  // useEffect(() => {
-  //   Object.keys(inputForm).forEach((item) => {
-  //     console.log(inputForm[item] === '')
-  //     inputForm[item] === '' && delete inputForm[item]
-  //   })
-  //   console.log(inputForm)
-  // }, [inputForm])
-
   const handleCreateNew = async () => {
     setIsFirstClick(true)
+    const formSubmit = {...dataFromForm}
 
-    const isFullData = isCheckDataEmptyFromForm(dataFromForm)
+    const isFullData = isCheckDataEmptyFromForm(formSubmit)
 
     if (isFullData) {
-      const resData = await getDataFromAPI(dataFromForm, paramName)
-      checkResData(resData, setIsGetDataSuccessful)
+      const dataForm = formSubmit
+      const nameURL = dataProps.nameURL
+      const method = 'create'
+
+      const resData = await handleDataToAPI(dataForm, nameURL, method)
+      checkResData(
+        resData,
+        null,
+        setDataFromForm,
+        arrayIdLanguage,
+        setIsFirstClick
+      )
     } else {
       const statusNotifications = {
-        success: 'success',
         error: 'error',
       }
       const textnotifications = {
-        success: 'Tạo mới thành công',
         error: 'Tạo mới thất bại',
       }
       notifications(statusNotifications.error, textnotifications.error)
-      setIsGetDataSuccessful(false)
     }
   }
 
-  const handleCheckSubmit = () => {
-    if (isGetDataSuccessful) {
-      return '/'
+  const handleEdit = async () => {
+    setIsFirstClick(true)
+    const formSubmit = {...dataFromForm}
+
+    const isFullData = isCheckDataEmptyFromForm(formSubmit)
+
+    if (isFullData) {
+      const dataForm = formSubmit
+      const nameURL = dataProps.nameURL
+      const idURL = dataProps.idURL
+      const method = 'update'
+
+      const resData = await handleDataToAPI(dataForm, nameURL, method, idURL)
+      checkResData(resData, method)
     } else {
-      return ''
+      const statusNotifications = {
+        error: 'error',
+      }
+      const textnotifications = {
+        error: 'Chỉnh sửa thất bại',
+      }
+      notifications(statusNotifications.error, textnotifications.error)
     }
   }
 
   return (
     <div className={styles.wrapperCreateNew}>
       <div className={styles.wrapper_main_form}>
-        <h2>{text}</h2>
+        <h2>{dataProps.text}</h2>
         <div className={styles.wrapperForm}>
           <InputText
             id='1'
@@ -165,9 +230,18 @@ function ClassifyForm({text, paramName, dataItem}) {
             inputForm={dataFromForm}
             setInputForm={setDataFromForm}
             checkInput={isFirstClick}
+            disable={dataProps.isEdit && true}
+          />
+          <InputNumber
+            id='2'
+            textLabel='Số thứ tự'
+            name='no'
+            inputForm={dataFromForm}
+            setInputForm={setDataFromForm}
+            checkInput={isFirstClick}
           />
           <InputText
-            id='2'
+            id='3'
             textLabel='Tên phân loại'
             name='nameClassify'
             inputForm={dataFromForm}
@@ -175,7 +249,7 @@ function ClassifyForm({text, paramName, dataItem}) {
             checkInput={isFirstClick}
           />
           <InputDeps
-            id='3'
+            id='4'
             textLabel='Tên ngôn ngữ'
             name='languageId'
             arrayDeps={arrayIdLanguage}
@@ -183,7 +257,7 @@ function ClassifyForm({text, paramName, dataItem}) {
             setInputForm={setDataFromForm}
           />
           <InputDeps
-            id='4'
+            id='5'
             textLabel='Hiển thị'
             name='active'
             arrayDeps={hidden}
@@ -191,8 +265,8 @@ function ClassifyForm({text, paramName, dataItem}) {
             setInputForm={setDataFromForm}
           />
           <div className={styles.wrapper_button}>
-            <button onClick={handleCreateNew}>
-              <Link to={handleCheckSubmit}>Tạo mới</Link>
+            <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
+              <span>{dataProps.text}</span>
             </button>
           </div>
         </div>

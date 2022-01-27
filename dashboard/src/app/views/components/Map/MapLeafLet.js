@@ -30,6 +30,7 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm}) => {
 
   const handleClickOke = () => {
     setInputForm({...inputForm, ...coordinates})
+
     setIsCheckMap(false)
   }
 

@@ -95,18 +95,18 @@
                 }
             }
 
-            &>button:nth-child(1) {
+            &>a:nth-child(1) {
                 padding: 20px 23px;
             }
         }
 
-        &>button {
+        &>a {
             position: absolute;
-            bottom  : 4%;
+            bottom  : -1%;
             right   : 4%;
         }
 
-        button {
+        a {
             border          : none;
             border-radius   : 100%;
             padding         : 20px 25px;

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Link, useNavigate, useParams} from 'react-router-dom'
+import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 
 // Thư viện
@@ -10,16 +10,29 @@ import Avatar from '../../../Avatar/Avatar'
 import Logout from '../Logout/Logout'
 import getTableList from 'app/common/covertData'
 
-function HeaderNavBar({icon, text, isVisible, setIsVisible}) {
-  //navigate
+const RenderIconOrText = ({urlParam, nameURL, icon}) => {
   const navigate = useNavigate()
-  const {name} = useParams()
   const dispatch = useDispatch()
 
   const handleClickBack = () => {
-    getTableList(name, null, dispatch)
-    navigate(-1)
+    getTableList(nameURL, null, dispatch)
+    navigate(nameURL)
   }
+
+  if (
+    urlParam.pathname === `/home/${nameURL}` ||
+    urlParam.pathname === `/home/${nameURL}/`
+  ) {
+    return <h2>{nameURL}</h2>
+  } else {
+    return icon ? <div onClick={handleClickBack}>{icon.arrowLeft}</div> : null
+  }
+}
+
+function HeaderNavBar({icon, isVisible, setIsVisible}) {
+  //navigate
+  const {name} = useParams()
+  const urlParam = useLocation()
 
   return (
     <div className={styles.wrapper_header_navBar}>
@@ -27,8 +40,7 @@ function HeaderNavBar({icon, text, isVisible, setIsVisible}) {
         className={styles.wrapper_header_navBarLeft}
         onClick={() => setIsVisible(false)}
       >
-        {icon && <div onClick={handleClickBack}>{icon.arrowLeft}</div>}
-        {text && <h2>{text}</h2>}
+        <RenderIconOrText urlParam={urlParam} nameURL={name} icon={icon} />
       </div>
       <div
         onClick={() => setIsVisible(!isVisible)}

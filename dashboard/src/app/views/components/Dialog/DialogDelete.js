@@ -5,14 +5,16 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
-import tableDataAPI from 'app/api/tableData'
 import {toast} from 'react-toastify'
 import {useDispatch} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 
 import convertData from 'app/common/covertData'
+import tableDataAPI from 'app/api/tableData'
 
-const DialogDelete = ({isActive, infoItem, setIsActive}) => {
+const DialogDelete = ({isActive, infoItem, setIsActive, isDetail}) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const dialogCancel = () => {
     setIsActive(false)
@@ -25,7 +27,6 @@ const DialogDelete = ({isActive, infoItem, setIsActive}) => {
 
   const handleApiDelete = (name, id) => {
     tableDataAPI.delete(name, id).then((res) => {
-      console.log(res)
       if (res[0]['status'] === 400) {
         toast.error(
           'Xóa thất bại, vui lòng kiểm tra các thành phần phụ thuộc',
@@ -54,8 +55,9 @@ const DialogDelete = ({isActive, infoItem, setIsActive}) => {
         })
         // re-load table
         convertData(infoItem['name'], null, dispatch)
-        // off dialog
-        setIsActive(false)
+
+        // isDetail exits go back table else off dialog
+        isDetail ? navigate(`/home/${name}`) : setIsActive(false)
       }
     })
   }

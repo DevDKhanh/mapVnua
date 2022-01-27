@@ -1,17 +1,22 @@
 @import '../../../style/color';
 
 .page {
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	min-height      : 100vh;
+	display         : flex;
+	justify-content : center;
+	align-items     : center;
+	background-color: #bbb3ff;
 
 	.mainForm {
 		width: 100%;
 
 		.form {
 			max-width: 450px;
-			margin: 0 auto;
+			margin   : 0 auto;
+
+			.textError {
+				color: red;
+			}
 		}
 
 		.title {
@@ -22,9 +27,10 @@
 			label {
 				font-weight: 600;
 			}
+
 			input {
 				border-radius: 20px;
-				padding: 8px 20px;
+				padding      : 8px 20px;
 			}
 		}
 

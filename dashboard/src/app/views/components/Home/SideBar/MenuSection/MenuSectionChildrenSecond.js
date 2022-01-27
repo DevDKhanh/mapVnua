@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import styled from 'styled-components'
+import {Link} from 'react-router-dom'
 
 // Thư mục
 import styles from './MenuSection.module.scss'
 import getTableList from 'app/common/covertData'
 
 //styled
-const PElement = styled.p`
+const LinkElement = styled(Link)`
   display: block;
   padding: 10px 20px;
   font-size: 0.9rem;
@@ -21,8 +22,8 @@ const PElement = styled.p`
     font-weight: 600;
   }
 
-  ${(props) =>
-    props.clickItem &&
+  ${({clickitem}) =>
+    clickitem === 'true' &&
     `color: #fff;
     font-weight: 600;
     background-color: rgba(0, 0, 0, 0.342);
@@ -91,17 +92,17 @@ function MenuSectionChildrenSecond({children, dataParam}) {
   return (
     <div className={styles.wrapper_children_second}>
       {children.map((item, index) => (
-        <PElement
-          tabIndex='0'
+        <LinkElement
+          to={`${dataParam[index]}`}
           onClick={() => {
             setIndexFocus(index)
             handleComponent(item, index)
           }}
           key={index}
-          clickItem={indexFocus === index && true}
+          clickitem={indexFocus === index ? 'true' : ''}
         >
           {item}
-        </PElement>
+        </LinkElement>
       ))}
     </div>
   )

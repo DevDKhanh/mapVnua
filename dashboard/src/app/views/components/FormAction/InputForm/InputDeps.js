@@ -4,15 +4,7 @@ import clsx from 'clsx'
 // Thư mục
 import styles from './Input.module.scss'
 
-function InputDeps({
-  id,
-  textLabel,
-  inputForm,
-  setInputForm,
-  arrayDeps,
-  isNumber,
-  name,
-}) {
+function InputDeps({id, textLabel, inputForm, setInputForm, arrayDeps, name}) {
   const handleCheckActive = (value) => {
     if (value === 'Có') {
       return 1
@@ -35,6 +27,7 @@ function InputDeps({
         id={id}
         name={name}
         onClick={handleChange}
+        // value={inputForm[name]}
       >
         {arrayDeps.map((item, index) => (
           <option key={index}>{item}</option>

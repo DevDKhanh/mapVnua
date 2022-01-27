@@ -66,7 +66,11 @@ function LoginPage() {
               onChange={handleChange}
               value={formData.password}
             />
-            {isError && <span>Tên đăng nhập hoặc mật khẩu sai</span>}
+            {isError && (
+              <span className={styles.textError}>
+                Tên đăng nhập hoặc mật khẩu sai
+              </span>
+            )}
             <div className={styles.groupBtn}>
               <Button text='Đăng nhập' maxWidth primary rounded />
             </div>

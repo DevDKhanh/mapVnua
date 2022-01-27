@@ -16,6 +16,7 @@ export const ButtonElement = styled.button`
   border: none;
   padding: 20px;
   border-radius: 45px;
+  margin-left: 37px;
 
   &:focus {
     outline: none;
