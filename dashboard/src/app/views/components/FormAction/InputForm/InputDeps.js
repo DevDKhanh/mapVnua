@@ -26,8 +26,7 @@ function InputDeps({id, textLabel, inputForm, setInputForm, arrayDeps, name}) {
         className='form-control'
         id={id}
         name={name}
-        onClick={handleChange}
-        // value={inputForm[name]}
+        onChange={handleChange}
       >
         {arrayDeps.map((item, index) => (
           <option key={index}>{item}</option>
