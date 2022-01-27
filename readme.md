@@ -14,7 +14,7 @@ vnuamap
 server
 ```
 
-### `npm run dev`:
+### window:`npm run dev` - mac: `npm i -g concurrently` before `npm run dev`:
 Chạy dự án tại thư mục gốc:
 <br>
 Open [http://localhost:3002](http://localhost:3002)  view client.
