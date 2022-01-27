@@ -90,7 +90,7 @@ export class LayerService {
       await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
-          args: { name: 'Id lớp' },
+          args: { name: 'Id khu vực' },
         }),
         HttpStatus.BAD_REQUEST,
       );

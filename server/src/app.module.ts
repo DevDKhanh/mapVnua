@@ -27,7 +27,7 @@ import { LayerModule } from './modules/layer/layer.module';
         database: config.get<string>('MYSQL_DATABASE'),
         username: config.get<string>('MYSQL_USERNAME'),
         password: config.get<string>('MYSQL_PASSWORD'),
-        synchronize: config.get<boolean>('MYSQL_SYNC'),
+        synchronize: false,
         autoLoadEntities: true,
         entities: ['dist/**/*.entity.{ts,js}'],
         migrationsTableName: 'migration',

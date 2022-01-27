@@ -18,7 +18,6 @@ function InputFile({id, textLabel, name, inputForm, setInputForm, checkInput}) {
         <input
           name={name}
           type='file'
-          accept='image/*'
           className={clsx(
             'custom-file-input',
             !inputForm[name] && checkInput && 'is-invalid'

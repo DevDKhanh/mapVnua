@@ -27,7 +27,6 @@ const optionsImage = {
     },
   }),
   fileFilter: (req: any, file: any, cb: any) => {
-    console.log(file.mimetype);
     if (file.mimetype.match(/\/(jpg|jpeg|png|gif|svg\+xml|)$/)) {
       cb(null, true);
     } else {
@@ -52,7 +51,6 @@ const optionsFile = {
     },
   }),
   fileFilter: (req: any, file: any, cb: any) => {
-    console.log(file.mimetype);
     if (file.mimetype.match(/\/(json)$/)) {
       cb(null, true);
     } else {
