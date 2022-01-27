@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer, ZoomControl } from "react-leaflet";
 
 import FullScreen from '../../components/map/FullScreen';
 import ButtonDisplayLayer from '../../components/map/ButtonDisplayLayer';

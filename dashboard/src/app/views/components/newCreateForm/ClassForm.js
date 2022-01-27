@@ -12,6 +12,8 @@ import {useSelector} from 'react-redux'
 import InputColorPicker from '../FormAction/InputForm/InputColorPicker'
 import InputNumber from '../FormAction/InputForm/InputNumber'
 import dataFormTable from '../../../config/dataForm.js'
+import {ButtonElement} from './element.js'
+import MapLeaflet from '../Map/MapLeafLet.js'
 
 const checkResData = (parameters) => {
   const statusNotifications = {
@@ -134,6 +136,7 @@ const converByKeys = (dataFromForm, resLayerData) => {
   return converData
 }
 
+// ===========
 function ClassifyForm({dataProps}) {
   const [isFirstClick, setIsFirstClick] = useState(false)
   const [isOnMap, setIsOnMap] = useState(false)
@@ -165,25 +168,29 @@ function ClassifyForm({dataProps}) {
     classify: 'classify',
     area: 'area',
   })
-  let arrayIdLanguage = dataFromRedux[keys.current.language].map(
+
+  const arrayIdLanguage = dataFromRedux[keys.current.language].map(
     (infoLanguage) => infoLanguage[keys.current.id]
   )
-  let arrayIdClassify = dataFromRedux[keys.current.classify].map(
+
+  const arrayIdClassify = dataFromRedux[keys.current.classify].map(
     (infoClassify) => infoClassify[keys.current.id]
   )
-  let arrayIdArea = dataFromRedux[keys.current.area].map(
+
+  const arrayIdArea = dataFromRedux[keys.current.area].map(
     (infoArea) => infoArea[keys.current.id]
   )
-  let optionStyle = ['Vector', 'Raster']
-  let hidden = ['Có', 'Không']
 
-  const indexFirst = React.useRef(0)
+  const optionStyle = ['Vector', 'Raster']
+
+  const hidden = ['Có', 'Không']
+
   const dataDefault = React.useRef({
     id: '',
     nameLayer: '',
-    classifyId: arrayIdClassify[indexFirst.current],
-    areaId: arrayIdArea[indexFirst.current],
-    style: optionStyle[indexFirst.current],
+    classifyId: arrayIdClassify[0],
+    areaId: arrayIdArea[0],
+    style: optionStyle[0],
     path: '',
     icon: '',
     borderColor: '#333',
@@ -197,7 +204,7 @@ function ClassifyForm({dataProps}) {
     lngNE: 1,
     active: 1,
     zIndex: 1,
-    languageId: arrayIdLanguage[indexFirst.current],
+    languageId: arrayIdLanguage[0],
   })
 
   const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
@@ -293,9 +300,9 @@ function ClassifyForm({dataProps}) {
     }
   }
 
-  // const handleTurnOnMap = () => {
-  //   setIsOnMap(true)
-  // }
+  const handleTurnOnMap = () => {
+    setIsOnMap(true)
+  }
 
   const handleEdit = async () => {
     setIsFirstClick(true)
@@ -385,190 +392,203 @@ function ClassifyForm({dataProps}) {
   }
 
   return (
-    <div className={styles.wrapperCreateNew}>
-      <div className={styles.wrapper_main_form}>
-        <h2>{dataProps.text}</h2>
-        <div className={styles.wrapperForm}>
-          <InputText
-            id='1'
-            textLabel='ID lớp'
-            name='id'
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-            checkInput={isFirstClick}
-            disable={dataProps.isEdit && true}
-          />
-          <InputDeps
-            id='2'
-            textLabel='Tên khu vực'
-            name='areaId'
-            arrayDeps={arrayIdArea}
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-          />
-          <InputDeps
-            id='3'
-            textLabel='Tên ngôn ngữ'
-            name='languageId'
-            arrayDeps={arrayIdLanguage}
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-          />
-          <InputDeps
-            id='4'
-            textLabel='Tên phân loại'
-            name='classifyId'
-            arrayDeps={arrayIdClassify}
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-          />
-          <InputText
-            id='5'
-            textLabel='Tên lớp'
-            name='nameLayer'
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-            checkInput={isFirstClick}
-          />
-          <InputFile
-            id='6'
-            textLabel='Đường dẫn'
-            name='path'
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-            checkInput={isFirstClick}
-          />
-          <InputFile
-            id='7'
-            textLabel='Icon'
-            name='icon'
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-            checkInput={isFirstClick}
-          />
-          <InputNumber
-            id='19'
-            textLabel='Xếp chồng lớp'
-            name='zIndex'
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-            checkInput={isFirstClick}
-            isNumber={true}
-          />
-          <InputDeps
-            id='8'
-            textLabel='Kiểu'
-            name='style'
-            arrayDeps={optionStyle}
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-          />
-          {dataFromForm['style'] === 'Raster' ? (
-            <React.Fragment>
-              <InputNumber
-                id={10}
-                textLabel='Tọa độ latSW'
-                name='latSW'
-                step={0.01}
-                inputForm={dataFromForm}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-                isNumber={true}
-              />
-              <InputNumber
-                id={11}
-                textLabel='Tọa độ lngSW'
-                name='lngSW'
-                step={0.01}
-                inputForm={dataFromForm}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-                isNumber={true}
-              />
-              <InputNumber
-                id={12}
-                textLabel='Tọa độ latNE'
-                name='latNE'
-                step={0.01}
-                inputForm={dataFromForm}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-                isNumber={true}
-              />
-              <InputNumber
-                id={13}
-                textLabel='Tọa độ lngNE'
-                name='lngNE'
-                step={0.01}
-                inputForm={dataFromForm}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-                isNumber={true}
-              />
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              <InputColorPicker
-                id={14}
-                textLabel='Màu viền'
-                inputForm={dataFromForm}
-                name='borderColor'
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-              />
-              <InputNumber
-                id={15}
-                textLabel='Độ rộng viền'
-                name='widthBorder'
-                inputForm={dataFromForm}
-                isNumber={true}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-              />
-              <InputNumber
-                id={16}
-                textLabel='Viền trong suốt'
-                name='opacityBorder'
-                inputForm={dataFromForm}
-                isNumber={true}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-              />
-              <InputColorPicker
-                id={17}
-                textLabel='Màu nền'
-                name='backgroundColor'
-                inputForm={dataFromForm}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-              />
-              <InputNumber
-                id={18}
-                textLabel='Nền trong suốt'
-                name='opacityBackground'
-                isNumber={true}
-                inputForm={dataFromForm}
-                setInputForm={setDataFromForm}
-                checkInput={isFirstClick}
-              />
-            </React.Fragment>
-          )}
-          <InputDeps
-            id='9'
-            textLabel='Hiển thị'
-            name='active'
-            arrayDeps={hidden}
-            inputForm={dataFromForm}
-            setInputForm={setDataFromForm}
-          />
-          <div className={styles.wrapper_button}>
-            <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
-              <span>{dataProps.text}</span>
-            </button>
+    <React.Fragment>
+      {isOnMap && (
+        <MapLeaflet
+          setIsCheckMap={setIsOnMap}
+          inputForm={dataFromForm}
+          setInputForm={setDataFromForm}
+          isLayer={true}
+        />
+      )}
+      <div className={styles.wrapperCreateNew}>
+        <div className={styles.wrapper_main_form}>
+          <h2>{dataProps.text}</h2>
+          <div className={styles.wrapperForm}>
+            <InputText
+              id='1'
+              textLabel='ID lớp'
+              name='id'
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
+              disable={dataProps.isEdit && true}
+            />
+            <InputDeps
+              id='2'
+              textLabel='Tên khu vực'
+              name='areaId'
+              arrayDeps={arrayIdArea}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+            />
+            <InputDeps
+              id='3'
+              textLabel='Tên ngôn ngữ'
+              name='languageId'
+              arrayDeps={arrayIdLanguage}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+            />
+            <InputDeps
+              id='4'
+              textLabel='Tên phân loại'
+              name='classifyId'
+              arrayDeps={arrayIdClassify}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+            />
+            <InputText
+              id='5'
+              textLabel='Tên lớp'
+              name='nameLayer'
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
+            />
+            <InputFile
+              id='6'
+              textLabel='Đường dẫn'
+              name='path'
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
+            />
+            <InputFile
+              id='7'
+              textLabel='Icon'
+              name='icon'
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
+            />
+            <InputNumber
+              id='19'
+              textLabel='Xếp chồng lớp'
+              name='zIndex'
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+              checkInput={isFirstClick}
+              isNumber={true}
+            />
+            <InputDeps
+              id='8'
+              textLabel='Kiểu'
+              name='style'
+              arrayDeps={optionStyle}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+            />
+            {dataFromForm['style'] === 'Raster' ? (
+              <React.Fragment>
+                <InputNumber
+                  id={10}
+                  textLabel='Tọa độ latSW'
+                  name='latSW'
+                  step={0.01}
+                  inputForm={dataFromForm}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                  isNumber={true}
+                />
+                <InputNumber
+                  id={11}
+                  textLabel='Tọa độ lngSW'
+                  name='lngSW'
+                  step={0.01}
+                  inputForm={dataFromForm}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                  isNumber={true}
+                />
+                <InputNumber
+                  id={12}
+                  textLabel='Tọa độ latNE'
+                  name='latNE'
+                  step={0.01}
+                  inputForm={dataFromForm}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                  isNumber={true}
+                />
+                <InputNumber
+                  id={13}
+                  textLabel='Tọa độ lngNE'
+                  name='lngNE'
+                  step={0.01}
+                  inputForm={dataFromForm}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                  isNumber={true}
+                />
+                <ButtonElement onClick={handleTurnOnMap}>
+                  Chọn tọa độ trên bản đồ
+                </ButtonElement>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <InputColorPicker
+                  id={14}
+                  textLabel='Màu viền'
+                  inputForm={dataFromForm}
+                  name='borderColor'
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                />
+                <InputNumber
+                  id={15}
+                  textLabel='Độ rộng viền'
+                  name='widthBorder'
+                  inputForm={dataFromForm}
+                  isNumber={true}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                />
+                <InputNumber
+                  id={16}
+                  textLabel='Viền trong suốt'
+                  name='opacityBorder'
+                  inputForm={dataFromForm}
+                  isNumber={true}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                />
+                <InputColorPicker
+                  id={17}
+                  textLabel='Màu nền'
+                  name='backgroundColor'
+                  inputForm={dataFromForm}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                />
+                <InputNumber
+                  id={18}
+                  textLabel='Nền trong suốt'
+                  name='opacityBackground'
+                  isNumber={true}
+                  inputForm={dataFromForm}
+                  setInputForm={setDataFromForm}
+                  checkInput={isFirstClick}
+                />
+              </React.Fragment>
+            )}
+            <InputDeps
+              id='9'
+              textLabel='Hiển thị'
+              name='active'
+              arrayDeps={hidden}
+              inputForm={dataFromForm}
+              setInputForm={setDataFromForm}
+            />
+            <div className={styles.wrapper_button}>
+              <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
+                <span>{dataProps.text}</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 

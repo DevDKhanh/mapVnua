@@ -1,8 +1,8 @@
-import { memo, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { memo, useMemo } from "react";
+import { useSelector } from "react-redux";
 
-import Vector from '../../layers/Vector';
-import Raster from '../../layers/Raster';
+import Vector from "../../layers/Vector";
+import Raster from "../../layers/Raster";
 
 function ContainerLayer() {
 	const { layers } = useSelector(state => state.dataMap);
