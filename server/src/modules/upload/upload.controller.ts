@@ -15,7 +15,7 @@ import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
-import { AdminAuthGuard } from '../auth/jwt.strategy';
+import { PermisionUploadGuard } from '../auth/jwt.strategy';
 
 const optionsImage = {
   storage: diskStorage({
@@ -72,7 +72,7 @@ const optionsFile = {
 @Controller('upload')
 export class UploadController {
   @Post('/image')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionUploadGuard)
   @ApiOperation({ summary: 'Upload image Api ' })
   @UseInterceptors(FileInterceptor('file', optionsImage))
   async upload(@UploadedFile('file') file): Promise<{ filename: any }> {
@@ -80,7 +80,7 @@ export class UploadController {
   }
 
   @Post('/file')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionUploadGuard)
   @ApiOperation({ summary: 'Upload file Api ' })
   @UseInterceptors(FileInterceptor('file', optionsFile))
   async uploadFile(@UploadedFile('file') file): Promise<{ filename: any }> {

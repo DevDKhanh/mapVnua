@@ -51,6 +51,7 @@ export class AuthService {
       where: {
         userName: loginUserDto.userName,
       },
+      relations: ['permission'],
     });
 
     /********** Check userName **********/
@@ -73,6 +74,7 @@ export class AuthService {
       {
         id: user.id,
         role: user.role,
+        permission: user.permission,
       },
       { expiresIn: '365d' },
     );
@@ -83,6 +85,7 @@ export class AuthService {
       id: user.id,
       fullName: user.fullName,
       userName: user.userName,
+      permission: user.permission,
     });
   }
 }

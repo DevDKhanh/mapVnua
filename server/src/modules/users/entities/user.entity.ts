@@ -1,13 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { PermissionEntity } from 'src/modules/permission/entities/permission.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'tbl_user' })
+@Entity({ name: 'tbltaikhoan' })
 export class UserEntity {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
@@ -24,6 +27,14 @@ export class UserEntity {
   @ApiProperty()
   @Column({ length: 50 })
   fullName: string;
+
+  @OneToOne(
+    () => PermissionEntity,
+    permission => permission.user,
+    { nullable: true, onDelete: 'SET NULL' },
+  )
+  @JoinColumn({ name: 'permissionId' })
+  permission: PermissionEntity;
 
   @ApiProperty()
   @Column({ type: 'tinyint', default: 1 })

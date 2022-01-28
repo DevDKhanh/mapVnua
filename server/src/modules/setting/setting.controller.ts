@@ -17,7 +17,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { AdminAuthGuard } from '../auth/jwt.strategy';
+import {
+  AdminAuthGuard,
+  PermisionCreateGuard,
+  PermisionDeleteGuard,
+  PermisionEditGuard,
+} from '../auth/jwt.strategy';
 import { SettingService } from './setting.service';
 import { CreateSettingDto } from './dto/post.dto';
 import { UpdateSettingDto } from './dto/put.dto';
@@ -30,7 +35,7 @@ export class SettingController {
   constructor(private readonly settingService: SettingService) {}
 
   @Post('/')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionCreateGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Create setting new . Admin' })
   @ApiOkResponse({ type: CreateSettingDto, status: 201 })
@@ -39,7 +44,7 @@ export class SettingController {
   }
 
   @Put('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionEditGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update setting . Admin' })
   @ApiOkResponse({ type: UpdateSettingDto, status: 201 })
@@ -67,7 +72,7 @@ export class SettingController {
   }
 
   @Delete('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionDeleteGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete one setting . Admin' })
   @ApiOkResponse({ type: CreateSettingDto, status: 200 })

@@ -49,3 +49,88 @@ export class AdminAuthGuard extends AuthGuard('jwt') {
     return user;
   }
 }
+@Injectable()
+export class PermisionSeenGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+
+    if (user?.permission?.permissionSeen) {
+      return user;
+    }
+
+    throw new ForbiddenException();
+  }
+}
+@Injectable()
+export class PermisionEditGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+
+    if (user?.permission?.permissionEdit) {
+      return user;
+    }
+
+    throw new ForbiddenException();
+  }
+}
+@Injectable()
+export class PermisionDeleteGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+
+    if (user?.permission?.permissionDelete) {
+      return user;
+    }
+
+    throw new ForbiddenException();
+  }
+}
+@Injectable()
+export class PermisionCreateGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+
+    if (user?.permission?.permissionCreate) {
+      return user;
+    }
+
+    throw new ForbiddenException();
+  }
+}
+@Injectable()
+export class PermisionUploadGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+  handleRequest(err, user, info) {
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+
+    if (user?.permission?.permissionCreate || user.permission?.permissionEdit) {
+      return user;
+    }
+
+    throw new ForbiddenException();
+  }
+}

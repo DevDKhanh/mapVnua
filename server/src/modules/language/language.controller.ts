@@ -24,7 +24,11 @@ import { GetListDto } from '../../common/dto/index.dto';
 import { CreateLanguageDto } from './dto/post.dto';
 import { UpdateLanguageDto } from './dto/put.dto';
 import { LanguageService } from './language.service';
-import { AdminAuthGuard } from '../auth/jwt.strategy';
+import {
+  PermisionCreateGuard,
+  PermisionDeleteGuard,
+  PermisionEditGuard,
+} from '../auth/jwt.strategy';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Language API')
@@ -34,7 +38,7 @@ export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
 
   @Post()
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionCreateGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Create language new . Admin' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 201 })
@@ -48,7 +52,7 @@ export class LanguageController {
   }
 
   @Put('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionEditGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update language . Admin' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 200 })
@@ -78,7 +82,7 @@ export class LanguageController {
   }
 
   @Delete('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionDeleteGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Get detail language . Admin' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 200 })
