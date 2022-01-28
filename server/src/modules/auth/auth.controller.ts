@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 
 import {
   ApiBearerAuth,
@@ -7,9 +16,11 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { GetListDto } from 'src/common/dto/index.dto';
 import { AuthService } from './auth.service';
 import { LoginUserDto, ResLoginUserDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register.dto';
+import { AdminAuthGuard } from './jwt.strategy';
 @ApiTags('Auth Api')
 @ApiConsumes('Auth Api')
 @Controller('auth')
@@ -27,5 +38,21 @@ export class AuthController {
   @ApiOkResponse({ type: ResLoginUserDto, status: 200 })
   async login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
+  }
+
+  @Get('/users')
+  @HttpCode(200)
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'Get list Users . SPAdmin' })
+  async getList(@Query() getListDto: GetListDto) {
+    return this.authService.getList(getListDto);
+  }
+
+  @Get('/users/user/:id')
+  @HttpCode(200)
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'Get detail User . SPAdmin' })
+  async getDetail(@Param('id') id: string) {
+    return this.authService.getDetail(id);
   }
 }
