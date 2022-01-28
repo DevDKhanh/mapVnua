@@ -1,0 +1,96 @@
+.main {
+  .btnClose {
+    position: absolute;
+    top: 90%;
+    padding: 8px 32px;
+    margin-left: 50px;
+    z-index: 1000;
+    outline: none;
+    border: 2px solid #000;
+    background-color: #fff;
+    transform: translateY(-50%);
+
+    &:active {
+      opacity: 0.8;
+    }
+  }
+  .controlEdit {
+    user-select: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-height: 400px;
+    padding: 20px;
+    z-index: 1000;
+    transition: 0.3s;
+    background-color: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    .btnToggle {
+      position: absolute;
+      width: 30px;
+      height: 80px;
+      background-color: rgb(26, 21, 21);
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%);
+
+      &:hover {
+        cursor: pointer;
+      }
+      &:active {
+        background-color: #333;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        border-top: 12px solid transparent;
+        border-right: 12px solid #fff;
+        border-bottom: 12px solid transparent;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .groupEdit {
+      margin-top: 40px;
+    }
+
+    .groupControl {
+      user-select: all;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-width: 100%;
+      margin-top: 20px;
+
+      .value {
+        font-size: 1.3rem;
+      }
+
+      .btn {
+        user-select: none;
+        border: none;
+        outline: none;
+        width: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: transparent;
+
+        &:active {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  .controlEdit.isClosed {
+    left: 35px;
+  }
+}
