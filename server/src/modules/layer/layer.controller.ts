@@ -17,7 +17,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { AdminAuthGuard } from '../auth/jwt.strategy';
+import { AdminAuthGuard, PermisionCreateGuard, PermisionDeleteGuard, PermisionEditGuard } from '../auth/jwt.strategy';
 import { LayerService } from './layer.service';
 import { CreateLayerDto } from './dto/post.dto';
 import { UpdateLayerDto } from './dto/put.dto';
@@ -30,7 +30,7 @@ export class LayerController {
   constructor(private readonly layerService: LayerService) {}
 
   @Post('/')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionCreateGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Create Layer new . Admin' })
   @ApiOkResponse({ type: CreateLayerDto, status: 201 })
@@ -39,7 +39,7 @@ export class LayerController {
   }
 
   @Put('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionEditGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update Layer . Admin' })
   @ApiOkResponse({ type: UpdateLayerDto, status: 200 })
@@ -67,7 +67,7 @@ export class LayerController {
   }
 
   @Delete('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionDeleteGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete one Layer . Admin' })
   @ApiOkResponse({ type: CreateLayerDto, status: 200 })

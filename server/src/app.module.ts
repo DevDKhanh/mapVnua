@@ -15,6 +15,7 @@ import { LanguageModule } from './modules/language/language.module';
 import { ClassifyModule } from './modules/classify/classify.module';
 import { AreaModule } from './modules/area/area.module';
 import { LayerModule } from './modules/layer/layer.module';
+import { PermissionModule } from './modules/permission/permission.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -28,6 +29,7 @@ import { LayerModule } from './modules/layer/layer.module';
         username: config.get<string>('MYSQL_USERNAME'),
         password: config.get<string>('MYSQL_PASSWORD'),
         synchronize: false,
+        migrationsRun: true,
         autoLoadEntities: true,
         entities: ['dist/**/*.entity.{ts,js}'],
         migrationsTableName: 'migration',
@@ -43,6 +45,7 @@ import { LayerModule } from './modules/layer/layer.module';
     AreaModule,
     LayerModule,
     UploadModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

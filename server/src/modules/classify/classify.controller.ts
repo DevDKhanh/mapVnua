@@ -17,7 +17,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { AdminAuthGuard } from '../auth/jwt.strategy';
+import {
+  AdminAuthGuard,
+  PermisionCreateGuard,
+  PermisionDeleteGuard,
+  PermisionEditGuard,
+} from '../auth/jwt.strategy';
 import { ClassifyService } from './classify.service';
 import { CreateClassifyDto } from './dto/post.dto';
 import { UpdateClassifyDto } from './dto/put.dto';
@@ -30,7 +35,7 @@ export class ClassifyController {
   constructor(private readonly classifyService: ClassifyService) {}
 
   @Post('/')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionCreateGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Create Classify new . Admin' })
   @ApiOkResponse({ type: CreateClassifyDto, status: 201 })
@@ -39,7 +44,7 @@ export class ClassifyController {
   }
 
   @Put('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionEditGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Update Classify . Admin' })
   @ApiOkResponse({ type: UpdateClassifyDto, status: 200 })
@@ -67,7 +72,7 @@ export class ClassifyController {
   }
 
   @Delete('/:id')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(PermisionDeleteGuard)
   @HttpCode(200)
   @ApiOperation({ summary: 'Delete one Classify . Admin' })
   @ApiOkResponse({ type: CreateClassifyDto, status: 200 })
