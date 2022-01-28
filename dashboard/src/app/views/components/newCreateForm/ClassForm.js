@@ -14,6 +14,7 @@ import InputNumber from '../FormAction/InputForm/InputNumber'
 import dataFormTable from '../../../config/dataForm.js'
 import {ButtonElement} from './element.js'
 import MapLeaflet from '../Map/MapLeafLet.js'
+import EditRaster from '../EditRaster'
 
 const checkResData = (parameters) => {
   const statusNotifications = {
@@ -300,7 +301,23 @@ function ClassifyForm({dataProps}) {
     }
   }
 
+  const handleSetCoordinatesRaster = (coordinates) => {
+    const {top, bottom} = coordinates
+    setDataFromForm((prev) => ({
+      ...prev,
+      latNE: top.lat,
+      lngNE: top.lng,
+      latSW: bottom.lat,
+      lngSW: bottom.lng,
+    }))
+  }
+
   const handleTurnOnMap = () => {
+    if (dataFromForm.path == '') {
+      return toast.warn(
+        'Hãy chọn đường dẫn ảnh trước khi thực hiện thao tác này'
+      )
+    }
     setIsOnMap(true)
   }
 
@@ -394,11 +411,10 @@ function ClassifyForm({dataProps}) {
   return (
     <React.Fragment>
       {isOnMap && (
-        <MapLeaflet
-          setIsCheckMap={setIsOnMap}
-          inputForm={dataFromForm}
-          setInputForm={setDataFromForm}
-          isLayer={true}
+        <EditRaster
+          file={dataFromForm.path}
+          setCoordinates={handleSetCoordinatesRaster}
+          onClose={() => setIsOnMap(false)}
         />
       )}
       <div className={styles.wrapperCreateNew}>
