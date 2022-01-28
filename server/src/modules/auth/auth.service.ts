@@ -8,7 +8,8 @@ import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/register.dto';
 import { UserEntity } from '../users/entities/user.entity';
 import { LoginUserDto } from './dto/login.dto';
-import { resultData } from 'src/common/text.helper';
+import { createPagination, resultData } from '../../common/text.helper';
+import { GetListDto } from '../../common/dto/index.dto';
 
 @Injectable()
 export class AuthService {
@@ -87,5 +88,46 @@ export class AuthService {
       userName: user.userName,
       permission: user.permission,
     });
+  }
+
+  async getList(getListDto: GetListDto) {
+    const result = await this.usersRepository.findAndCount({
+      skip: (getListDto.page - 1) * getListDto.pageSize,
+      take: getListDto.pageSize,
+      relations: ['permission'],
+      select: ['id', 'fullName', 'actived', 'role', 'permission', 'createdAt'],
+      order: {
+        createdAt: -1,
+      },
+    });
+    return createPagination(
+      result[0],
+      result[1],
+      getListDto.page,
+      getListDto.pageSize,
+    );
+  }
+
+  async getDetail(id: string) {
+    const result = await this.usersRepository.findOne(id, {
+      select: ['id', 'fullName', 'actived', 'role'],
+      relations: ['permission'],
+    });
+
+    if (!result) {
+      throw new HttpException(
+        await this.i18n.translate('site.IS_NOT_EXISTS', {
+          args: { name: 'Tài khoản' },
+        }),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return resultData(
+      await this.i18n.translate('site.DETAIL_DATA', {
+        args: { name: 'phân loại' },
+      }),
+      { ...result },
+    );
   }
 }
