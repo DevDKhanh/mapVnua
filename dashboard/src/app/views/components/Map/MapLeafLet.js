@@ -1,52 +1,42 @@
 import React from 'react'
-import {MapContainer, useMapEvents, TileLayer, ZoomControl} from 'react-leaflet'
+import {
+  MapContainer,
+  useMapEvents,
+  TileLayer,
+  ZoomControl,
+  Marker,
+} from 'react-leaflet'
+import L from 'leaflet'
 
 import 'leaflet/dist/leaflet.css'
 import styles from './MapLeaflet.module.scss'
 import clsx from 'clsx'
 import FormCoordinatesDefault from './FormDefault.js'
-import FormLayerCoordinates from './FormLayer.js'
-import SettingForm from './SettingForm.js'
+import images from 'app/constants/images'
 
 function Temporary(props) {
-  let countClick = React.useRef(0)
+  const [position, setPosition] = React.useState(null)
+
+  var greenIcon = L.icon({
+    iconUrl: images.location,
+    iconSize: [38, 38], // size of the icon
+  })
 
   useMapEvents({
     click(events) {
-      if (props.isLayer) {
-        ++countClick.current
+      setPosition(events['latlng'])
 
-        if (countClick.current % 2 !== 0) {
-          const latSW = events.latlng.lat
-          const lngSW = events.latlng.lng
-
-          props.setcoordinatesTop({latSW, lngSW})
-        } else {
-          const latNE = events.latlng.lat
-          const lngNE = events.latlng.lng
-
-          props.setcoordinatesBottom({latNE, lngNE})
-        }
-      } else {
-        props.setCoordinates(events['latlng'])
-      }
+      props.setCoordinates(events['latlng'])
     },
   })
 
-  return null
+  return position === null ? null : (
+    <Marker position={position} icon={greenIcon}></Marker>
+  )
 }
 
-const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm, isLayer}) => {
+const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm}) => {
   const [coordinates, setCoordinates] = React.useState({lat: '', lng: ''})
-
-  const [coordinatesTop, setCoordinatesTop] = React.useState({
-    latSW: '',
-    lngSW: '',
-  })
-  const [coordinatesBottom, setCoordinatesBottom] = React.useState({
-    latNE: '',
-    lngNE: '',
-  })
 
   const handleCloseMap = () => {
     setIsCheckMap(false)
@@ -60,46 +50,10 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm, isLayer}) => {
     setCoordinates({...coordinates, lng: JSON.parse(events.target.value)})
   }
 
-  const handleChangelatSW = (events) => {
-    setCoordinatesTop({
-      ...coordinatesTop,
-      latSW: JSON.parse(events.target.value),
-    })
-  }
-
-  const handleChangeLngSW = (events) => {
-    setCoordinatesTop({
-      ...coordinatesTop,
-      lngSW: JSON.parse(events.target.value),
-    })
-  }
-
-  const handleChangeLatNE = (events) => {
-    setCoordinatesBottom({
-      ...coordinatesBottom,
-      latNE: JSON.parse(events.target.value),
-    })
-  }
-
-  const handleChangeLngNE = (events) => {
-    setCoordinatesBottom({
-      ...coordinatesBottom,
-      lngNE: JSON.parse(events.target.value),
-    })
-  }
-
   const handleClickOke = () => {
-    if (isLayer) {
-      const coordinatesLayer = {...coordinatesTop, ...coordinatesBottom}
+    setInputForm({...inputForm, ...coordinates})
 
-      setInputForm({...inputForm, ...coordinatesLayer})
-
-      setIsCheckMap(false)
-    } else {
-      setInputForm({...inputForm, ...coordinates})
-
-      setIsCheckMap(false)
-    }
+    setIsCheckMap(false)
   }
 
   return (
@@ -119,12 +73,7 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm, isLayer}) => {
           attribution=''
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        <Temporary
-          setCoordinates={setCoordinates}
-          isLayer={isLayer}
-          setcoordinatesTop={setCoordinatesTop}
-          setcoordinatesBottom={setCoordinatesBottom}
-        />
+        <Temporary setCoordinates={setCoordinates} />
         <ZoomControl position='bottomright' />
 
         {/* icon off map */}
@@ -135,26 +84,15 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm, isLayer}) => {
       </MapContainer>
 
       {/* display coordinates */}
-      {isLayer ? (
-        <FormLayerCoordinates
-          coordinatesTop={coordinatesTop}
-          handleChangelatSW={handleChangelatSW}
-          handleChangeLngSW={handleChangeLngSW}
-          coordinatesBottom={coordinatesBottom}
-          handleChangeLatNE={handleChangeLatNE}
-          handleChangeLngNE={handleChangeLngNE}
-          handleClickOke={handleClickOke}
-        />
-      ) : (
-        <FormCoordinatesDefault
-          coordinates={coordinates}
-          handleChangeLat={handleChangeLat}
-          handleChangeLng={handleChangeLng}
-          handleClickOke={handleClickOke}
-        />
-      )}
 
-      <SettingForm />
+      <FormCoordinatesDefault
+        coordinates={coordinates}
+        handleChangeLat={handleChangeLat}
+        handleChangeLng={handleChangeLng}
+        handleClickOke={handleClickOke}
+      />
+
+      {/* <SettingForm /> */}
     </React.Fragment>
   )
 }

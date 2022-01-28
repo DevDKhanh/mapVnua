@@ -19,17 +19,7 @@
         background-color: #fff;
         border-radius   : 10px;
         filter          : drop-shadow(2px 2px 4px #333);
-        max-height      : 400px;
-        overflow        : auto;
-
-        &::-webkit-scrollbar {
-            width: .8em;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: darkgrey;
-            border-radius   : 10px;
-        }
+        margin-bottom   : 20px;
 
         .wrapper_button {
             display        : flex;
