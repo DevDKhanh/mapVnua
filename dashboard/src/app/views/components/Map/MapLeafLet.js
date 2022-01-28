@@ -1,14 +1,12 @@
 import React from 'react'
-import {MapContainer, useMapEvents, TileLayer} from 'react-leaflet'
+import {MapContainer, useMapEvents, TileLayer, ZoomControl} from 'react-leaflet'
 
 import 'leaflet/dist/leaflet.css'
-import {WrapperCondinates, Input, WrapperInput, LabelInput} from './element'
-import {ButtonElement} from '../newCreateForm/element'
 import styles from './MapLeaflet.module.scss'
 import clsx from 'clsx'
-import FormLayer from './FormLayer.js'
 import FormCoordinatesDefault from './FormDefault.js'
 import FormLayerCoordinates from './FormLayer.js'
+import SettingForm from './SettingForm.js'
 
 function Temporary(props) {
   let countClick = React.useRef(0)
@@ -115,9 +113,10 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm, isLayer}) => {
         }}
         center={{lat: 51.505, lng: -0.09}}
         zoom={13}
+        zoomControl={false}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution=''
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
         <Temporary
@@ -126,6 +125,7 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm, isLayer}) => {
           setcoordinatesTop={setCoordinatesTop}
           setcoordinatesBottom={setCoordinatesBottom}
         />
+        <ZoomControl position='bottomright' />
 
         {/* icon off map */}
         <i
@@ -153,6 +153,8 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm, isLayer}) => {
           handleClickOke={handleClickOke}
         />
       )}
+
+      <SettingForm />
     </React.Fragment>
   )
 }

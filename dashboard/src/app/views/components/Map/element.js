@@ -27,9 +27,39 @@ export const WrapperInput = styled.div`
 
 export const LabelInput = styled.label`
   flex: 50%;
+  display: ${(props) => props.display};
 `
 
 export const Input = styled.input`
   outline: none;
   flex: 50%;
+`
+
+export const WrapperSetting = styled.div`
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+`
+
+export const ContainerChange = styled.div`
+  margin-top: 1rem;
+`
+
+export const WrapperChange = styled.div`
+  display: flex;
+  padding: 0 2rem;
+  justify-content: space-between;
+  margin-top: 1rem;
+  align-items: center;
+`
+
+export const ButtonChange = styled.button`
+  border: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+  background-color: #000;
+  color: #fff;
 `

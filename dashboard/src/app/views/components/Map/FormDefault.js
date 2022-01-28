@@ -15,7 +15,7 @@ const FormCoordinatesDefault = ({
         <Input
           id='lat'
           type='number'
-          value={coordinates['lat'] || ''}
+          value={coordinates['lat']}
           onChange={handleChangeLat}
           placeholder='Tọa độ lat'
         />
@@ -25,7 +25,7 @@ const FormCoordinatesDefault = ({
         <Input
           id='lng'
           type='number'
-          value={coordinates['lng'] || ''}
+          value={coordinates['lng']}
           onChange={handleChangeLng}
           placeholder='Tọa độ lng'
         />
