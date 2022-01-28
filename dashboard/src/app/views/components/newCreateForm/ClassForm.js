@@ -318,6 +318,11 @@ function ClassifyForm({dataProps}) {
         'Hãy chọn đường dẫn ảnh trước khi thực hiện thao tác này'
       )
     }
+
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
     setIsOnMap(true)
   }
 
@@ -415,6 +420,7 @@ function ClassifyForm({dataProps}) {
           file={dataFromForm.path}
           setCoordinates={handleSetCoordinatesRaster}
           onClose={() => setIsOnMap(false)}
+          dataFromForm={dataFromForm}
         />
       )}
       <div className={styles.wrapperCreateNew}>

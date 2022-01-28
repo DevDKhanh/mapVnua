@@ -11,7 +11,6 @@ const FormLayerCoordinates = ({
   handleChangeLngNE,
   handleClickOke,
 }) => {
-  console.log(coordinatesTop)
   return (
     <WrapperCondinates>
       <WrapperInput>

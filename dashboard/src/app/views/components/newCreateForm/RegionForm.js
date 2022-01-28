@@ -226,6 +226,10 @@ function RegionForm({dataProps}) {
   }
 
   const handleTurnOnMap = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
     setIsOnMap(true)
   }
 
