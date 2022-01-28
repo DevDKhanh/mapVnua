@@ -1,9 +1,10 @@
 import { DATA_ADD, DATA_ADD_LAYER, DATA_REMOVE_LAYER } from '../action/dataMap';
 
 const initialState = {
-    dataLayers: [], //detail
+    dataLayers: [], //layers detail
+    layers: [], //layers display
     classifys: [],
-    layers: [],
+    setting: [],
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -13,6 +14,7 @@ export default (state = initialState, { type, payload }) => {
                 ...state,
                 dataLayers: payload.layers,
                 classifys: payload.classifys,
+                setting: payload.setting,
             };
         case DATA_ADD_LAYER:
             return {

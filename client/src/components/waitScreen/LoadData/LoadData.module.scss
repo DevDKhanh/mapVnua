@@ -1,0 +1,15 @@
+.mainLoad {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(226, 226, 226);
+
+    img {
+        display: block;
+        margin-top: 4%;
+        width: 20%;
+    }
+}
