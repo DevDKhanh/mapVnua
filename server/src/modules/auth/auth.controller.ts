@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -16,11 +18,13 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { GetListDto } from 'src/common/dto/index.dto';
+import { GetListDto } from '../../common/dto/index.dto';
 import { AuthService } from './auth.service';
 import { LoginUserDto, ResLoginUserDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register.dto';
 import { AdminAuthGuard } from './jwt.strategy';
+import { UpdateUserDto } from '../users/dto/put.dto';
+
 @ApiTags('Auth Api')
 @ApiConsumes('Auth Api')
 @Controller('auth')
@@ -54,5 +58,21 @@ export class AuthController {
   @ApiOperation({ summary: 'Get detail User . SPAdmin' })
   async getDetail(@Param('id') id: string) {
     return this.authService.getDetail(id);
+  }
+
+  @Put('/users/user/:id')
+  @HttpCode(200)
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'Update User . SPAdmin' })
+  async update(@Param('id') id: string, updateUserDto: UpdateUserDto) {
+    return this.authService.update(id, updateUserDto);
+  }
+
+  @Delete('/users/user/:id')
+  @HttpCode(200)
+  @UseGuards(AdminAuthGuard)
+  @ApiOperation({ summary: 'Delete User . SPAdmin' })
+  async delete(@Param('id') id: string) {
+    return this.authService.delete(id);
   }
 }
