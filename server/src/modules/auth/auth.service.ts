@@ -96,7 +96,15 @@ export class AuthService {
       skip: (getListDto.page - 1) * getListDto.pageSize,
       take: getListDto.pageSize,
       relations: ['permission'],
-      select: ['id', 'fullName', 'actived', 'role', 'permission', 'createdAt'],
+      select: [
+        'id',
+        'userName',
+        'fullName',
+        'actived',
+        'role',
+        'permission',
+        'createdAt',
+      ],
       order: {
         createdAt: -1,
       },
@@ -111,7 +119,7 @@ export class AuthService {
 
   async getDetail(id: string) {
     const result = await this.usersRepository.findOne(id, {
-      select: ['id', 'fullName', 'actived', 'role'],
+      select: ['id', 'userName', 'fullName', 'actived', 'role'],
       relations: ['permission'],
     });
 
