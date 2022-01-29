@@ -38,9 +38,9 @@ function MoveRaster({file, setCoordinates, dataFromForm}) {
     setCoordinates(point)
   }, [point])
 
-  //Di chuyen anh khi click
+  //Di chuyen anh khi dbclick
   useMapEvents({
-    click(e) {
+    dblclick(e) {
       const {lat, lng} = e.latlng
       const top = {
         lat: lat + 1,

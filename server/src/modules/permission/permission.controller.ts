@@ -18,7 +18,6 @@ import {
 } from '@nestjs/swagger';
 import { AdminAuthGuard } from '../auth/jwt.strategy';
 import { AddPermissionAdminDto } from './dto/post.dto';
-import { PermissionEntity } from './entities/permission.entity';
 import { PermissionService } from './permission.service';
 @ApiTags('Phân quyền admin')
 @ApiConsumes('Phân quyền admin')

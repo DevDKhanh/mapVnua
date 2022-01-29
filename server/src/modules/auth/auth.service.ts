@@ -10,6 +10,7 @@ import { UserEntity } from '../users/entities/user.entity';
 import { LoginUserDto } from './dto/login.dto';
 import { createPagination, resultData } from '../../common/text.helper';
 import { GetListDto } from '../../common/dto/index.dto';
+import { UpdateUserDto } from '../users/dto/put.dto';
 
 @Injectable()
 export class AuthService {
@@ -95,7 +96,15 @@ export class AuthService {
       skip: (getListDto.page - 1) * getListDto.pageSize,
       take: getListDto.pageSize,
       relations: ['permission'],
-      select: ['id', 'fullName', 'actived', 'role', 'permission', 'createdAt'],
+      select: [
+        'id',
+        'userName',
+        'fullName',
+        'actived',
+        'role',
+        'permission',
+        'createdAt',
+      ],
       order: {
         createdAt: -1,
       },
@@ -110,7 +119,7 @@ export class AuthService {
 
   async getDetail(id: string) {
     const result = await this.usersRepository.findOne(id, {
-      select: ['id', 'fullName', 'actived', 'role'],
+      select: ['id', 'userName', 'fullName', 'actived', 'role'],
       relations: ['permission'],
     });
 
@@ -129,5 +138,45 @@ export class AuthService {
       }),
       { ...result },
     );
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = this.usersRepository.findOne(id);
+
+    if (!user) {
+      throw new HttpException(
+        await this.i18n.translate('site.IS_NOT_EXISTS', {
+          args: { name: 'Tài khoản' },
+        }),
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    await this.usersRepository.update({ id }, { ...updateUserDto });
+    const userUpdate = this.usersRepository.findOne(id, {
+      select: ['id', 'fullName', 'actived', 'role'],
+      relations: ['permission'],
+    });
+
+    return resultData(
+      await this.i18n.translate('site.SUCCESS_UPDATE'),
+      userUpdate,
+    );
+  }
+
+  async delete(id: string) {
+    const user = this.usersRepository.findOne(id);
+
+    if (!user) {
+      throw new HttpException(
+        await this.i18n.translate('site.IS_NOT_EXISTS', {
+          args: { name: 'Tài khoản' },
+        }),
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    await this.usersRepository.delete(id);
+    return resultData(await this.i18n.translate('site.SUCCESS_DELETE'), { id });
   }
 }
