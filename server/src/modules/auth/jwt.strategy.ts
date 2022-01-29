@@ -127,7 +127,10 @@ export class PermisionUploadGuard extends AuthGuard('jwt') {
       throw err || new UnauthorizedException();
     }
 
-    if (user?.permission?.permissionCreate || user.permission?.permissionEdit) {
+    if (
+      user?.permission?.permissionCreate ||
+      user?.permission?.permissionEdit
+    ) {
       return user;
     }
 
