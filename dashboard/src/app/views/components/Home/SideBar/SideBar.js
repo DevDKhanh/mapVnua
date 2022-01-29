@@ -45,8 +45,8 @@ function SideBar() {
           icon={icons.iconEdit}
           text='Quản lý trang'
           iconArrowDown={icons.iconArrowDown}
-          dataParam={['setting', 'interface', 'language']}
-          children={['Cấu hình', 'Giao diện', 'Ngôn ngữ']}
+          dataParam={['setting', 'language']}
+          children={['Cấu hình', 'Ngôn ngữ']}
           setIndexFocus={setIndexFocus}
           indexFocus={indexFocus}
           index={2}

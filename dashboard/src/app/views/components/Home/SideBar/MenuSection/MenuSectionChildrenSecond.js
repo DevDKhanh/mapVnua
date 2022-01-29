@@ -2,10 +2,14 @@ import React, {useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 
 // Thư mục
 import styles from './MenuSection.module.scss'
 import getTableList from 'app/common/covertData'
+import {keysLocal} from 'app/localStorage/keys'
+import {getItem} from 'app/localStorage/localStorage'
+import {reqDisplay} from 'app/redux/action/action.componentDisplay'
 
 //styled
 const LinkElement = styled(Link)`
@@ -58,6 +62,33 @@ function MenuSectionChildrenSecond({children, dataParam}) {
   const dispatch = useDispatch()
   const [indexFocus, setIndexFocus] = useState()
 
+  const callAPIUser = () => {
+    axios
+      .get('http://localhost:3000/auth/users?page=1&pageSize=100', {
+        headers: {
+          Authorization: 'Bearer ' + getItem(keysLocal['token']),
+        },
+      })
+      .then((response) => {
+        const {data} = response
+        const {records} = data
+        const dataFullName = records.map((item) => {
+          const {id, fullName} = item
+
+          return {id, fullName}
+        })
+
+        dispatch(
+          reqDisplay({
+            theadTable: 'account',
+            data: dataFullName,
+            paramName: 'account',
+          })
+        )
+      })
+      .catch((e) => console.error(e))
+  }
+
   const handleComponent = (item, index) => {
     switch (dataParam[index]) {
       case 'area':
@@ -69,20 +100,14 @@ function MenuSectionChildrenSecond({children, dataParam}) {
       case 'layer':
         getTableList('layer', item, dispatch)
         break
-      case 'document':
-        getTableList('document', item, dispatch)
-        break
       case 'setting':
         getTableList('setting', item, dispatch)
-        break
-      case 'interface':
-        getTableList('interface', item, dispatch)
         break
       case 'language':
         getTableList('language', item, dispatch)
         break
       case 'account':
-        getTableList('account', item, dispatch)
+        callAPIUser('account', item, dispatch)
         break
       default:
         return

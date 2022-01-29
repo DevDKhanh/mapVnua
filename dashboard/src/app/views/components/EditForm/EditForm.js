@@ -6,10 +6,8 @@ import FormLanguage from '../newCreateForm/LanguageForm'
 import FormRegion from '../newCreateForm/RegionForm'
 import FormClassify from '../newCreateForm/ClassifyForm'
 import FormConfig from '../newCreateForm/ConfigForm'
-import FormInterface from '../newCreateForm/InterfaceForm'
 import FormAccount from '../newCreateForm/AccountForm'
 import FormClass from '../newCreateForm/ClassForm'
-import {useOutletContext} from 'react-router-dom'
 
 const formEdit = (dataProps) => {
   switch (dataProps.nameURL) {
@@ -21,8 +19,6 @@ const formEdit = (dataProps) => {
       return <FormClass dataProps={dataProps} />
     case 'setting':
       return <FormConfig dataProps={dataProps} />
-    case 'interface':
-      return <FormInterface dataProps={dataProps} />
     case 'language':
       return <FormLanguage dataProps={dataProps} />
     case 'account':

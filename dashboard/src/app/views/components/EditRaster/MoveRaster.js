@@ -11,14 +11,27 @@ L.Icon.Default.mergeOptions({
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
 })
 
-function MoveRaster({file, setCoordinates}) {
+function MoveRaster({file, setCoordinates, dataFromForm}) {
+  console.log(dataFromForm)
   const markerRefTop = useRef(null)
   const markerRefBottom = useRef(null)
 
-  const [point, setPoint] = useState({
-    top: {lat: 15, lng: 108},
-    bottom: {lat: 14, lng: 107},
-  })
+  const getCoordinates = useMemo(() => {
+    const {latNE, latSW, lngNE, lngSW} = dataFromForm
+    if (latNE && latSW && lngNE && lngSW) {
+      return {
+        top: {lat: latNE, lng: lngNE},
+        bottom: {lat: latSW, lng: lngSW},
+      }
+    }
+
+    return {
+      top: {lat: 15, lng: 108},
+      bottom: {lat: 14, lng: 107},
+    }
+  }, [dataFromForm])
+
+  const [point, setPoint] = useState(getCoordinates)
   const img = useMemo(() => URL.createObjectURL(file), [file])
 
   useEffect(() => {

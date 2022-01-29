@@ -34,6 +34,7 @@ const dataFormTable = {
     nameLanguage: '',
     icon: '',
   },
+  account: {},
 }
 
 export default dataFormTable

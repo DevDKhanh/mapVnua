@@ -1,85 +1,96 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from 'react'
+import {Link} from 'react-router-dom'
+import {Checkbox, Divider} from 'antd'
 
 //Thư mục
-import styles from "./form.module.scss";
-import InputText from "../FormAction/InputForm/InputText";
-import InputDeps from "../FormAction/InputForm/InputDeps";
+import './account.css'
 
-function AccountForm({ text, paramName, setIsVisible, dataItem }) {
-  // catch the first time button click event
-  const [checkInput, setCheckInput] = useState(false);
+const CheckboxGroup = Checkbox.Group
+const plainOptions = ['Cho phép thêm', 'Cho phép sửa', 'Cho phép xóa']
+const defaultCheckedList = null
 
-  let arrayDeps = ["Admin", "Biên tập viên"];
-  //state stores all input's data
-  const [input1, setInput1] = useState("");
-  const [input2, setInput2] = useState("");
-  const [input3, setInput3] = useState("");
-  const [input4, setInput4] = useState(arrayDeps[0]);
+function AccountForm({dataProps}) {
+  const [checkedList, setCheckedList] = React.useState(defaultCheckedList)
+  const [indeterminate, setIndeterminate] = React.useState(true)
+  const [checkAll, setCheckAll] = React.useState(false)
 
-  //array the stores all the state of the input
-  let stateArray = [input1, input2, input3, input4];
+  console.log({checkedList, indeterminate, checkAll})
 
-  //handle click of button to create new
-  const handleClickCreateNew = () => {
-    setCheckInput(true);
-    console.log(stateArray);
-  };
+  const onChange = (list) => {
+    setCheckedList(list)
+    setIndeterminate(!!list.length && list.length < plainOptions.length)
+    setCheckAll(list.length === plainOptions.length)
+  }
 
+  const onCheckAllChange = (e) => {
+    setCheckedList(e.target.checked ? plainOptions : [])
+    setIndeterminate(false)
+    setCheckAll(e.target.checked)
+  }
+
+  // BEM
   return (
-    <div className={styles.wrapperCreateNew}>
-      <div
-        className={styles.wrapper_main_form}
-        onClick={() => setIsVisible(false)}
-      >
-        <h2>{text}</h2>
-        <div className={styles.wrapperForm}>
-          <InputText
-            id="input1"
-            textLabel="Tên người dùng"
-            value={input1}
-            onChange={setInput1}
-            checkInput={checkInput}
+    <div className='account'>
+      <h2 className='account__title'>Tạo mới</h2>
+
+      <div className='account__container'>
+        <div className='account_wrapperInput'>
+          <label htmlFor='1' className='account__label'>
+            Tài khoản:
+          </label>
+          <input
+            id='1'
+            className='account__input'
+            placeholder='Nhập tài khoản '
           />
-          <InputText
-            id="input2"
-            textLabel="Tài khoản"
-            value={input2}
-            onChange={setInput2}
-            checkInput={checkInput}
-          />
-          <InputText
-            id="input3"
-            textLabel="Mật khẩu"
-            value={input3}
-            onChange={setInput3}
-            checkInput={checkInput}
-            type="password"
-          />
-          <InputDeps
-            id="input4"
-            textLabel="Mật khẩu"
-            arrayDeps={arrayDeps}
-            value={input4}
-            onChange={setInput4}
-          />
-          <div className={styles.wrapper_button}>
-            <button onClick={handleClickCreateNew}>
-              <Link
-                to={
-                  stateArray.every((state) => state !== "")
-                    ? `/`
-                    : `/new_create/${paramName}`
-                }
-              >
-                Tạo mới
-              </Link>
-            </button>
-          </div>
         </div>
+
+        <div className='account_wrapperInput'>
+          <label htmlFor='1' className='account__label'>
+            Mật khẩu:
+          </label>
+          <input
+            id='1'
+            className='account__input '
+            placeholder='Nhập mật khẩu'
+          />
+        </div>
+
+        <div className='account_wrapperInput'>
+          <label htmlFor='1' className='account__label'>
+            Tên người dùng:
+          </label>
+          <input
+            id='1'
+            className='account__input'
+            placeholder='Nhập tên người dùng '
+          />
+        </div>
+
+        <div className='account__wrapperCheckBox'>
+          <label htmlFor='1' className='account__label'>
+            Phân quyền:
+          </label>
+          <Checkbox
+            indeterminate={indeterminate}
+            onChange={onCheckAllChange}
+            checked={checkAll}
+            className='account__checkbox'
+          >
+            Chọn tất cả
+          </Checkbox>
+
+          <CheckboxGroup
+            options={plainOptions}
+            value={checkedList}
+            onChange={onChange}
+            className='account__checkboxGroup'
+          />
+        </div>
+        <button className='account__button'>Tạo mới</button>
       </div>
     </div>
-  );
+  )
 }
 
-export default AccountForm;
+export default AccountForm

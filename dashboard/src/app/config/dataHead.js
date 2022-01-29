@@ -24,7 +24,6 @@ const dataHead = {
     'Tên khu vực',
     'Tên lớp',
   ],
-  document: ['STT', 'ID tài liệu', 'Tên ngôn ngữ'],
   setting: [
     'STT',
     'ID cấu hình',
@@ -34,16 +33,8 @@ const dataHead = {
     'Tọa độ Lng',
     'Zoom',
   ],
-  interface: ['STT', 'ID giao diện', 'Từ khóa', 'Tên ngôn ngữ', 'Dịch'],
   language: ['STT', 'ID ngôn ngữ', 'Tên ngôn ngữ', 'Icon'],
-  account: [
-    'STT',
-    'ID tài khoản',
-    'Tên người dùng',
-    'Email',
-    'Mật khẩu',
-    'Phân quyền',
-  ],
+  account: ['STT', 'ID', 'Họ và tên'],
 }
 
 export default dataHead

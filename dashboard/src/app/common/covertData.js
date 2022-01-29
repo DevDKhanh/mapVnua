@@ -13,8 +13,13 @@ const getTableList = async (paramName, item, dispatch) => {
 
   // call api and convert data => object => dispatch to redux
   try {
+    if (Object.keys(dataFormTable[paramName]).length === 0) {
+      return
+    } // fix bug click sidebar account
+
     const tableList = await tableDataAPI.getList(paramName, 1, 100)
     const records = tableList[0]['records']
+
     records.forEach((item) => {
       Object.keys(dataFormTable[paramName]).forEach((keys) => {
         switch (typeof item[keys]) {
@@ -35,6 +40,7 @@ const getTableList = async (paramName, item, dispatch) => {
       objectData = {}
     })
     // console.log(arrData)
+
     dispatch(
       reqDisplay({
         paramName: paramName,
