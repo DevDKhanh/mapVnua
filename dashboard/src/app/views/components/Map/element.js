@@ -11,12 +11,6 @@ export const WrapperCondinates = styled.div`
   padding: 1rem;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
-
-  button {
-    margin: 0;
-    border-radius: 100%;
-    margin-top: 1rem;
-  }
 `
 
 export const WrapperInput = styled.div`
@@ -53,13 +47,4 @@ export const WrapperChange = styled.div`
   justify-content: space-between;
   margin-top: 1rem;
   align-items: center;
-`
-
-export const ButtonChange = styled.button`
-  border: none;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 100%;
-  background-color: #000;
-  color: #fff;
 `

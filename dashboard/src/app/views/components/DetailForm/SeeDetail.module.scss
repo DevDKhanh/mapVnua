@@ -17,21 +17,12 @@
         width           : 90%;
         margin          : auto;
         padding         : 10px;
-        max-height      : 400px;
-        overflow        : auto;
         background-color: #fff;
         box-shadow      : -4px -1px 5px rgb(179 179 179 / 90%),
             3px 3px 5px rgb(0 0 0 / 50%);
         border-radius: 8px;
-
-        &::-webkit-scrollbar {
-            width: .8em;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: darkgrey;
-            border-radius   : 8px;
-        }
+        max-height   : 400px;
+        overflow     : auto;
 
         table {
             padding: 20px 30px;

@@ -1,7 +1,7 @@
 // Input text
 .wrapperInputText {
-    width  : 90%;
-    margin : 20px auto;
+    width  : 100%;
+    margin : 20px 0;
     display: block;
 
     &>label {
@@ -20,7 +20,8 @@
 }
 
 .wrapper_input_color {
-    margin: 0 40px;
+    width : 100%;
+    margin: 20px 0;
 
     &>label {
         color  : #2a3f54;

@@ -15,7 +15,10 @@ import FormCoordinatesDefault from './FormDefault.js'
 import images from 'app/constants/images'
 
 function Temporary(props) {
-  const [position, setPosition] = React.useState(null)
+  const [position, setPosition] = React.useState({
+    lat: 21.123917697066574,
+    lng: 105.79158358723559,
+  })
 
   var greenIcon = L.icon({
     iconUrl: images.location,
@@ -36,7 +39,10 @@ function Temporary(props) {
 }
 
 const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm}) => {
-  const [coordinates, setCoordinates] = React.useState({lat: '', lng: ''})
+  const [coordinates, setCoordinates] = React.useState({
+    lat: 21.123917697066574,
+    lng: 105.79158358723559,
+  })
 
   const handleCloseMap = () => {
     setIsCheckMap(false)
@@ -60,13 +66,18 @@ const MapLeaflet = ({setIsCheckMap, inputForm, setInputForm}) => {
     <React.Fragment>
       <MapContainer
         style={{
-          height: '90%',
-          width: '80%',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
           position: 'absolute',
           zIndex: '1000',
         }}
-        center={{lat: 51.505, lng: -0.09}}
-        zoom={13}
+        center={{
+          lat: 21.123917697066574,
+          lng: 105.79158358723559,
+        }}
+        zoom={5}
         zoomControl={false}
       >
         <TileLayer

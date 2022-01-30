@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
-import {useSelector} from 'react-redux'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import {Link, useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
 //Thư mục
 import styles from './form.module.scss'
@@ -11,14 +11,9 @@ import tableDataAPI from 'app/api/tableData'
 import {ButtonElement} from './element'
 import MapLeaflet from '../Map/MapLeafLet'
 import {toast} from 'react-toastify'
+import {ElementButton} from '../element.js'
 
-const checkResData = (
-  resData,
-  method,
-  setDataFromForm,
-  arrayIdLanguage,
-  setIsFirstClick
-) => {
+const checkResData = (resData, method, navigate) => {
   const statusNotifications = {
     success: 'success',
     error: 'error',
@@ -33,37 +28,28 @@ const checkResData = (
     notifications(statusNotifications.error, textnotifications.error)
   }
   if (Array.isArray(resData) && resData[0].code === 200) {
-    notifications(statusNotifications.success, textnotifications.success)
-
-    // !method = null not exits method
-    if (!method) {
-      setDataFromForm({
-        id: '',
-        nameArea: '',
-        lat: '',
-        lng: '',
-        zoom: '',
-        active: 1,
-        languageId: arrayIdLanguage[0],
-      })
-      setIsFirstClick(false)
-    }
+    notifications(
+      statusNotifications.success,
+      textnotifications.success,
+      navigate
+    )
   }
   if (Array.isArray(resData) && resData[0].code === 400) {
     notifications(statusNotifications.error, textnotifications.error)
   }
 }
 
-const checkNotificationStatus = (status) => {
+const checkNotificationStatus = (status, navigate) => {
   if (status === 'success') {
+    navigate('/home/area')
     return 'success'
   } else {
     return 'error'
   }
 }
 
-const notifications = (status, textStatus) => {
-  const filterStatus = checkNotificationStatus(status)
+const notifications = (status, textStatus, navigate) => {
+  const filterStatus = checkNotificationStatus(status, navigate)
   toast[filterStatus](textStatus, {
     position: 'top-right',
     autoClose: 2000,
@@ -128,8 +114,39 @@ const converByKeys = (dataFromForm, resLayerData) => {
 function RegionForm({dataProps}) {
   const [isFirstClick, setIsFirstClick] = useState(false)
   const [isOnMap, setIsOnMap] = useState(false)
+  const navigate = useNavigate()
+  const [languageData, setLanguageData] = useState()
+  const [dataFromForm, setDataFromForm] = useState({
+    id: '',
+    nameArea: '',
+    lat: '',
+    lng: '',
+    zoom: '',
+    active: 1,
+  })
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const {isEdit} = dataProps
+
+    if (!isEdit && languageData) {
+      setDataFromForm({...dataFromForm, nameLanguage: languageData[0].id})
+    }
+  }, [languageData])
+
+  useEffect(() => {
+    const getLanguage = async () => {
+      axios
+        .get('http://localhost:3000/language?page=1&pageSize=100')
+        .then((res) => {
+          setLanguageData(res.data.records)
+        })
+        .catch((e) => console.log(e))
+    }
+
+    getLanguage()
+  }, [])
+
+  useEffect(() => {
     ;(async () => {
       const {idURL, isEdit, nameURL} = dataProps
       if (isEdit) {
@@ -141,37 +158,58 @@ function RegionForm({dataProps}) {
         )
 
         const convertedData = converByKeys(dataFromForm, resLayerData)
+        convertedData.nameLanguage = resLayerData.data.language.nameLanguage
+
         setDataFromForm(convertedData)
       }
     })()
   }, [dataProps])
 
-  const dataFromRedux = useSelector(
-    (state) => state['displayMainContent']['data']
+  const convertToName = useCallback(
+    (languageData) => {
+      if (languageData) {
+        return languageData.map((infoLanguege) => infoLanguege.nameLanguage)
+      }
+    },
+    [languageData]
   )
 
-  const keys = React.useRef({
-    language: 'language',
-    id: 'id',
-  })
-  let arrayIdLanguage = dataFromRedux[keys.current.language].map(
-    (infoLanguage) => infoLanguage[keys.current.id]
-  )
+  // nameLanguage được lấy ra từ formsubmit or datafromform
+  const convertToId = (languageData, nameLanguage) => {
+    if (languageData) {
+      const idCurrent = languageData.find(
+        (infoLanguege) => infoLanguege.nameLanguage === nameLanguage
+      )
+
+      if (idCurrent) {
+        return idCurrent.id
+      } else {
+        return nameLanguage // vì lúc này nameLanguage chính là id do truyền từ useEffect đầu
+      }
+    }
+  }
+
+  const nameLanguage = convertToName(languageData) //return về array
+
   let hidden = ['Có', 'Không']
-
-  const dataDefault = React.useRef({
-    id: '',
-    nameArea: '',
-    lat: '',
-    lng: '',
-    zoom: '',
-    active: 1,
-    languageId: arrayIdLanguage[0],
-  })
-  const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
 
   const handleCreateNew = async () => {
     setIsFirstClick(true)
+
+    if (dataFromForm.nameLanguage) {
+      // thêm languageId
+      dataFromForm.languageId = dataFromForm.nameLanguage
+
+      // xóa key nameLanguage
+      delete dataFromForm.nameLanguage
+
+      // lấy ra id căn cứ theo name
+      dataFromForm.languageId = convertToId(
+        languageData,
+        dataFromForm.languageId
+      )
+    }
+
     const formSubmit = {...dataFromForm}
 
     const isFullData = isCheckDataEmptyFromForm(formSubmit)
@@ -180,15 +218,8 @@ function RegionForm({dataProps}) {
       const dataForm = formSubmit
       const nameURL = dataProps.nameURL
       const method = 'create'
-
       const resData = await handleDataToAPI(dataForm, nameURL, method)
-      checkResData(
-        resData,
-        null,
-        setDataFromForm,
-        arrayIdLanguage,
-        setIsFirstClick
-      )
+      checkResData(resData, null, navigate)
     } else {
       const statusNotifications = {
         error: 'error',
@@ -213,7 +244,7 @@ function RegionForm({dataProps}) {
       const method = 'update'
 
       const resData = await handleDataToAPI(dataForm, nameURL, method, idURL)
-      checkResData(resData, method)
+      checkResData(resData, method, navigate)
     } else {
       const statusNotifications = {
         error: 'error',
@@ -281,9 +312,7 @@ function RegionForm({dataProps}) {
               setInputForm={setDataFromForm}
               checkInput={isFirstClick}
             />
-            <ButtonElement onClick={handleTurnOnMap}>
-              Chọn tọa độ trên bản đồ
-            </ButtonElement>
+            <ElementButton onClick={handleTurnOnMap}>Chọn tọa độ</ElementButton>
             <InputNumber
               id='5'
               textLabel='Zoom'
@@ -295,9 +324,9 @@ function RegionForm({dataProps}) {
             />
             <InputDeps
               id='6'
-              textLabel='ID ngôn ngữ'
-              arrayDeps={arrayIdLanguage}
-              name='languageId'
+              textLabel='Tên ngôn ngữ'
+              arrayDeps={nameLanguage || []}
+              name='nameLanguage'
               inputForm={dataFromForm}
               setInputForm={setDataFromForm}
             />
@@ -311,9 +340,12 @@ function RegionForm({dataProps}) {
               setInputForm={setDataFromForm}
             />
             <div className={styles.wrapper_button}>
-              <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
+              <ElementButton
+                mgTop={'10px'}
+                onClick={dataProps.isEdit ? handleEdit : handleCreateNew}
+              >
                 <span>{dataProps.text}</span>
-              </button>
+              </ElementButton>
             </div>
           </div>
         </div>

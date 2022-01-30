@@ -13,6 +13,7 @@ import {toast} from 'react-toastify'
 import {useSelector} from 'react-redux'
 import MapLeaflet from '../Map/MapLeafLet'
 import tableDataAPI from 'app/api/tableData'
+import {ElementButton} from '../element.js'
 
 const checkResData = (
   resData,
@@ -309,9 +310,12 @@ function ConfigForm({dataProps}) {
               checkInput={isFirstClick}
             />
             <div className={styles.wrapper_button}>
-              <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
+              <ElementButton
+                mgTop={'10px'}
+                onClick={dataProps.isEdit ? handleEdit : handleCreateNew}
+              >
                 <span>{dataProps.text}</span>
-              </button>
+              </ElementButton>
             </div>
           </div>
         </div>

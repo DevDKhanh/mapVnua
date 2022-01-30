@@ -7,7 +7,6 @@ import FormLanguage from './LanguageForm'
 import FormRegion from './RegionForm'
 import FormClassify from './ClassifyForm'
 import FormConfig from './ConfigForm'
-import FormInterface from './InterfaceForm'
 import FormAccount from './AccountForm'
 import FormClass from './ClassForm'
 
@@ -21,8 +20,6 @@ const formUpdate = (dataProps) => {
       return <FormClass dataProps={dataProps} />
     case 'setting':
       return <FormConfig dataProps={dataProps} />
-    case 'interface':
-      return <FormInterface dataProps={dataProps} />
     case 'language':
       return <FormLanguage dataProps={dataProps} />
     case 'account':

@@ -20,6 +20,18 @@
         border-radius   : 10px;
         filter          : drop-shadow(2px 2px 4px #333);
         margin-bottom   : 20px;
+        max-height      : 400px;
+        overflow        : auto;
+
+        &::-webkit-scrollbar {
+            width: 0.7em;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: darkgrey;
+            outline         : 1px solid slategrey;
+            border-radius   : 5px;
+        }
 
         .wrapper_button {
             display        : flex;
@@ -28,20 +40,12 @@
             align-items    : center;
 
             &>button {
-                background-color: #fff;
-                border          : none;
-                margin          : 20px 0;
+                padding: 0;
 
                 &>span {
-                    text-decoration : none;
                     color           : #fff;
-                    padding         : 20px 117px;
+                    padding         : 10px 30px;
                     background-color: #2a3f54;
-                    text-transform  : uppercase;
-                    font-size       : 0.8rem;
-                    font-weight     : bold;
-                    cursor          : pointer;
-                    box-shadow      : -4px -1px 5px rgb(179 179 179 / 90%), 3px 3px 5px rgb(0 0 0 / 50%);
                     border-radius   : 30px;
                 }
 

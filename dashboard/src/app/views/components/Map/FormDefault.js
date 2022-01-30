@@ -1,4 +1,5 @@
 import React from 'react'
+import {ElementButton} from '../element.js'
 import {ButtonElement} from '../newCreateForm/element.js'
 import {WrapperCondinates, Input, WrapperInput, LabelInput} from './element'
 
@@ -30,7 +31,9 @@ const FormCoordinatesDefault = ({
           placeholder='Tọa độ lng'
         />
       </WrapperInput>
-      <ButtonElement onClick={handleClickOke}>oke</ButtonElement>
+      <ElementButton onClick={handleClickOke} mgTop={'20px'}>
+        Chấp nhận
+      </ElementButton>
     </WrapperCondinates>
   )
 }

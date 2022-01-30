@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -7,13 +7,30 @@ import styles from './PanelMainContent.module.scss'
 import PanelHeadTable from './PanelHeadTable'
 import dataHead from 'app/config/dataHead'
 import DialogDelete from '../Dialog/DialogDelete'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
+import covertData from 'app/common/covertData'
+import {ElementButton} from '../element.js'
 
-function PanelMainContent({nameHead, dataTable}) {
+function PanelMainContent() {
   // state on/off dialog
   const [isActive, setIsActive] = useState(false)
+
   // ID & name delete
   const [infoItem, setInfoItem] = useState()
+
+  const [resData, setResData] = useState([])
+
+  const {name} = useParams()
+
+  useEffect(() => {
+    const getData = async () => {
+      setResData(await covertData(name))
+    }
+
+    getData()
+
+    return () => {}
+  }, [resData, name])
 
   const handleDialog = (name, id) => {
     setInfoItem({name, id})
@@ -45,37 +62,39 @@ function PanelMainContent({nameHead, dataTable}) {
 
   return (
     <div className={styles.wrapper_panel_content}>
-      <button>
+      <ElementButton mgBottom={'20px'}>
         <Link to='new_create'>Tạo mới</Link>
-      </button>
+      </ElementButton>
+
       <div className={styles.wrapper_panel}>
         <table>
-          <PanelHeadTable dataHead={dataHead[nameHead]} />
+          <PanelHeadTable dataHead={dataHead[name]} />
           <tbody>
-            {dataTable[nameHead].map((item, index) => (
-              <tr key={index}>
-                <td>{index}</td>
-                {Object.values(item).map((itemValue, index) => (
-                  <React.Fragment key={index}>
-                    <RenderValue itemValue={itemValue} />
-                  </React.Fragment>
-                ))}
-                <td>
-                  <Link to={`see_detail/${item['id']}`}>
-                    <i className='far fa-eye'></i>
-                  </Link>
-                  <Link to={`edit/${item['id']}`}>
-                    <i className='far fa-edit'></i>
-                  </Link>
-                  <Link
-                    to={''}
-                    onClick={() => handleDialog(nameHead, item['id'])}
-                  >
-                    <i className='far fa-trash-alt'></i>
-                  </Link>
-                </td>
-              </tr>
-            ))}
+            {resData &&
+              resData.map((item, index) => (
+                <tr key={index}>
+                  <td>{index}</td>
+                  {Object.values(item).map((itemValue, index) => (
+                    <React.Fragment key={index}>
+                      <RenderValue itemValue={itemValue} />
+                    </React.Fragment>
+                  ))}
+                  <td>
+                    <Link to={`see_detail/${item['id']}`}>
+                      <i className='far fa-eye'></i>
+                    </Link>
+                    <Link to={`edit/${item['id']}`}>
+                      <i className='far fa-edit'></i>
+                    </Link>
+                    <Link
+                      to={''}
+                      onClick={() => handleDialog(name, item['id'])}
+                    >
+                      <i className='far fa-trash-alt'></i>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

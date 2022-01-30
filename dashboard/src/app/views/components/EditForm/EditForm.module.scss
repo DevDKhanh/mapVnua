@@ -37,21 +37,17 @@
             justify-content: center;
 
             &>button {
-                background-color: #fff;
-                border          : none;
-                margin          : 20px 0;
+                padding: 0;
+
 
                 &>a {
                     text-decoration : none;
+                    padding         : 10px 30px;
                     color           : #fff;
-                    padding         : 20px 117px;
                     background-color: #2a3f54;
-                    text-transform  : uppercase;
-                    font-size       : 0.8rem;
-                    font-weight     : bold;
-                    cursor          : pointer;
-                    box-shadow      : -4px -1px 5px rgb(179 179 179 / 90%), 3px 3px 5px rgb(0 0 0 / 50%);
                     border-radius   : 30px;
+
+                    cursor: pointer;
 
                     &:visited {
                         color: #fff;

@@ -4,13 +4,15 @@ import MoveRaster from './MoveRaster'
 import style from './EditRaster.module.scss'
 import {ElementButton} from '../CoordinatesRaster/element.js'
 
-function EditRaster({file, setCoordinates, onClose}) {
+function EditRaster({file, setCoordinates, onClose, dataFromForm}) {
   return (
     <div className={style.main}>
       <MapContainer
         style={{
-          height: '90%',
-          width: '80%',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
           position: 'absolute',
           zIndex: '1000',
         }}
@@ -22,7 +24,11 @@ function EditRaster({file, setCoordinates, onClose}) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        <MoveRaster file={file} setCoordinates={setCoordinates} />
+        <MoveRaster
+          file={file}
+          setCoordinates={setCoordinates}
+          dataFromForm={dataFromForm}
+        />
         <ZoomControl position='bottomright' />
       </MapContainer>
       <ElementButton

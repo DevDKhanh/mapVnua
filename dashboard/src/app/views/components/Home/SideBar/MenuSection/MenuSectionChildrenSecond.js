@@ -2,10 +2,14 @@ import React, {useEffect, useState} from 'react'
 import {useDispatch} from 'react-redux'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 
 // Thư mục
 import styles from './MenuSection.module.scss'
 import getTableList from 'app/common/covertData'
+import {keysLocal} from 'app/localStorage/keys'
+import {getItem} from 'app/localStorage/localStorage'
+import {reqDisplay} from 'app/redux/action/action.componentDisplay'
 
 //styled
 const LinkElement = styled(Link)`
@@ -58,46 +62,11 @@ function MenuSectionChildrenSecond({children, dataParam}) {
   const dispatch = useDispatch()
   const [indexFocus, setIndexFocus] = useState()
 
-  const handleComponent = (item, index) => {
-    switch (dataParam[index]) {
-      case 'area':
-        getTableList('area', item, dispatch)
-        break
-      case 'classify':
-        getTableList('classify', item, dispatch)
-        break
-      case 'layer':
-        getTableList('layer', item, dispatch)
-        break
-      case 'document':
-        getTableList('document', item, dispatch)
-        break
-      case 'setting':
-        getTableList('setting', item, dispatch)
-        break
-      case 'interface':
-        getTableList('interface', item, dispatch)
-        break
-      case 'language':
-        getTableList('language', item, dispatch)
-        break
-      case 'account':
-        getTableList('account', item, dispatch)
-        break
-      default:
-        return
-    }
-  }
-
   return (
     <div className={styles.wrapper_children_second}>
       {children.map((item, index) => (
         <LinkElement
           to={`${dataParam[index]}`}
-          onClick={() => {
-            setIndexFocus(index)
-            handleComponent(item, index)
-          }}
           key={index}
           clickitem={indexFocus === index ? 'true' : ''}
         >

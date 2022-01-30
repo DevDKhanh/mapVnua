@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
+import React, {useCallback, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {toast} from 'react-toastify'
+import axios from 'axios'
 
 //Thư mục
 import styles from './form.module.scss'
@@ -15,6 +16,8 @@ import dataFormTable from '../../../config/dataForm.js'
 import {ButtonElement} from './element.js'
 import MapLeaflet from '../Map/MapLeafLet.js'
 import EditRaster from '../EditRaster'
+import {useNavigate} from 'react-router-dom'
+import {ElementButton} from '../element.js'
 
 const checkResData = (parameters) => {
   const statusNotifications = {
@@ -34,48 +37,28 @@ const checkResData = (parameters) => {
     notifications(statusNotifications.error, textnotifications.error)
   }
   if (Array.isArray(parameters.resData) && parameters.resData[0].code === 200) {
-    notifications(statusNotifications.success, textnotifications.success)
-
-    // !method = null not exits method
-    if (!parameters.method) {
-      parameters.setDataFromForm({
-        ...parameters.dataFromForm,
-        id: '',
-        nameLayer: '',
-        classifyId: parameters.arrayIdClassify[0],
-        areaId: parameters.arrayIdArea[0],
-        style: parameters.optionStyle[0],
-        borderColor: '#333',
-        backgroundColor: '#333',
-        widthBorder: 1,
-        opacityBorder: 1,
-        opacityBackground: 1,
-        latSW: 1,
-        lngSW: 1,
-        latNE: 1,
-        lngNE: 1,
-        active: 1,
-        zIndex: 1,
-        languageId: parameters.arrayIdLanguage[0],
-      })
-      parameters.setIsFirstClick(false)
-    }
+    notifications(
+      statusNotifications.success,
+      textnotifications.success,
+      parameters.navigate
+    )
   }
   if (Array.isArray(parameters.resData) && parameters.resData[0].code === 400) {
     notifications(statusNotifications.error, textnotifications.error)
   }
 }
 
-const checkNotificationStatus = (status) => {
+const checkNotificationStatus = (status, navigate) => {
   if (status === 'success') {
+    navigate('/home/layer')
     return 'success'
   } else {
     return 'error'
   }
 }
 
-const notifications = (status, textStatus) => {
-  const filterStatus = checkNotificationStatus(status)
+const notifications = (status, textStatus, navigate) => {
+  const filterStatus = checkNotificationStatus(status, navigate)
   toast[filterStatus](textStatus, {
     position: 'top-right',
     autoClose: 2000,
@@ -138,9 +121,88 @@ const converByKeys = (dataFromForm, resLayerData) => {
 }
 
 // ===========
-function ClassifyForm({dataProps}) {
+function ClassForm({dataProps}) {
   const [isFirstClick, setIsFirstClick] = useState(false)
   const [isOnMap, setIsOnMap] = useState(false)
+  const navigate = useNavigate()
+  const [dataFromForm, setDataFromForm] = useState({
+    id: '',
+    nameLayer: '',
+    style: 'Vector',
+    path: '',
+    icon: '',
+    borderColor: '#333',
+    backgroundColor: '#333',
+    widthBorder: 1,
+    opacityBorder: 1,
+    opacityBackground: 1,
+    latSW: 1,
+    lngSW: 1,
+    latNE: 1,
+    lngNE: 1,
+    active: 1,
+    zIndex: 1,
+  })
+
+  const [languageData, setLanguageData] = useState()
+  const [classifyData, setClassifyData] = useState()
+  const [areaData, setAreaData] = useState()
+
+  React.useEffect(() => {
+    const {isEdit} = dataProps
+
+    if (!isEdit && languageData) {
+      setDataFromForm({
+        ...dataFromForm,
+        nameLanguage: languageData[0].id,
+      })
+    }
+    if (!isEdit && classifyData) {
+      setDataFromForm({
+        ...dataFromForm,
+        nameClassify: classifyData[0].id,
+      })
+    }
+    if (!isEdit && areaData) {
+      setDataFromForm({
+        ...dataFromForm,
+        nameArea: areaData[0].id,
+      })
+    }
+  }, [languageData, classifyData, areaData])
+
+  React.useEffect(() => {
+    const getLanguage = async () => {
+      axios
+        .get('http://localhost:3000/language?page=1&pageSize=100')
+        .then((res) => {
+          setLanguageData(res.data.records)
+        })
+        .catch((e) => console.log(e))
+    }
+
+    const getClassify = async () => {
+      axios
+        .get('http://localhost:3000/classify?page=1&pageSize=100')
+        .then((res) => {
+          setClassifyData(res.data.records)
+        })
+        .catch((e) => console.log(e))
+    }
+
+    const getArea = async () => {
+      axios
+        .get('http://localhost:3000/area?page=1&pageSize=100')
+        .then((res) => {
+          setAreaData(res.data.records)
+        })
+        .catch((e) => console.log(e))
+    }
+
+    getLanguage()
+    getClassify()
+    getArea()
+  }, [dataProps])
 
   React.useEffect(() => {
     ;(async () => {
@@ -159,60 +221,104 @@ function ClassifyForm({dataProps}) {
     })()
   }, [dataProps])
 
-  const dataFromRedux = useSelector(
-    (state) => state['displayMainContent']['data']
-  )
+  const convertToName = useCallback((data, name) => {
+    if (data) {
+      if (name === 'language') {
+        return data.map((itemInfo) => itemInfo.nameLanguage)
+      }
+      if (name === 'classify') {
+        return data.map((itemInfo) => itemInfo.nameClassify)
+      }
+      if (name === 'area') {
+        return data.map((itemInfo) => itemInfo.nameArea)
+      }
+    }
+  }, [])
 
-  const keys = React.useRef({
-    language: 'language',
-    id: 'id',
-    classify: 'classify',
-    area: 'area',
-  })
+  const convertToId = (data, nameConver, name) => {
+    if (data) {
+      if (name === 'language') {
+        const idCurrent = data.find(
+          (infoLanguege) => infoLanguege.nameLanguage === nameConver
+        )
 
-  const arrayIdLanguage = dataFromRedux[keys.current.language].map(
-    (infoLanguage) => infoLanguage[keys.current.id]
-  )
+        if (idCurrent) {
+          return idCurrent.id
+        } else {
+          return nameConver // vì lúc này nameLanguage chính là id do truyền từ useEffect đầu
+        }
+      }
+      if (name === 'classify') {
+        const idCurrent = data.find(
+          (infoClassify) => infoClassify.nameClassify === nameConver
+        )
 
-  const arrayIdClassify = dataFromRedux[keys.current.classify].map(
-    (infoClassify) => infoClassify[keys.current.id]
-  )
+        if (idCurrent) {
+          return idCurrent.id
+        } else {
+          return nameConver
+        }
+      }
+      if (name === 'area') {
+        const idCurrent = data.find(
+          (infoArea) => infoArea.nameArea === nameConver
+        )
 
-  const arrayIdArea = dataFromRedux[keys.current.area].map(
-    (infoArea) => infoArea[keys.current.id]
-  )
+        if (idCurrent) {
+          return idCurrent.id
+        } else {
+          return nameConver
+        }
+      }
+    }
+  }
+
+  const nameLanguage = convertToName(languageData, 'language')
+  const nameClassify = convertToName(classifyData, 'classify')
+  const nameArea = convertToName(areaData, 'area')
 
   const optionStyle = ['Vector', 'Raster']
 
   const hidden = ['Có', 'Không']
 
-  const dataDefault = React.useRef({
-    id: '',
-    nameLayer: '',
-    classifyId: arrayIdClassify[0],
-    areaId: arrayIdArea[0],
-    style: optionStyle[0],
-    path: '',
-    icon: '',
-    borderColor: '#333',
-    backgroundColor: '#333',
-    widthBorder: 1,
-    opacityBorder: 1,
-    opacityBackground: 1,
-    latSW: 1,
-    lngSW: 1,
-    latNE: 1,
-    lngNE: 1,
-    active: 1,
-    zIndex: 1,
-    languageId: arrayIdLanguage[0],
-  })
-
-  const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
-
   const handleCreateNew = async () => {
     setIsFirstClick(true)
+    console.log(dataFromForm)
+
+    // thêm id
+    if (
+      dataFromForm.nameLanguage &&
+      dataFromForm.nameArea &&
+      dataFromForm.nameClassify
+    ) {
+      dataFromForm.languageId = dataFromForm.nameLanguage
+      dataFromForm.areaId = dataFromForm.nameArea
+      dataFromForm.classifyId = dataFromForm.nameClassify
+
+      // xóa key nameLanguage
+      delete dataFromForm.nameLanguage
+      delete dataFromForm.nameArea
+      delete dataFromForm.nameClassify
+    }
+
+    // lấy ra id căn cứ theo name
+    dataFromForm.languageId = convertToId(
+      languageData,
+      dataFromForm.languageId,
+      'language'
+    )
+
+    dataFromForm.areaId = convertToId(areaData, dataFromForm.areaId, 'area')
+
+    dataFromForm.classifyId = convertToId(
+      classifyData,
+      dataFromForm.classifyId,
+      'classify'
+    )
+
     const formSubmit = {...dataFromForm}
+
+    console.log(formSubmit)
 
     if (dataFromForm.icon) {
       const formData = new FormData()
@@ -280,13 +386,7 @@ function ClassifyForm({dataProps}) {
       const parameters = {
         method: null,
         resData: resData,
-        setDataFromForm: setDataFromForm,
-        dataFromForm: dataFromForm,
-        arrayIdClassify: arrayIdClassify,
-        arrayIdArea: arrayIdArea,
-        optionStyle: optionStyle,
-        arrayIdLanguage: arrayIdLanguage,
-        setIsFirstClick: setIsFirstClick,
+        navigate: navigate,
       }
 
       checkResData(parameters)
@@ -397,6 +497,7 @@ function ClassifyForm({dataProps}) {
       const parameters = {
         resData: resData,
         method: method,
+        navigate: navigate,
       }
 
       checkResData(parameters)
@@ -439,24 +540,24 @@ function ClassifyForm({dataProps}) {
             <InputDeps
               id='2'
               textLabel='Tên khu vực'
-              name='areaId'
-              arrayDeps={arrayIdArea}
+              name='nameArea'
+              arrayDeps={nameArea || []}
               inputForm={dataFromForm}
               setInputForm={setDataFromForm}
             />
             <InputDeps
               id='3'
               textLabel='Tên ngôn ngữ'
-              name='languageId'
-              arrayDeps={arrayIdLanguage}
+              name='nameLanguage'
+              arrayDeps={nameLanguage || []}
               inputForm={dataFromForm}
               setInputForm={setDataFromForm}
             />
             <InputDeps
               id='4'
               textLabel='Tên phân loại'
-              name='classifyId'
-              arrayDeps={arrayIdClassify}
+              name='nameClassify'
+              arrayDeps={nameClassify || []}
               inputForm={dataFromForm}
               setInputForm={setDataFromForm}
             />
@@ -543,9 +644,9 @@ function ClassifyForm({dataProps}) {
                   checkInput={isFirstClick}
                   isNumber={true}
                 />
-                <ButtonElement onClick={handleTurnOnMap}>
-                  Chọn tọa độ trên bản đồ
-                </ButtonElement>
+                <ElementButton onClick={handleTurnOnMap}>
+                  Chọn tọa độ
+                </ElementButton>
               </React.Fragment>
             ) : (
               <React.Fragment>
@@ -603,9 +704,12 @@ function ClassifyForm({dataProps}) {
               setInputForm={setDataFromForm}
             />
             <div className={styles.wrapper_button}>
-              <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
+              <ElementButton
+                mgTop={'10px'}
+                onClick={dataProps.isEdit ? handleEdit : handleCreateNew}
+              >
                 <span>{dataProps.text}</span>
-              </button>
+              </ElementButton>
             </div>
           </div>
         </div>
@@ -614,4 +718,4 @@ function ClassifyForm({dataProps}) {
   )
 }
 
-export default ClassifyForm
+export default ClassForm
