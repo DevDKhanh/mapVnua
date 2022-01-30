@@ -39,16 +39,18 @@ const getTableList = async (paramName, item, dispatch) => {
       arrData.push(objectData)
       objectData = {}
     })
-    // console.log(arrData)
+    if (dispatch) {
+      dispatch(
+        reqDisplay({
+          paramName: paramName,
+          text: item,
+          data: arrData,
+          theadTable: paramName,
+        })
+      )
+    }
 
-    dispatch(
-      reqDisplay({
-        paramName: paramName,
-        text: item,
-        data: arrData,
-        theadTable: paramName,
-      })
-    )
+    return arrData
   } catch (e) {
     console.error(e)
   }

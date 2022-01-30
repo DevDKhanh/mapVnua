@@ -53,6 +53,7 @@ const DialogDelete = ({isActive, infoItem, setIsActive, isDetail}) => {
           draggable: true,
           progress: undefined,
         })
+
         // re-load table
         convertData(infoItem['name'], null, dispatch)
 

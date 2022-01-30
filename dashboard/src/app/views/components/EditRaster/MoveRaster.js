@@ -12,7 +12,6 @@ L.Icon.Default.mergeOptions({
 })
 
 function MoveRaster({file, setCoordinates, dataFromForm}) {
-  console.log(dataFromForm)
   const markerRefTop = useRef(null)
   const markerRefBottom = useRef(null)
 

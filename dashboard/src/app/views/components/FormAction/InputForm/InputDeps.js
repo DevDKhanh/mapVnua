@@ -19,6 +19,7 @@ function InputDeps({id, textLabel, inputForm, setInputForm, arrayDeps, name}) {
     let {name, value} = e.target
     setInputForm({...inputForm, [name]: handleCheckActive(value)})
   }
+
   return (
     <div className={clsx('form-group', styles.wrapperInputText)}>
       <label htmlFor={id}>{textLabel}</label>

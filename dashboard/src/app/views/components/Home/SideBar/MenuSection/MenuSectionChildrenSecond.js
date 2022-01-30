@@ -62,67 +62,11 @@ function MenuSectionChildrenSecond({children, dataParam}) {
   const dispatch = useDispatch()
   const [indexFocus, setIndexFocus] = useState()
 
-  const callAPIUser = () => {
-    axios
-      .get('http://localhost:3000/auth/users?page=1&pageSize=100', {
-        headers: {
-          Authorization: 'Bearer ' + getItem(keysLocal['token']),
-        },
-      })
-      .then((response) => {
-        const {data} = response
-        const {records} = data
-        const dataFullName = records.map((item) => {
-          const {id, fullName} = item
-
-          return {id, fullName}
-        })
-
-        dispatch(
-          reqDisplay({
-            theadTable: 'account',
-            data: dataFullName,
-            paramName: 'account',
-          })
-        )
-      })
-      .catch((e) => console.error(e))
-  }
-
-  const handleComponent = (item, index) => {
-    switch (dataParam[index]) {
-      case 'area':
-        getTableList('area', item, dispatch)
-        break
-      case 'classify':
-        getTableList('classify', item, dispatch)
-        break
-      case 'layer':
-        getTableList('layer', item, dispatch)
-        break
-      case 'setting':
-        getTableList('setting', item, dispatch)
-        break
-      case 'language':
-        getTableList('language', item, dispatch)
-        break
-      case 'account':
-        callAPIUser('account', item, dispatch)
-        break
-      default:
-        return
-    }
-  }
-
   return (
     <div className={styles.wrapper_children_second}>
       {children.map((item, index) => (
         <LinkElement
           to={`${dataParam[index]}`}
-          onClick={() => {
-            setIndexFocus(index)
-            handleComponent(item, index)
-          }}
           key={index}
           clickitem={indexFocus === index ? 'true' : ''}
         >

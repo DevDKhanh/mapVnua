@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useParams} from 'react-router-dom'
 
 //Thư mục
@@ -10,14 +10,9 @@ import tableDataAPI from 'app/api/tableData'
 import {PElement} from './element'
 import {useSelector} from 'react-redux'
 import {toast} from 'react-toastify'
+import {ElementButton} from '../element.js'
 
-const checkResData = (
-  resData,
-  method,
-  setDataFromForm,
-  dataFromForm,
-  setIsFirstClick
-) => {
+const checkResData = (resData, method, navigate) => {
   const statusNotifications = {
     success: 'success',
     error: 'error',
@@ -32,33 +27,28 @@ const checkResData = (
     notifications(statusNotifications.error, textnotifications.error)
   }
   if (Array.isArray(resData) && resData[0].code === 200) {
-    notifications(statusNotifications.success, textnotifications.success)
-
-    // !method = null not exits method
-    if (!method) {
-      setDataFromForm({
-        ...dataFromForm,
-        id: '',
-        nameLanguage: '',
-      })
-      setIsFirstClick(false)
-    }
+    notifications(
+      statusNotifications.success,
+      textnotifications.success,
+      navigate
+    )
   }
   if (Array.isArray(resData) && resData[0].code === 400) {
     notifications(statusNotifications.error, textnotifications.error)
   }
 }
 
-const checkNotificationStatus = (status) => {
+const checkNotificationStatus = (status, navigate) => {
   if (status === 'success') {
+    navigate('/home/language')
     return 'success'
   } else {
     return 'error'
   }
 }
 
-const notifications = (status, textStatus) => {
-  const filterStatus = checkNotificationStatus(status)
+const notifications = (status, textStatus, navigate) => {
+  const filterStatus = checkNotificationStatus(status, navigate)
   toast[filterStatus](textStatus, {
     position: 'top-right',
     autoClose: 2000,
@@ -121,6 +111,12 @@ const converByKeys = (dataFromForm, resLayerData) => {
 
 function LanguageForm({dataProps}) {
   const [isFirstClick, setIsFirstClick] = useState(false)
+  const navigate = useNavigate()
+  const [dataFromForm, setDataFromForm] = useState({
+    id: '',
+    nameLanguage: '',
+    icon: '',
+  })
 
   React.useEffect(() => {
     ;(async () => {
@@ -138,13 +134,6 @@ function LanguageForm({dataProps}) {
       }
     })()
   }, [dataProps])
-
-  const dataDefault = React.useRef({
-    id: '',
-    nameLanguage: '',
-    icon: '',
-  })
-  const [dataFromForm, setDataFromForm] = useState(dataDefault.current)
 
   const handleCreateNew = async () => {
     setIsFirstClick(true)
@@ -165,13 +154,7 @@ function LanguageForm({dataProps}) {
       const method = 'create'
 
       const resData = await handleDataToAPI(dataForm, nameURL, method)
-      checkResData(
-        resData,
-        null,
-        setDataFromForm,
-        dataFromForm,
-        setIsFirstClick
-      )
+      checkResData(resData, null, navigate)
     } else {
       const statusNotifications = {
         error: 'error',
@@ -202,7 +185,7 @@ function LanguageForm({dataProps}) {
       const method = 'update'
 
       const resData = await handleDataToAPI(dataForm, nameURL, method, idURL)
-      checkResData(resData, method)
+      checkResData(resData, method, navigate)
     } else {
       const statusNotifications = {
         error: 'error',
@@ -245,9 +228,12 @@ function LanguageForm({dataProps}) {
             checkInput={isFirstClick}
           />
           <div className={styles.wrapper_button}>
-            <button onClick={dataProps.isEdit ? handleEdit : handleCreateNew}>
+            <ElementButton
+              mgTop={'10px'}
+              onClick={dataProps.isEdit ? handleEdit : handleCreateNew}
+            >
               <span>{dataProps.text}</span>
-            </button>
+            </ElementButton>
           </div>
         </div>
       </div>

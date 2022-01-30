@@ -18,17 +18,6 @@ const icon = {
 function HomePage() {
   const [isVisible, setIsVisible] = useState(false)
 
-  //dispatch
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    ;(() => {
-      Object.keys(dataFormTable).map((keys) =>
-        getTableList(keys, 'home', dispatch)
-      )
-    })()
-  }, [])
-
   const param = useParams() // param of url
 
   return (

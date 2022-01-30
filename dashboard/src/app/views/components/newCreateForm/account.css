@@ -14,17 +14,29 @@
 .account__container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   margin: 0 5rem 3rem 5rem;
   background-color: #2a3f5449;
   border-radius: 10px;
   padding: 3rem 0;
+  max-height: 400px;
+  overflow: auto;
+  padding: 3rem 5rem;
 }
+
+.account__container::-webkit-scrollbar {
+  width: 0.8em;
+}
+
+.account__container::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  border-radius: 10px;
+}
+
 .account_wrapperInput {
   display: flex;
   flex-direction: column;
   margin-bottom: 1rem;
-  width: 30rem;
+  width: 100%;
 }
 .account__label {
   font-size: 0.8rem;
@@ -53,22 +65,5 @@
   color: #2a3f54;
 }
 .account__button {
-  background-color: #fff;
-  border: none;
-  margin: 4rem 0 0 0;
-  text-decoration: none;
-  color: #fff;
-  padding: 20px 90px;
-  background-color: #2a3f54;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: -4px -1px 5px rgb(179 179 179 / 90%), 3px 3px 5px rgb(0 0 0 / 50%);
-  border-radius: 30px;
-}
-
-.account__button :focus {
-  outline: none;
-  border: none;
+  align-self: center;
 }

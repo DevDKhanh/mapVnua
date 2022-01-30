@@ -21,6 +21,8 @@
         box-shadow      : -4px -1px 5px rgb(179 179 179 / 90%),
             3px 3px 5px rgb(0 0 0 / 50%);
         border-radius: 8px;
+        max-height   : 400px;
+        overflow     : auto;
 
         table {
             padding: 20px 30px;

@@ -4,6 +4,7 @@ import {Checkbox, Divider} from 'antd'
 
 //Thư mục
 import './account.css'
+import {ElementButton} from '../element.js'
 
 const CheckboxGroup = Checkbox.Group
 const plainOptions = ['Cho phép thêm', 'Cho phép sửa', 'Cho phép xóa']
@@ -87,7 +88,9 @@ function AccountForm({dataProps}) {
             className='account__checkboxGroup'
           />
         </div>
-        <button className='account__button'>Tạo mới</button>
+        <ElementButton mgTop='30px' className='account__button'>
+          Tạo mới
+        </ElementButton>
       </div>
     </div>
   )

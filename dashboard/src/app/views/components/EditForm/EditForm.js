@@ -28,13 +28,12 @@ const formEdit = (dataProps) => {
   }
 }
 
-function EditForm({itemEdit, nameURL, idURL}) {
+function EditForm({nameURL, idURL}) {
   const dataProps = {
     nameURL: nameURL,
     idURL: idURL,
     text: 'Chỉnh sửa',
     isEdit: true,
-    itemEdit: itemEdit,
   }
 
   return <div className={styles.wrapper_main_form}>{formEdit(dataProps)}</div>
