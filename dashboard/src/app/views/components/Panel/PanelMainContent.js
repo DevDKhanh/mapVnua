@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-
+import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
 
 // Thư mục
@@ -10,6 +10,8 @@ import DialogDelete from '../Dialog/DialogDelete'
 import {Link, useParams} from 'react-router-dom'
 import covertData from 'app/common/covertData'
 import {ElementButton} from '../element.js'
+import {keysLocal} from 'app/localStorage/keys'
+import {getItem} from 'app/localStorage/localStorage'
 
 function PanelMainContent() {
   // state on/off dialog
@@ -24,13 +26,32 @@ function PanelMainContent() {
 
   useEffect(() => {
     const getData = async () => {
-      setResData(await covertData(name))
+      if (name === 'account') {
+        // resDataAccount dùng để nhận dữ liệu của account từ server <Object>
+        const resDataAccount = await axios.get(
+          'http://localhost:3000/auth/users?page=1&pageSize=10',
+          {
+            headers: {
+              Authorization: 'Bearer ' + getItem(keysLocal['token']),
+            },
+          }
+        )
+
+        // converData lấy ra những dữ liệu cần thiết để hiển thị ra bảng
+        const dataAccount = resDataAccount.data.records
+        const converData = dataAccount.map((accountInfo) => {
+          const {id, userName, fullName, createdAt} = accountInfo
+          return {id, userName, fullName, createdAt}
+        })
+
+        setResData(converData)
+      } else {
+        setResData(await covertData(name))
+      }
     }
 
     getData()
-
-    return () => {}
-  }, [resData, name])
+  }, [name])
 
   const handleDialog = (name, id) => {
     setInfoItem({name, id})
@@ -39,6 +60,7 @@ function PanelMainContent() {
 
   const checkIsPathImage = (itemValue) => {
     const baseURL = 'http://localhost:3000/upload'
+    console.log(itemValue)
 
     if (itemValue.toString().includes('/image/')) {
       return (

@@ -34,7 +34,7 @@ const dataHead = {
     'Zoom',
   ],
   language: ['STT', 'ID ngôn ngữ', 'Tên ngôn ngữ', 'Icon'],
-  account: ['STT', 'ID', 'Họ và tên'],
+  account: ['STT', 'ID', 'Tên tài khoản', 'Họ và tên', 'Ngày tạo'],
 }
 
 export default dataHead
