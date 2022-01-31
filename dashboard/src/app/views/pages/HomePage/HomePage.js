@@ -15,6 +15,7 @@ const H2Element = styled.h2`
 const HomePage = () => {
   const [renderTable, setRenderTable] = useState()
   const {name} = useParams()
+
   useEffect(() => {
     // name in dataFormTable to check exist
     // nameURL can not exist if not check

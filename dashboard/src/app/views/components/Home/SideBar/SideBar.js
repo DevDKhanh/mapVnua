@@ -8,7 +8,7 @@ import Avatar from '../../Avatar/Avatar'
 import MenuSectionChildren from './MenuSection/MenuSectionChildren'
 import HomeChildren from './MenuSection/HomeChildren'
 
-function SideBar() {
+function SideBar({fullName}) {
   const [indexFocus, setIndexFocus] = useState()
   const icons = {
     iconEdit: <i className='far fa-edit'></i>,
@@ -22,7 +22,7 @@ function SideBar() {
         <Avatar size={50} />
         <div className={styles.wrapper_profile_title}>
           <h3>Xin chào</h3>
-          <h3>Thanh</h3>
+          <h3>{fullName}</h3>
         </div>
       </div>
       <div className={styles.wrapper_menu_section}>

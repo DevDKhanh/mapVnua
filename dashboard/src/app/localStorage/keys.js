@@ -1,3 +1,4 @@
 export const keysLocal = {
-  token: "token",
-};
+  token: 'token',
+  userInfo: 'userInfo',
+}

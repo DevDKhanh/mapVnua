@@ -1,9 +1,9 @@
 .wrapper_sideBar {
-  position: relative;
-  z-index: 10000;
-  flex: 20%;
+  position        : relative;
+  z-index         : 10000;
+  flex            : 20%;
   background-color: #2a3f54;
-  padding: 0 20px;
+  padding         : 0 20px;
 
   .wrapper_profile_info {
     display: flex;
@@ -11,25 +11,25 @@
 
     .wrapper_profile_title {
       padding-left: 20px;
-      align-self: center;
-      flex: 1;
+      align-self  : center;
+      flex        : 1;
 
       h3 {
         font-size: 0.9rem;
-        margin: 0;
       }
 
       h3:nth-child(1) {
-        font-size: 0.8rem;
-        color: #ddd;
-        font-weight: 600;
+        font-size     : 0.8rem;
+        color         : #ddd;
+        font-weight   : 600;
         letter-spacing: 1.05px;
       }
 
       h3:nth-child(2) {
-        color: #fff;
-        font-weight: 600;
+        color         : #fff;
+        font-weight   : 600;
         letter-spacing: 1.05px;
+        margin-top    : 0.5rem;
       }
     }
   }

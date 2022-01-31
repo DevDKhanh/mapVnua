@@ -3,8 +3,6 @@ import {useNavigate} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 
 // path of folder
-// import Input from '../../components/Input'
-// import Button from '../../components/Button'
 import styles from './LoginPage.module.scss'
 import {getItem, setItem} from 'app/localStorage/localStorage'
 import {useCancelToken} from 'app/common/hooks/useClearToken'
@@ -20,11 +18,11 @@ function LoginPage() {
   const {newCancelToken} = useCancelToken()
 
   const dispatch = useDispatch() //dispatch data to redux
-  const naviga = useNavigate() // navigation
+  const navigate = useNavigate() // navigation
   useEffect(() => {
     const token = getItem(keysLocal.token) // token
-    Boolean(token) && naviga('/home')
-  }, [])
+    Boolean(token) && navigate('/home')
+  }, [navigate])
 
   const handleChange = (e) => {
     const {name, value} = e.target
@@ -35,10 +33,14 @@ function LoginPage() {
     e.preventDefault()
     try {
       const userData = await authAPI.login(formData, newCancelToken()) // call api get data user
+
       setIsError(false) // delete mess error
+
       pushToken(userData) //push token to local storage
-      dispatch(setUserInfo(userData)) // set user infor to redux
-      naviga('/home', {replace: true}) // navigation to home page
+
+      userInfo(userData)
+
+      navigate('/home', {replace: true}) // navigation to home page
     } catch (e) {
       console.log(e)
       setIsError(true) // notification error display
@@ -86,6 +88,17 @@ const pushToken = (userData) => {
     // push token to local
     const tokenData = userData[0].data.token
     setItem(keysLocal.token, tokenData)
+  } else {
+    console.log('Không có local storage')
+  }
+}
+
+const userInfo = (userData) => {
+  if (localStorage) {
+    // push user info to local
+    const [userInfo] = userData
+
+    setItem(keysLocal.userInfo, userInfo.data)
   } else {
     console.log('Không có local storage')
   }

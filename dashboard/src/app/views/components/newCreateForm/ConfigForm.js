@@ -290,9 +290,7 @@ function ConfigForm({dataProps}) {
               setInputForm={setDataFromForm}
               checkInput={isFirstClick}
             />
-            <ButtonElement onClick={handleTurnOnMap}>
-              Chọn tọa độ trên bản đồ
-            </ButtonElement>
+            <ElementButton onClick={handleTurnOnMap}>Chọn tọa độ</ElementButton>
             <InputNumber
               id='5'
               textLabel='Zoom'

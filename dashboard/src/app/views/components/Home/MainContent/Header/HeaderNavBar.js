@@ -29,7 +29,7 @@ const RenderIconOrText = ({urlParam, nameURL, icon}) => {
   }
 }
 
-function HeaderNavBar({icon, isVisible, setIsVisible}) {
+function HeaderNavBar({fullName, icon, isVisible, setIsVisible}) {
   //navigate
   const {name} = useParams()
   const urlParam = useLocation()
@@ -47,7 +47,7 @@ function HeaderNavBar({icon, isVisible, setIsVisible}) {
         className={styles.wrapper_header_navBarRight}
       >
         <Avatar size={40} />
-        <p>Thanh</p>
+        <p>{fullName}</p>
         <i className='fas fa-caret-down'></i>
       </div>
       {/* logout */}

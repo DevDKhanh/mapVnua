@@ -1,12 +1,12 @@
-import { combineReducers } from "redux";
+import {combineReducers} from 'redux'
 
 //Thư mục
-import reqDisplay from "./reducer.reqDisplay";
-import user from "./reducer.user";
+import reqDisplay from './reducer.reqDisplay'
+import userInfo from './reducer.user'
 
 const rootReducer = combineReducers({
   displayMainContent: reqDisplay,
-  userInfo: user,
-});
+  userInfo,
+})
 
-export default rootReducer;
+export default rootReducer
