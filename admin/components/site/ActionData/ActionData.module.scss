@@ -1,0 +1,14 @@
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .item {
+        padding: 0 5px;
+        color: #ff8a65;
+        cursor: pointer;
+        &:hover {
+            color: #f9a991;
+        }
+    }
+}
