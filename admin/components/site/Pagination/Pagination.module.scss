@@ -1,0 +1,71 @@
+.tfoot {
+    display: flex;
+    margin-top: 24px;
+    align-items: center;
+    > * {
+        flex: 0 0 fit-content;
+    }
+    > .expan {
+        flex: 1 1 fit-content;
+    }
+    .limit_info {
+        display: flex;
+        align-items: center;
+        height: fit-content;
+        font-size: 1rem;
+    }
+    .limit {
+        select {
+            margin: 0 8px;
+            background: #481eff;
+            box-sizing: border-box;
+            border-radius: 6px;
+            color: #ffffff;
+            padding: 8px;
+        }
+    }
+    .pagination {
+        user-select: none;
+        display: flex;
+        gap: 16px;
+        flex-wrap: nowrap;
+        align-items: center;
+        font-size: 1rem;
+        .page {
+            background: #481eff;
+            color: #fff;
+            border-radius: 6px;
+            padding: 8px 20px;
+            height: 40px;
+        }
+        .prev_next {
+            cursor: pointer;
+            display: flex;
+            flex-wrap: nowrap;
+            > * {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 8px 12px;
+                height: 40px;
+                background: #ccc;
+                color: #777e90;
+            }
+            > *.active {
+                background: radial-gradient(
+                        72.29% 96.43% at 50.5% 3.57%,
+                        #6666ff 0%,
+                        #323ad0 100%
+                    )
+                    /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+                color: #ffffff;
+            }
+            > *:first-child {
+                border-radius: 6px 0px 0px 6px;
+            }
+            > *:last-child {
+                border-radius: 0px 6px 6px 0px;
+            }
+        }
+    }
+}
