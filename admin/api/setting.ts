@@ -1,13 +1,22 @@
 import axiosClient from '.';
+const base: string = '/setting';
 
 const settingAPI = {
     get: (data: { page: number; pageSize: number }, tokenAxios?: any) => {
         return axiosClient.get(
-            `/setting?page=${data.page}&pageSize=${data.pageSize}`,
+            `${base}?page=${data.page}&pageSize=${data.pageSize}`,
             {
                 cancelToken: tokenAxios,
             }
         );
+    },
+    post: (data: any, token: string, tokenAxios?: any) => {
+        return axiosClient.post(`${base}`, data, {
+            cancelToken: tokenAxios,
+            headers: {
+                authorization: 'Bearer ' + token,
+            },
+        });
     },
 };
 

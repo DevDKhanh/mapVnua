@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import classifyAPI from '../../../api/classify';
 import ActionData from '../../../components/site/ActionData';
@@ -6,6 +8,8 @@ import DataTable from '../../../components/site/Table';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 
 function index() {
+    const router = useRouter();
+
     const [totalItem, setTotalItem] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageCurrent, setPageCurrent] = useState<number>(1);
@@ -24,10 +28,22 @@ function index() {
                 }
             } catch (err) {}
         })();
-    }, [pageCurrent, pageSize]);
+    }, [pageCurrent, pageSize, router]);
+
+    const detailData = {
+        'Hình ảnh kí hiệu': 'icon',
+        'Số thứ tự': 'no',
+        'ID phân loại': 'id',
+        'Tên phân loại': 'nameClassify',
+        'Tên ngôn ngữ': 'language.nameLanguage',
+        'Hiển thị': 'active',
+    };
 
     return (
         <DashboardLayout title="Phân loại">
+            <Link href="/category/classify/create">
+                <a className="btn-create">Thêm mới</a>
+            </Link>
             <DataTable
                 data={list}
                 columns={[
@@ -64,7 +80,13 @@ function index() {
                     {
                         title: 'Hành động',
                         template: (data: any) => {
-                            return <ActionData />;
+                            return (
+                                <ActionData
+                                    id={data.id}
+                                    url="classify"
+                                    detailData={detailData}
+                                />
+                            );
                         },
                     },
                 ]}

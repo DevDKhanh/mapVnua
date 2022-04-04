@@ -1,8 +1,10 @@
-import { memo, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import areaAPI from '../../../api/area';
+import languageAPI from '../../../api/language';
 import { useValidateAll } from '../../../common/hooks/useValidate';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
@@ -35,21 +37,37 @@ interface typeFormSubmit {
 function index() {
     const validator = useValidateAll;
     const { token } = useSelector((state: RootState) => state.auth);
+    const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
         id: '',
         nameArea: '',
-        language: {
-            txt: 'Viet',
-            value: 'vi',
-        },
+        language: null,
         lat: '',
         lng: '',
         active: {
             txt: 'Có',
             value: 1,
         },
-        zoom: '',
+        zoom: '6',
     });
+
+    /*---------- get list language insert select language ----------*/
+    useEffect(() => {
+        (async () => {
+            const [res, status]: any = await languageAPI.get({
+                page: 1,
+                pageSize: 100,
+            });
+            if (res && status === 200) {
+                setListLanguage(
+                    res.records.map((item: any) => ({
+                        txt: item.nameLanguage,
+                        value: item.id,
+                    }))
+                );
+            }
+        })();
+    }, []);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -85,6 +103,20 @@ function index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+
+                    /*---------- Clear form ----------*/
+                    setDataForm({
+                        id: '',
+                        nameArea: '',
+                        language: null,
+                        lat: '',
+                        lng: '',
+                        active: {
+                            txt: 'Có',
+                            value: 1,
+                        },
+                        zoom: '',
+                    });
                 } else {
                     toast.warn(res?.message);
                 }
@@ -93,6 +125,11 @@ function index() {
             }
         })();
     };
+
+    const GetCoordinates = dynamic(
+        () => import('../../../components/map/GetCoordinates'),
+        { ssr: false }
+    );
 
     return (
         <DashboardLayout
@@ -138,16 +175,7 @@ function index() {
                         <Select
                             title="Ngôn ngữ"
                             value={dataForm?.language?.txt}
-                            data={[
-                                {
-                                    txt: 'Có',
-                                    value: 1,
-                                },
-                                {
-                                    txt: 'Không',
-                                    value: 0,
-                                },
-                            ]}
+                            data={listLanguage}
                             onChange={(v) => handleChangeSelect(v, 'language')}
                         />
                         <Select

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import layerAPI from '../../../api/layer';
 import ActionData from '../../../components/site/ActionData';
@@ -6,6 +8,8 @@ import DataTable from '../../../components/site/Table';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 
 function index() {
+    const router = useRouter();
+
     const [totalItem, setTotalItem] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageCurrent, setPageCurrent] = useState<number>(1);
@@ -25,10 +29,29 @@ function index() {
                 }
             } catch (err) {}
         })();
-    }, [pageCurrent, pageSize]);
+    }, [pageCurrent, pageSize, router]);
+
+    const detailData = {
+        'Hình ảnh kí hiệu': 'icon',
+        'ID khu vực': 'id',
+        'Tên Lớp': 'nameLayer',
+        'Tên ngôn ngữ': 'language.nameLanguage',
+        'Kiểu lớp': 'style',
+        'Thuộc khu vực': 'area.nameArea',
+        'Thuộc phân loại': 'classify.nameClassify',
+        'Tọa độ latSW': 'latSW',
+        'Tọa độ lngSW': 'lngSW',
+        'Tọa độ latNE': 'latNE',
+        'Tọa độ lngNE': 'lngNE',
+        'Hiển thị': 'active',
+        'Lớp xếp chồng': 'zIndex',
+    };
 
     return (
         <DashboardLayout title="Quản lí các lớp">
+            <Link href="/category/layer/create">
+                <a className="btn-create">Thêm mới</a>
+            </Link>
             <DataTable
                 data={list}
                 columns={[
@@ -77,7 +100,13 @@ function index() {
                     {
                         title: 'Hành động',
                         template: (data: any) => {
-                            return <ActionData />;
+                            return (
+                                <ActionData
+                                    id={data.id}
+                                    url="layer"
+                                    detailData={detailData}
+                                />
+                            );
                         },
                     },
                 ]}

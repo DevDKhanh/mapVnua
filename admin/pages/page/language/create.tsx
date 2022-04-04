@@ -1,81 +1,120 @@
-import { memo, useEffect, useState } from 'react';
-import classifyAPI from '../../../api/classify';
-import ActionData from '../../../components/site/ActionData';
-import Pagination from '../../../components/site/Pagination';
-import DataTable from '../../../components/site/Table';
+import { memo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import languageAPI from '../../../api/language';
+import uploadAPI from '../../../api/upload';
+import { useValidateAll } from '../../../common/hooks/useValidate';
+import Input from '../../../components/site/Input';
 import { DashboardLayout } from '../../../components/widgets/Layout';
+import { RootState } from '../../../redux/reducers';
 
+/*---------- type form input ----------*/
+interface typeForm {
+    id: string;
+    nameLanguage: string;
+    icon: any;
+}
+
+/*---------- type form submit ----------*/
+interface typeFormSubmit {
+    id: string;
+    nameLanguage: string;
+    icon: string;
+}
+
+/*===========> MAIN COMPONENT <==========*/
 function index() {
-    const [totalItem, setTotalItem] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [pageCurrent, setPageCurrent] = useState<number>(1);
-    const [list, setList] = useState<any>([]);
+    const validator = useValidateAll;
+    const { token } = useSelector((state: RootState) => state.auth);
+    const [dataForm, setDataForm] = useState<typeForm>({
+        icon: '',
+        nameLanguage: '',
+        id: '',
+    });
 
-    useEffect(() => {
+    const handleChange = (e: any) => {
+        const { name, value } = e.target;
+        setDataForm((prev: any) => ({ ...prev, [name]: value }));
+    };
+
+    const handleChangeFile = (e: any) => {
+        const { name } = e.target;
+        setDataForm((prev: any) => ({ ...prev, [name]: e.target.files[0] }));
+    };
+
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
+        if (!validator(dataForm)) {
+            toast.warn('Vui lòng nhập đầy đủ thông tin');
+            return;
+        }
+
         (async () => {
             try {
-                const [res, status]: any = await classifyAPI.get({
-                    page: pageCurrent,
-                    pageSize,
-                });
+                /*---------- Create file form updaload icon ----------*/
+                const file: any = new FormData();
+                file.append('file', dataForm.icon);
+
+                /*---------- upload icon and get link icon ----------*/
+                const [URL]: any = await uploadAPI.upImage(file, token);
+
+                /*---------- create submit form ----------*/
+                const formSubmit: typeFormSubmit = {
+                    ...dataForm,
+                    icon: `${URL.filename}`,
+                };
+
+                const [res, status]: any = await languageAPI.post(
+                    formSubmit,
+                    token
+                );
                 if (res && status === 200) {
-                    setList(res.records);
-                    setTotalItem(res.total);
+                    toast.success(res?.message);
+
+                    /*---------- Clear form ----------*/
+                    setDataForm({
+                        icon: '',
+                        nameLanguage: '',
+                        id: '',
+                    });
+                } else {
+                    toast.warn(res?.message);
                 }
-            } catch (err) {}
+            } catch (err: any) {
+                toast.error(err?.message || 'Thêm mới thất bại');
+            }
         })();
-    }, [pageCurrent, pageSize]);
+    };
 
     return (
-        <DashboardLayout title="Phân loại">
-            <DataTable
-                data={list}
-                columns={[
-                    {
-                        title: 'STT',
-                        template: (data: any, i: number) => {
-                            return i + 1;
-                        },
-                    },
-                    {
-                        title: 'ID phân loại',
-                        template: (data: any) => {
-                            return data.id;
-                        },
-                    },
-                    {
-                        title: 'Tên phân loại',
-                        template: (data: any) => {
-                            return data.nameClassify;
-                        },
-                    },
-                    {
-                        title: 'Tên ngôn ngữ',
-                        template: (data: any) => {
-                            return data.language.nameLanguage;
-                        },
-                    },
-                    {
-                        title: 'Hiển thị',
-                        template: (data: any) => {
-                            return data.active ? 'Có' : 'Không';
-                        },
-                    },
-                    {
-                        title: 'Hành động',
-                        template: (data: any) => {
-                            return <ActionData />;
-                        },
-                    },
-                ]}
-            />
-            <Pagination
-                totalItem={totalItem}
-                pageSize={pageSize}
-                pageCurrent={pageCurrent}
-                onSetPage={setPageCurrent}
-                onSetPageSize={setPageSize}
-            />
+        <DashboardLayout title="Thêm ngôn ngữ mới" hrefBack="/page/language/">
+            <div>
+                <div className="form">
+                    <form onSubmit={handleSubmit}>
+                        <Input
+                            title="ID ngôn ngữ"
+                            value={dataForm?.id}
+                            name="id"
+                            onChange={handleChange}
+                        />
+                        <Input
+                            title="Tên ngôn ngữ"
+                            value={dataForm?.nameLanguage}
+                            name="nameLanguage"
+                            onChange={handleChange}
+                        />
+                        <Input
+                            title="Icon"
+                            value={dataForm?.icon?.path}
+                            name="icon"
+                            type="file"
+                            onChange={handleChangeFile}
+                        />
+                        <button className="btn-create">Thêm mới</button>
+                    </form>
+                </div>
+            </div>
         </DashboardLayout>
     );
 }

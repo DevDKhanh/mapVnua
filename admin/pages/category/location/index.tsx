@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import areaAPI from '../../../api/area';
 import ActionData from '../../../components/site/ActionData';
@@ -7,6 +8,8 @@ import DataTable from '../../../components/site/Table';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 
 function index() {
+    const router = useRouter();
+
     const [totalItem, setTotalItem] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageCurrent, setPageCurrent] = useState<number>(1);
@@ -25,7 +28,18 @@ function index() {
                 }
             } catch (err) {}
         })();
-    }, [pageCurrent, pageSize]);
+    }, [pageCurrent, pageSize, router]);
+
+    const detailData = {
+        'ID khu vực': 'id',
+        'Tên khu vực': 'nameArea',
+        'ID ngôn ngữ': 'languageId',
+        'Tên ngôn ngữ': 'language.nameLanguage',
+        'Tọa độ lat': 'lat',
+        'Tọa độ lng': 'lng',
+        'Hiển thị': 'active',
+        Zoom: 'zoom',
+    };
 
     return (
         <DashboardLayout title="Quản lí khu vực">
@@ -86,7 +100,13 @@ function index() {
                     {
                         title: 'Hành động',
                         template: (data: any) => {
-                            return <ActionData />;
+                            return (
+                                <ActionData
+                                    id={data.id}
+                                    url="area"
+                                    detailData={detailData}
+                                />
+                            );
                         },
                     },
                 ]}

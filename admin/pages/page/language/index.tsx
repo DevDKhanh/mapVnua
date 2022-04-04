@@ -1,4 +1,6 @@
 import { Avatar, Box } from '@mui/material';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import languageAPI from '../../../api/language';
 import ActionData from '../../../components/site/ActionData';
@@ -8,6 +10,8 @@ import { DashboardLayout } from '../../../components/widgets/Layout';
 import { API_URL } from '../../../constants/config';
 
 function index() {
+    const router = useRouter();
+
     const [totalItem, setTotalItem] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageCurrent, setPageCurrent] = useState<number>(1);
@@ -26,10 +30,19 @@ function index() {
                 }
             } catch (err) {}
         })();
-    }, [pageCurrent, pageSize]);
+    }, [pageCurrent, pageSize, router]);
+
+    const detailData = {
+        'Hình ảnh kí hiệu': 'icon',
+        'ID ngôn ngữ': 'id',
+        'Tên ngôn ngữ': 'nameLanguage',
+    };
 
     return (
         <DashboardLayout title="Ngôn ngữ">
+            <Link href="/page/language/create">
+                <a className="btn-create">Thêm mới</a>
+            </Link>
             <DataTable
                 data={list}
                 columns={[
@@ -63,7 +76,7 @@ function index() {
                                 >
                                     <Avatar
                                         alt={'icon image'}
-                                        src={`${API_URL}/upload/image/${data.icon}`}
+                                        src={`${API_URL}/upload${data.icon}`}
                                     />
                                 </Box>
                             );
@@ -72,7 +85,13 @@ function index() {
                     {
                         title: 'Hành động',
                         template: (data: any) => {
-                            return <ActionData />;
+                            return (
+                                <ActionData
+                                    id={data.id}
+                                    url="language"
+                                    detailData={detailData}
+                                />
+                            );
                         },
                     },
                 ]}

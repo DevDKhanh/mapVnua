@@ -71,7 +71,7 @@ export default function DataTable({
                                                     >
                                                         {itemCol.template(
                                                             data[index],
-                                                            indexCol
+                                                            index
                                                         )}
                                                     </div>
                                                 </td>

@@ -48,7 +48,7 @@ a {
 
 .btn-create {
     padding: 8px 32px;
-    background-color: #ff8a65;
+    background-color: #481eff;
     max-width: max-content;
     border-radius: 5px;
     font-weight: bold;
@@ -75,4 +75,15 @@ a {
     margin: 0 auto;
     background-color: #fff;
     padding: 30px;
+}
+
+.overlay {
+    position: fixed;
+    background-color: #060728;
+    opacity: 0.5;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100000;
 }
