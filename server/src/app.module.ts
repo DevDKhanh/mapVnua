@@ -28,7 +28,7 @@ import { PermissionModule } from './modules/permission/permission.module';
         database: config.get<string>('MYSQL_DATABASE'),
         username: config.get<string>('MYSQL_USERNAME'),
         password: config.get<string>('MYSQL_PASSWORD'),
-        synchronize: false,
+        synchronize: true,
         migrationsRun: true,
         autoLoadEntities: true,
         entities: ['dist/**/*.entity.{ts,js}'],

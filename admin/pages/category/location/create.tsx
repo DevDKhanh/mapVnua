@@ -11,6 +11,10 @@ import Select from '../../../components/site/Select';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 import { RootState } from '../../../redux/reducers';
 
+const GetCoordinates = dynamic(
+    () => import('../../../components/map/GetCoordinates'),
+    { ssr: false }
+);
 /*---------- type form input ----------*/
 interface typeForm {
     id: string;
@@ -37,6 +41,7 @@ interface typeFormSubmit {
 function index() {
     const validator = useValidateAll;
     const { token } = useSelector((state: RootState) => state.auth);
+
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
         id: '',
@@ -126,10 +131,9 @@ function index() {
         })();
     };
 
-    const GetCoordinates = dynamic(
-        () => import('../../../components/map/GetCoordinates'),
-        { ssr: false }
-    );
+    const handleSetPosition = (e: any) => {
+        setDataForm({ ...dataForm, ...e });
+    };
 
     return (
         <DashboardLayout
@@ -137,6 +141,7 @@ function index() {
             hrefBack="/category/location/"
         >
             <div>
+                {console.log(dataForm)}
                 <div className="form">
                     <form onSubmit={handleSubmit}>
                         <Input
@@ -197,6 +202,10 @@ function index() {
                     </form>
                 </div>
             </div>
+            <GetCoordinates
+                position={[dataForm.lat, dataForm.lng]}
+                onSetPosition={handleSetPosition}
+            />
         </DashboardLayout>
     );
 }
