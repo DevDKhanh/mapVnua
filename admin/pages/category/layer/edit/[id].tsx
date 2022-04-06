@@ -1,27 +1,28 @@
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import areaAPI from '../../../api/area';
-import classifyAPI from '../../../api/classify';
-import languageAPI from '../../../api/language';
-import layerAPI from '../../../api/layer';
-import uploadAPI from '../../../api/upload';
-import { useValidateAll } from '../../../common/hooks/useValidate';
-import Input from '../../../components/site/Input';
-import Select from '../../../components/site/Select';
-import { DashboardLayout } from '../../../components/widgets/Layout';
-import { RootState } from '../../../redux/reducers';
+import areaAPI from '../../../../api/area';
+import classifyAPI from '../../../../api/classify';
+import languageAPI from '../../../../api/language';
+import layerAPI from '../../../../api/layer';
+import siteAPI from '../../../../api/site';
+import uploadAPI from '../../../../api/upload';
+import { useValidateAll } from '../../../../common/hooks/useValidate';
+import Input from '../../../../components/site/Input';
+import Select from '../../../../components/site/Select';
+import { DashboardLayout } from '../../../../components/widgets/Layout';
+import { RootState } from '../../../../redux/reducers';
 
 const GetCoordinatesRaster = dynamic(
-    () => import('../../../components/map/GetCoordinatesRaster'),
+    () => import('../../../../components/map/GetCoordinatesRaster'),
     { ssr: false }
 );
 
 /*---------- type form input ----------*/
 interface typeForm {
-    id: string;
     nameLayer: string;
     language: any;
     classify: any;
@@ -44,14 +45,13 @@ interface typeForm {
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
-    id: string;
     nameLayer: string;
     languageId: string;
     classifyId: string;
     areaId: string;
     style: string;
-    path: string;
-    icon: string;
+    path?: string;
+    icon?: string;
     borderColor: string;
     widthBorder: number;
     opacityBorder: number;
@@ -67,7 +67,8 @@ interface typeFormSubmit {
 
 /*===========> MAIN COMPONENT <==========*/
 function index() {
-    const validator = useValidateAll;
+    const router = useRouter();
+    const { id } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
 
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -79,7 +80,6 @@ function index() {
             txt: 'Có',
             value: 1,
         },
-        id: '',
         nameLayer: '',
         language: null,
         classify: null,
@@ -143,6 +143,48 @@ function index() {
         })();
     }, []);
 
+    /*---------- Get info data insert form ----------*/
+    useEffect(() => {
+        if (token && id) {
+            (async () => {
+                try {
+                    const [res, status]: any = await siteAPI.get(
+                        'layer',
+                        id,
+                        token
+                    );
+                    if (res && status === 200) {
+                        const { data } = res;
+                        setDataForm({
+                            ...data,
+                            active: {
+                                txt: data.active ? 'Có' : 'Không',
+                                value: data.active,
+                            },
+                            nameLayer: data.nameLayer,
+                            language: {
+                                value: data.language.id,
+                                txt: data.language.nameLanguage,
+                            },
+                            classify: {
+                                value: data.classify.id,
+                                txt: data.classify.nameClassify,
+                            },
+                            area: {
+                                value: data.area.id,
+                                txt: data.area.nameArea,
+                            },
+                            style: {
+                                txt: data.style,
+                                value: data.style,
+                            },
+                        });
+                    }
+                } catch (err) {}
+            })();
+        }
+    }, [id, token]);
+
     const handleChange = (e: any, key?: any) => {
         if (key) {
             setDataForm((prev: any) => ({ ...prev, [key]: e.hex }));
@@ -174,85 +216,77 @@ function index() {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!validator(dataForm)) {
-            toast.warn('Vui lòng nhập đầy đủ thông tin');
-            return;
-        }
 
         (async () => {
+            const formSubmit: typeFormSubmit = {
+                nameLayer: dataForm.nameLayer,
+                languageId: dataForm.language.value,
+                classifyId: dataForm.classify.value,
+                areaId: dataForm.area.value,
+                style: dataForm.style.value,
+                borderColor: dataForm.borderColor,
+                widthBorder: Number(dataForm.widthBorder),
+                opacityBorder: Number(dataForm.opacityBorder),
+                backgroundColor: dataForm.backgroundColor,
+                icon: dataForm.icon,
+                path: dataForm.path,
+                opacityBackground: Number(dataForm.opacityBackground),
+                latNE: Number(dataForm.latNE),
+                lngNE: Number(dataForm.lngNE),
+                latSW: Number(dataForm.latSW),
+                lngSW: Number(dataForm.lngSW),
+                zIndex: Number(dataForm.zIndex),
+                active: dataForm.active.value,
+            };
             /*---------- Create file form updaload icon ----------*/
 
-            const file: any = new FormData();
-            file.append('file', dataForm.icon);
-            const [URL_icon]: any = await uploadAPI.upload(
-                'image',
-                file,
-                token
-            );
+            if (typeof dataForm.icon !== 'string') {
+                try {
+                    const file: any = new FormData();
+                    file.append('file', dataForm.icon);
+                    const [URL_icon]: any = await uploadAPI.upload(
+                        'image',
+                        file,
+                        token
+                    );
+                    if (URL_icon) {
+                        formSubmit.icon = URL_icon.filename;
+                    }
 
-            /*---------- Upload file or raster ----------*/
-            const filePath: any = new FormData();
-            filePath.append('file', dataForm.path);
-            const [URL_path]: any = await uploadAPI.upload(
-                dataForm?.style?.value === 'Raster' ? 'image' : 'file',
-                filePath,
-                token
-            );
+                    toast.warn(URL_icon?.message);
+                } catch (err: any) {
+                    toast.warn(err?.message);
+                }
+            }
+
+            if (typeof dataForm.path !== 'string') {
+                /*---------- Upload file or raster ----------*/
+                try {
+                    const filePath: any = new FormData();
+                    filePath.append('file', dataForm.path);
+                    const [URL_path]: any = await uploadAPI.upload(
+                        dataForm?.style?.value === 'Raster' ? 'image' : 'file',
+                        filePath,
+                        token
+                    );
+                    if (URL_path) {
+                        formSubmit.path = URL_path.filename;
+                    }
+
+                    toast.warn(URL_path?.message);
+                } catch (err: any) {
+                    toast.warn(err?.message);
+                }
+            }
 
             try {
-                const formSubmit: typeFormSubmit = {
-                    id: dataForm.id,
-                    nameLayer: dataForm.nameLayer,
-                    languageId: dataForm.language.value,
-                    classifyId: dataForm.classify.value,
-                    areaId: dataForm.area.value,
-                    style: dataForm.style.value,
-                    path: `${URL_path.filename}`,
-                    icon: `${URL_icon.filename}`,
-                    borderColor: dataForm.borderColor,
-                    widthBorder: Number(dataForm.widthBorder),
-                    opacityBorder: Number(dataForm.opacityBorder),
-                    backgroundColor: dataForm.backgroundColor,
-                    opacityBackground: Number(dataForm.opacityBackground),
-                    latNE: Number(dataForm.latNE),
-                    lngNE: Number(dataForm.lngNE),
-                    latSW: Number(dataForm.latSW),
-                    lngSW: Number(dataForm.lngSW),
-                    zIndex: Number(dataForm.zIndex),
-                    active: dataForm.active.value,
-                };
-                const [res, status]: any = await layerAPI.post(
+                const [res, status]: any = await layerAPI.update(
+                    id,
                     formSubmit,
                     token
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        active: {
-                            txt: 'Có',
-                            value: 1,
-                        },
-                        id: '',
-                        nameLayer: '',
-                        language: null,
-                        classify: null,
-                        area: null,
-                        style: '',
-                        path: '',
-                        icon: '',
-                        borderColor: '',
-                        widthBorder: '',
-                        opacityBorder: '',
-                        backgroundColor: '',
-                        opacityBackground: '',
-                        latNE: '',
-                        lngNE: '',
-                        latSW: '',
-                        lngSW: '',
-                        zIndex: '',
-                    });
                 } else {
                     toast.warn(res?.message);
                 }
@@ -263,16 +297,10 @@ function index() {
     };
 
     return (
-        <DashboardLayout title="Thêm lớp mới" hrefBack="/category/layer/">
+        <DashboardLayout title="Chỉnh sửa lớp" hrefBack="/category/layer/">
             <div>
                 <div className="form">
                     <form onSubmit={handleSubmit}>
-                        <Input
-                            title="ID lớp"
-                            value={dataForm?.id}
-                            name="id"
-                            onChange={handleChange}
-                        />
                         <Select
                             title="Tên khu vực"
                             value={dataForm?.area?.txt}
@@ -425,7 +453,7 @@ function index() {
                             ]}
                             onChange={(v) => handleChangeSelect(v, 'active')}
                         />
-                        <button className="btn-create">Thêm mới</button>
+                        <button className="btn-create">Cập nhật</button>
                     </form>
                 </div>
             </div>

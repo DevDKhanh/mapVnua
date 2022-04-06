@@ -1,16 +1,32 @@
-import { memo, useMemo, useState, useRef, useEffect } from 'react';
-import { ImageOverlay, useMapEvents, Marker } from 'react-leaflet';
-import { LatLngBounds } from 'leaflet';
+import { memo, useMemo, useState, useRef, useCallback, useEffect } from 'react';
+import { ImageOverlay, useMapEvents, Marker, Popup } from 'react-leaflet';
+import L, { LatLngBounds } from 'leaflet';
+import { API_URL } from '../../../constants/config';
 
-function MoveRaster({ file, setCoordinates }: any) {
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
+    iconUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
+    shadowUrl:
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
+});
+
+function MoveRaster({ file, dataForm, setCoordinates }: any) {
     const markerRefTop = useRef(null);
     const markerRefBottom = useRef(null);
-
     const [point, setPoint] = useState({
-        top: { lat: 15, lng: 108 },
-        bottom: { lat: 14, lng: 107 },
+        top: { lat: +dataForm?.latNE, lng: +dataForm?.lngNE },
+        bottom: { lat: +dataForm?.latSW, lng: +dataForm?.lngSW },
     });
-    const img = useMemo(() => URL.createObjectURL(file), [file]);
+    const img = useMemo(() => {
+        if (typeof file === 'string') {
+            return `${API_URL}/upload${file}`;
+        } else {
+            return URL.createObjectURL(file);
+        }
+    }, [file]);
 
     useEffect(() => {
         setCoordinates(point);
@@ -18,7 +34,7 @@ function MoveRaster({ file, setCoordinates }: any) {
 
     //Di chuyen anh khi dbclick
     useMapEvents({
-        dblclick(e: any) {
+        dblclick(e) {
             const { lat, lng } = e.latlng;
             const top = {
                 lat: lat + 1,
@@ -67,14 +83,17 @@ function MoveRaster({ file, setCoordinates }: any) {
 
     return (
         <>
-            <ImageOverlay url={img} bounds={handleDrag()} />
+            <ImageOverlay url={img} bounds={handleDrag()} zIndex={5} />
+
             <Marker
                 position={[point.top.lat, point.top.lng]}
+                draggable={true}
                 eventHandlers={eventHandlers}
                 ref={markerRefTop}
             ></Marker>
             <Marker
                 position={[point.bottom.lat, point.bottom.lng]}
+                draggable={true}
                 eventHandlers={eventHandlers}
                 ref={markerRefBottom}
             />

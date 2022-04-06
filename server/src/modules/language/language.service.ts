@@ -77,7 +77,10 @@ export class LanguageService {
       );
     }
 
-    await deleteFile(checkId.icon);
+    /*---------- Kiểm tra nếu ảnh upload ko trùng thì xóa ----------*/
+    checkId.icon !== updateLanguageDto.icon && (await deleteFile(checkId.icon));
+
+    /*---------- Cập nhật trả kết quả cho client ----------*/
     await this.languageRepository.update({ id }, { ...updateLanguageDto });
     const data = await this.languageRepository.findOne(id);
     return resultData(await this.i18n.translate('site.SUCCESS_UPDATE'), data);

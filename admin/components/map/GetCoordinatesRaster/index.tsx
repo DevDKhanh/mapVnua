@@ -1,43 +1,45 @@
 import { Fragment, useState } from 'react';
-import {
-    MapContainer,
-    Marker,
-    Popup,
-    TileLayer,
-    useMapEvents,
-} from 'react-leaflet';
-import L from 'leaflet';
+import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 
-import icon from '../../../assets/image/location.svg';
 import 'leaflet/dist/leaflet.css';
 import style from './GetCoordinates.module.scss';
+import MoveRaster from './MoveRaster';
+import { toast } from 'react-toastify';
 
-function LocationMarker({ position, onSetPosition }: any) {
-    const [positionMap, setPositionMap] = useState(position);
-    var iconLocation = L.icon({
-        iconUrl: icon.src,
-        iconSize: [30, 30],
-        popupAnchor: [0, -15],
-        shadowAnchor: [13, 28],
-    });
-
-    useMapEvents({
-        click(e: any) {
-            setPositionMap(e.latlng);
-            onSetPosition && onSetPosition(e.latlng);
-        },
-    });
-
-    return position === null ? null : (
-        <Marker position={positionMap} icon={iconLocation}></Marker>
-    );
-}
-
-const Map = ({ position, onSetPosition }: any) => {
+const Map = ({ file, dataForm, onSetPosition }: any) => {
     const [showMap, setShowMap] = useState<boolean>(false);
+
+    const handleShowMap = () => {
+        if (typeof file === 'string') {
+            setShowMap(true);
+            return;
+        }
+
+        if (!file) {
+            toast.warning(
+                'Vui lòng chọn hình ảnh trước khi thực hiện thao tác này'
+            );
+            return;
+        }
+
+        const { type } = file;
+        if (
+            type !== 'image/jpeg' &&
+            type !== 'image/jpg' &&
+            type !== 'image/png' &&
+            type !== 'image/svg+xml'
+        ) {
+            toast.warning(
+                `Định dạng tệp không chính xác, đuôi tệp chấp nhận .jpg, .jpeg, .png`
+            );
+            return;
+        }
+        setShowMap(true);
+    };
+
     return (
         <Fragment>
-            <button className={style.btnShow} onClick={() => setShowMap(true)}>
+            <button className={style.btnShow} onClick={handleShowMap}>
                 Chọn tọa độ
             </button>
             {showMap && (
@@ -61,9 +63,10 @@ const Map = ({ position, onSetPosition }: any) => {
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
-                            <LocationMarker
-                                position={position}
-                                onSetPosition={onSetPosition}
+                            <MoveRaster
+                                file={file}
+                                dataForm={dataForm}
+                                setCoordinates={onSetPosition}
                             />
                         </MapContainer>
                     </Fragment>

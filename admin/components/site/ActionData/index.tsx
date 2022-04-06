@@ -10,6 +10,7 @@ import DetailData from '../Popup/DetailData';
 import Popup from '../Popup';
 import siteAPI from '../../../api/site';
 import style from './ActionData.module.scss';
+import Link from 'next/link';
 function index(props: any) {
     const router = useRouter();
     const { token } = useSelector((state: RootState) => state.auth);
@@ -49,9 +50,11 @@ function index(props: any) {
                 >
                     <Eye variant="Bold" />
                 </div>
-                <div className={style.item} title="Sửa">
-                    <Edit2 variant="Bold" />
-                </div>
+                <Link href={`${router.pathname}/edit/${props.id}`}>
+                    <a className={style.item} title="Sửa">
+                        <Edit2 variant="Bold" />
+                    </a>
+                </Link>
                 <div
                     className={style.item}
                     title="Xóa"
@@ -61,8 +64,13 @@ function index(props: any) {
                 </div>
             </div>
             {/*---------- Delete ----------*/}
-            <Popup isShow={showPopupDel} onClose={() => setShowPopupDel(false)}>
+            <Popup
+                key={props.id}
+                isShow={showPopupDel}
+                onClose={() => setShowPopupDel(false)}
+            >
                 <DeleteData
+                    key={props.id}
                     onClose={() => setShowPopupDel(false)}
                     onSubmit={handleDelete}
                 />
@@ -70,10 +78,12 @@ function index(props: any) {
 
             {/*---------- Detail ----------*/}
             <Popup
+                key={props.id}
                 isShow={showPopupDetail}
                 onClose={() => setShowPopupDetail(false)}
             >
                 <DetailData
+                    key={props.id}
                     onClose={() => setShowPopupDetail(false)}
                     {...props}
                 />

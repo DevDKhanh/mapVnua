@@ -1,13 +1,15 @@
-import { memo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import languageAPI from '../../../api/language';
-import uploadAPI from '../../../api/upload';
-import { useValidateAll } from '../../../common/hooks/useValidate';
-import Input from '../../../components/site/Input';
-import { DashboardLayout } from '../../../components/widgets/Layout';
-import { RootState } from '../../../redux/reducers';
+import languageAPI from '../../../../api/language';
+import siteAPI from '../../../../api/site';
+import uploadAPI from '../../../../api/upload';
+import { useValidateAll } from '../../../../common/hooks/useValidate';
+import Input from '../../../../components/site/Input';
+import { DashboardLayout } from '../../../../components/widgets/Layout';
+import { RootState } from '../../../../redux/reducers';
 
 /*---------- type form input ----------*/
 interface typeForm {
@@ -25,13 +27,36 @@ interface typeFormSubmit {
 
 /*===========> MAIN COMPONENT <==========*/
 function index() {
-    const validator = useValidateAll;
+    const router = useRouter();
+    const { id } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
+
     const [dataForm, setDataForm] = useState<typeForm>({
         icon: '',
         nameLanguage: '',
         id: '',
     });
+
+    /*---------- Get info data insert form ----------*/
+    useEffect(() => {
+        if (token && id) {
+            (async () => {
+                try {
+                    const [res, status]: any = await siteAPI.get(
+                        'language',
+                        id,
+                        token
+                    );
+                    if (res && status === 200) {
+                        const { data } = res;
+                        setDataForm({
+                            ...data,
+                        });
+                    }
+                } catch (err) {}
+            })();
+        }
+    }, [id, token]);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -45,39 +70,42 @@ function index() {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!validator(dataForm)) {
-            toast.warn('Vui lòng nhập đầy đủ thông tin');
-            return;
-        }
 
         (async () => {
             try {
-                /*---------- Create file form updaload icon ----------*/
-                const file: any = new FormData();
-                file.append('file', dataForm.icon);
-
-                /*---------- upload icon and get link icon ----------*/
-                const [URL]: any = await uploadAPI.upload('image', file, token);
-
                 /*---------- create submit form ----------*/
                 const formSubmit: typeFormSubmit = {
                     ...dataForm,
-                    icon: `${URL.filename}`,
                 };
 
-                const [res, status]: any = await languageAPI.post(
+                /*---------- Create file form updaload icon ----------*/
+                if (typeof dataForm.icon !== 'string') {
+                    try {
+                        const file: any = new FormData();
+                        file.append('file', dataForm.icon);
+
+                        /*---------- upload icon and get link icon ----------*/
+                        const [URL]: any = await uploadAPI.upload(
+                            'image',
+                            file,
+                            token
+                        );
+                        if (URL.filename) {
+                            formSubmit.icon = URL.filename;
+                        }
+                        toast.warn(URL?.message);
+                    } catch (err: any) {
+                        toast.warn(err?.message);
+                    }
+                }
+
+                const [res, status]: any = await languageAPI.update(
+                    id,
                     formSubmit,
                     token
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        icon: '',
-                        nameLanguage: '',
-                        id: '',
-                    });
                 } else {
                     toast.warn(res?.message);
                 }
@@ -88,16 +116,10 @@ function index() {
     };
 
     return (
-        <DashboardLayout title="Thêm ngôn ngữ mới" hrefBack="/page/language/">
+        <DashboardLayout title="Chỉnh sửa ngôn ngữ" hrefBack="/page/language/">
             <div>
                 <div className="form">
                     <form onSubmit={handleSubmit}>
-                        <Input
-                            title="ID ngôn ngữ"
-                            value={dataForm?.id}
-                            name="id"
-                            onChange={handleChange}
-                        />
                         <Input
                             title="Tên ngôn ngữ"
                             value={dataForm?.nameLanguage}
@@ -111,7 +133,7 @@ function index() {
                             type="file"
                             onChange={handleChangeFile}
                         />
-                        <button className="btn-create">Thêm mới</button>
+                        <button className="btn-create">Cập nhật</button>
                     </form>
                 </div>
             </div>

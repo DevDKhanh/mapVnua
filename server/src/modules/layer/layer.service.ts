@@ -35,8 +35,19 @@ export class LayerService {
   ) {}
 
   /********** Xóa file trong thư mục update **********/
-  private async removeFile(data: any) {
+  private async removeFile(data: any, check?: any) {
     const { path, icon } = data;
+
+    /*---------- Kiểm tra nếu ko update img hoặc file ----------*/
+    if (!!check) {
+      const iconCheck = check.icon;
+      const pathCheck = check.path;
+      iconCheck !== icon && (await deleteFile(icon));
+      pathCheck !== path && (await deleteFile(path));
+      return;
+    }
+
+    /*---------- Xóa file nếu không có điều kiện check ----------*/
     path && (await deleteFile(path));
     icon && (await deleteFile(icon));
   }
@@ -150,7 +161,7 @@ export class LayerService {
       );
     }
 
-    await this.removeFile(checkLayerId);
+    await this.removeFile(checkLayerId, updateLayerDto);
     await this.layerRepository.update({ id }, { ...updateLayerDto });
 
     /********** Trả về thông tin chi tiết sau khi cập nhật của lớp**********/

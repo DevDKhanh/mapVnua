@@ -18,6 +18,14 @@ const settingAPI = {
             },
         });
     },
+    update: (id: any, data: any, token: string, tokenAxios?: any) => {
+        return axiosClient.put(`${base}/${id}`, data, {
+            cancelToken: tokenAxios,
+            headers: {
+                authorization: 'Bearer ' + token,
+            },
+        });
+    },
 };
 
 export default settingAPI;
