@@ -16,7 +16,7 @@ const siteAPI = {
     },
     get: (
         url: 'setting' | 'language' | 'layer' | 'classify' | 'area',
-        id: number,
+        id: any,
         token: string,
         tokenAxios?: any
     ) => {

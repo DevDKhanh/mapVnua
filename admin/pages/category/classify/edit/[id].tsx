@@ -1,59 +1,45 @@
-import dynamic from 'next/dynamic';
 import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import areaAPI from '../../../api/area';
-import languageAPI from '../../../api/language';
-import { useValidateAll } from '../../../common/hooks/useValidate';
-import Input from '../../../components/site/Input';
-import Select from '../../../components/site/Select';
-import { DashboardLayout } from '../../../components/widgets/Layout';
-import { RootState } from '../../../redux/reducers';
+import classifyAPI from '../../../../api/classify';
+import languageAPI from '../../../../api/language';
+import { useValidateAll } from '../../../../common/hooks/useValidate';
+import Input from '../../../../components/site/Input';
+import Select from '../../../../components/site/Select';
+import { DashboardLayout } from '../../../../components/widgets/Layout';
+import { RootState } from '../../../../redux/reducers';
 
-const GetCoordinates = dynamic(
-    () => import('../../../components/map/GetCoordinates'),
-    { ssr: false }
-);
 /*---------- type form input ----------*/
 interface typeForm {
-    id: string;
-    nameArea: string;
+    nameClassify: string;
     language: any;
-    lat: string;
-    lng: string;
     active: any;
-    zoom: string;
+    no: string;
 }
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
-    id: string;
-    nameArea: string;
+    nameClassify: string;
     languageId: string;
-    lat: number;
-    lng: number;
     active: number;
-    zoom: number;
+    no: number;
 }
 
 /*===========> MAIN COMPONENT <==========*/
 function index() {
-    const validator = useValidateAll;
+    const router = useRouter();
+    const { id } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
-
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
-        id: '',
-        nameArea: '',
+        nameClassify: '',
         language: null,
-        lat: '',
-        lng: '',
         active: {
             txt: 'Có',
             value: 1,
         },
-        zoom: '6',
+        no: '',
     });
 
     /*---------- get list language insert select language ----------*/
@@ -74,6 +60,36 @@ function index() {
         })();
     }, []);
 
+    /*---------- Get info data insert form ----------*/
+    useEffect(() => {
+        if (token && id) {
+            (async () => {
+                try {
+                    const [res, status]: any = await siteAPI.get(
+                        'classify',
+                        id,
+                        token
+                    );
+                    if (res && status === 200) {
+                        const { data } = res;
+                        setDataForm({
+                            nameClassify: data.nameClassify,
+                            language: {
+                                value: data.language.id,
+                                txt: data.language.nameLanguage,
+                            },
+                            active: {
+                                txt: data.active ? 'Có' : 'Không',
+                                value: data.active,
+                            },
+                            no: data.no,
+                        });
+                    }
+                } catch (err) {}
+            })();
+        }
+    }, [id, token]);
+
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setDataForm((prev: any) => ({ ...prev, [name]: value }));
@@ -83,49 +99,25 @@ function index() {
         setDataForm((prev: any) => ({ ...prev, [name]: v }));
     };
 
-    const handleSetPosition = (e: any) => {
-        setDataForm({ ...dataForm, ...e });
-    };
-
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!validator(dataForm)) {
-            toast.warn('Vui lòng nhập đầy đủ thông tin');
-            return;
-        }
 
         const formSubmit: typeFormSubmit = {
-            id: dataForm.id,
-            nameArea: dataForm.nameArea,
+            nameClassify: dataForm.nameClassify,
             languageId: dataForm.language.value,
-            lat: Number(dataForm.lat),
-            lng: Number(dataForm.lng),
             active: Number(dataForm.active.value),
-            zoom: Number(dataForm.zoom),
+            no: Number(dataForm.no),
         };
 
         (async () => {
             try {
-                const [res, status]: any = await areaAPI.post(
+                const [res, status]: any = await classifyAPI.update(
+                    id,
                     formSubmit,
                     token
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        id: '',
-                        nameArea: '',
-                        language: null,
-                        lat: '',
-                        lng: '',
-                        active: {
-                            txt: 'Có',
-                            value: 1,
-                        },
-                        zoom: '',
-                    });
                 } else {
                     toast.warn(res?.message);
                 }
@@ -137,44 +129,23 @@ function index() {
 
     return (
         <DashboardLayout
-            title="Thêm khu vực mới"
-            hrefBack="/category/location/"
+            title="Chỉnh sửa phân loại"
+            hrefBack="/category/classify/"
         >
             <div>
-                {console.log(dataForm)}
                 <div className="form">
                     <form onSubmit={handleSubmit}>
                         <Input
-                            title="ID khu vực"
-                            value={dataForm?.id}
-                            name="id"
+                            title="Số thứ tự"
+                            value={dataForm?.no}
+                            name="no"
+                            typr="number"
                             onChange={handleChange}
                         />
                         <Input
-                            title="Tên khu vực"
-                            value={dataForm?.nameArea}
-                            name="nameArea"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lat"
-                            value={dataForm?.lat}
-                            name="lat"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lng"
-                            value={dataForm?.lng}
-                            name="lng"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Zoom"
-                            value={dataForm?.zoom}
-                            name="zoom"
-                            type="number"
+                            title="Tên phân loại"
+                            value={dataForm?.nameClassify}
+                            name="nameClassify"
                             onChange={handleChange}
                         />
                         <Select
@@ -198,16 +169,18 @@ function index() {
                             ]}
                             onChange={(v) => handleChangeSelect(v, 'active')}
                         />
-                        <button className="btn-create">Thêm mới</button>
+                        <button className="btn-create">Cập nhật</button>
                     </form>
                 </div>
             </div>
-            <GetCoordinates
-                position={[dataForm.lat, dataForm.lng]}
-                onSetPosition={handleSetPosition}
-            />
         </DashboardLayout>
     );
 }
 
 export default memo(index);
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+import { GetServerSideProps } from 'next';
+import siteAPI from '../../../../api/site';
+import { useRouter } from 'next/router';

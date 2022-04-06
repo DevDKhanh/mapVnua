@@ -6,7 +6,7 @@ interface props {
     type?: string;
     name: string;
     isColorPicker?: boolean;
-    onChange?: (value: any) => void;
+    onChange: (e: any, ...args: any[]) => void;
     [props: string]: any;
 }
 
@@ -24,7 +24,11 @@ function Input({
             <p>{title}</p>
             <div className={style.input}>
                 {isColorPicker && (
-                    <InputColor initialValue={`#ccc`} placement="right" />
+                    <InputColor
+                        initialValue={value}
+                        onChange={(e) => onChange(e, name)}
+                        placement="right"
+                    />
                 )}
                 <input
                     type={type}

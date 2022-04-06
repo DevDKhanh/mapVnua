@@ -23,7 +23,6 @@ function index() {
                     pageSize,
                 });
                 if (res && status === 200) {
-                    console.log(res);
                     setList(res.records);
                     setTotalItem(res.total);
                 }

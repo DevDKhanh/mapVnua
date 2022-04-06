@@ -1,54 +1,59 @@
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import languageAPI from '../../../api/language';
-import settingAPI from '../../../api/setting';
-import uploadAPI from '../../../api/upload';
-import { useValidateAll } from '../../../common/hooks/useValidate';
-import Input from '../../../components/site/Input';
-import Select from '../../../components/site/Select';
-import { DashboardLayout } from '../../../components/widgets/Layout';
-import { RootState } from '../../../redux/reducers';
+import areaAPI from '../../../../api/area';
+import languageAPI from '../../../../api/language';
+import siteAPI from '../../../../api/site';
+import { useValidateAll } from '../../../../common/hooks/useValidate';
+import Input from '../../../../components/site/Input';
+import Select from '../../../../components/site/Select';
+import { DashboardLayout } from '../../../../components/widgets/Layout';
+import { RootState } from '../../../../redux/reducers';
 
 const GetCoordinates = dynamic(
-    () => import('../../../components/map/GetCoordinates'),
+    () => import('../../../../components/map/GetCoordinates'),
     { ssr: false }
 );
-
 /*---------- type form input ----------*/
 interface typeForm {
+    nameArea: string;
     language: any;
-    title: string;
     lat: string;
     lng: string;
+    active: any;
     zoom: string;
-    icon: any;
 }
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
+    nameArea: string;
     languageId: string;
-    title: string;
     lat: number;
     lng: number;
+    active: number;
     zoom: number;
-    icon: string;
 }
 
 /*===========> MAIN COMPONENT <==========*/
 function index() {
-    const validator = useValidateAll;
+    const router = useRouter();
+    const { id } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
+
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
-        language: '',
-        icon: '',
-        title: '',
-        zoom: '6',
+        nameArea: '',
+        language: null,
         lat: '',
         lng: '',
+        active: {
+            txt: 'Có',
+            value: 1,
+        },
+        zoom: '6',
     });
 
     /*---------- get list language insert select language ----------*/
@@ -69,14 +74,38 @@ function index() {
         })();
     }, []);
 
+    /*---------- Get info data insert form ----------*/
+    useEffect(() => {
+        if (token && id) {
+            (async () => {
+                try {
+                    const [res, status]: any = await siteAPI.get(
+                        'area',
+                        id,
+                        token
+                    );
+                    if (res && status === 200) {
+                        const { data } = res;
+                        setDataForm({
+                            ...data,
+                            active: {
+                                txt: data.active ? 'Có' : 'Không',
+                                value: data.active,
+                            },
+                            language: {
+                                value: data.language.id,
+                                txt: data.language.nameLanguage,
+                            },
+                        });
+                    }
+                } catch (err) {}
+            })();
+        }
+    }, [id, token]);
+
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setDataForm((prev: any) => ({ ...prev, [name]: value }));
-    };
-
-    const handleChangeFile = (e: any) => {
-        const { name } = e.target;
-        setDataForm((prev: any) => ({ ...prev, [name]: e.target.files[0] }));
     };
 
     const handleChangeSelect = (v: any, name: string) => {
@@ -89,46 +118,25 @@ function index() {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        if (!validator(dataForm)) {
-            toast.warn('Vui lòng nhập đầy đủ thông tin');
-            return;
-        }
+
+        const formSubmit: typeFormSubmit = {
+            nameArea: dataForm.nameArea,
+            languageId: dataForm.language.value,
+            lat: Number(dataForm.lat),
+            lng: Number(dataForm.lng),
+            active: Number(dataForm.active.value),
+            zoom: Number(dataForm.zoom),
+        };
 
         (async () => {
             try {
-                /*---------- Create file form updaload icon ----------*/
-                const file: any = new FormData();
-                file.append('file', dataForm.icon);
-
-                /*---------- upload icon and get link icon ----------*/
-                const [URL]: any = await uploadAPI.upload('image', file, token);
-
-                /*---------- create submit form ----------*/
-                const formSubmit: typeFormSubmit = {
-                    languageId: dataForm.language.value,
-                    title: dataForm.title,
-                    icon: `${URL.filename}`,
-                    lat: Number(dataForm.lat),
-                    lng: Number(dataForm.lng),
-                    zoom: Number(dataForm.zoom),
-                };
-
-                const [res, status]: any = await settingAPI.post(
+                const [res, status]: any = await areaAPI.update(
+                    id,
                     formSubmit,
                     token
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        language: '',
-                        icon: '',
-                        title: '',
-                        zoom: '6',
-                        lat: '',
-                        lng: '',
-                    });
                 } else {
                     toast.warn(res?.message);
                 }
@@ -139,20 +147,17 @@ function index() {
     };
 
     return (
-        <DashboardLayout title="Thêm cấu hình mới" hrefBack="/page/setting/">
+        <DashboardLayout
+            title="Chỉnh sửa khu vực"
+            hrefBack="/category/location/"
+        >
             <div>
                 <div className="form">
                     <form onSubmit={handleSubmit}>
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
                         <Input
-                            title="Tiêu đề"
-                            value={dataForm?.title}
-                            name="title"
+                            title="Tên khu vực"
+                            value={dataForm?.nameArea}
+                            name="nameArea"
                             onChange={handleChange}
                         />
                         <Input
@@ -176,14 +181,28 @@ function index() {
                             type="number"
                             onChange={handleChange}
                         />
-                        <Input
-                            title="Icon"
-                            value={dataForm?.icon?.path}
-                            name="icon"
-                            type="file"
-                            onChange={handleChangeFile}
+                        <Select
+                            title="Ngôn ngữ"
+                            value={dataForm?.language?.txt}
+                            data={listLanguage}
+                            onChange={(v) => handleChangeSelect(v, 'language')}
                         />
-                        <button className="btn-create">Thêm mới</button>
+                        <Select
+                            title="Hiển thị"
+                            value={dataForm?.active?.txt}
+                            data={[
+                                {
+                                    txt: 'Có',
+                                    value: 1,
+                                },
+                                {
+                                    txt: 'Không',
+                                    value: 0,
+                                },
+                            ]}
+                            onChange={(v) => handleChangeSelect(v, 'active')}
+                        />
+                        <button className="btn-create">Cập nhật</button>
                     </form>
                 </div>
             </div>
