@@ -87,3 +87,10 @@ a {
     left: 0;
     z-index: 100000;
 }
+
+.active-btn_ {
+    border-left: 5px solid #5047e5 !important;
+    margin-left: -5px !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}

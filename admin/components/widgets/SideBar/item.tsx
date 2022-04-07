@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Box, Button, ListItem } from '@mui/material';
 import { useMemo } from 'react';
+import clsx from 'clsx';
 
 export const NavItem = (props: any) => {
     const { href, icon, title, ...others } = props;
@@ -29,12 +30,7 @@ export const NavItem = (props: any) => {
                     component="a"
                     startIcon={icon}
                     disableRipple
-                    sx={{
-                        borderLeft: active && '5px solid #5047e5',
-                        marginInlineStart: active && '-5px',
-                        borderTopLeftRadius: active && 0,
-                        borderBottomLeftRadius: active && 0,
-                    }}
+                    className={clsx({ 'active-btn_': active })}
                 >
                     <Box sx={{ flexGrow: 1 }}>{title}</Box>
                 </Button>

@@ -2,7 +2,7 @@ import { Setting3, Screenmirroring, LanguageSquare } from 'iconsax-react';
 import ItemLink from '../../components/site/ItemLink';
 import { DashboardLayout } from '../../components/widgets/Layout';
 
-function index() {
+function Index() {
     return (
         <DashboardLayout title="Quản lí trang">
             <div className="main">
@@ -28,4 +28,4 @@ function index() {
     );
 }
 
-export default index;
+export default Index;

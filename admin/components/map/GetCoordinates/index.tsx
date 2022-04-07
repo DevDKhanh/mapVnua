@@ -14,7 +14,7 @@ import style from './GetCoordinates.module.scss';
 
 function LocationMarker({ position, onSetPosition }: any) {
     const [positionMap, setPositionMap] = useState(position);
-    var iconLocation = L.icon({
+    let iconLocation = L.icon({
         iconUrl: icon.src,
         iconSize: [30, 30],
         popupAnchor: [0, -15],

@@ -1,19 +1,19 @@
-import { memo, useMemo, useState, useRef, useCallback, useEffect } from 'react';
-import { ImageOverlay, useMapEvents, Marker, Popup } from 'react-leaflet';
-import L, { LatLngBounds } from 'leaflet';
+import { memo, useMemo, useState, useRef, useEffect } from 'react';
+import { ImageOverlay, useMapEvents, Marker } from 'react-leaflet';
+import { LatLngBounds } from 'leaflet';
 import { API_URL } from '../../../constants/config';
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
-    iconUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
-    shadowUrl:
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
-});
-
 function MoveRaster({ file, dataForm, setCoordinates }: any) {
+    const L = require('leaflet');
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+        iconRetinaUrl:
+            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
+        iconUrl:
+            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
+        shadowUrl:
+            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
+    });
+
     const markerRefTop = useRef(null);
     const markerRefBottom = useRef(null);
     const [point, setPoint] = useState({

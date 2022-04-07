@@ -38,7 +38,7 @@ interface typeFormSubmit {
 }
 
 /*===========> MAIN COMPONENT <==========*/
-function index() {
+function Index() {
     const validator = useValidateAll;
     const { token } = useSelector((state: RootState) => state.auth);
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -195,4 +195,4 @@ function index() {
     );
 }
 
-export default memo(index);
+export default memo(Index);

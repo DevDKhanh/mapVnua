@@ -7,7 +7,7 @@ import Pagination from '../../../components/site/Pagination';
 import DataTable from '../../../components/site/Table';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 
-function index() {
+function Index() {
     const router = useRouter();
 
     const [totalItem, setTotalItem] = useState<number>(0);
@@ -121,4 +121,4 @@ function index() {
     );
 }
 
-export default memo(index);
+export default memo(Index);
