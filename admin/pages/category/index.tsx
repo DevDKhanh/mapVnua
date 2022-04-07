@@ -2,7 +2,7 @@ import { Location, Grid3, Layer } from 'iconsax-react';
 import ItemLink from '../../components/site/ItemLink';
 import { DashboardLayout } from '../../components/widgets/Layout';
 
-function index() {
+function Index() {
     return (
         <DashboardLayout title="Quản lí danh mục">
             <div className="main">
@@ -28,4 +28,4 @@ function index() {
     );
 }
 
-export default index;
+export default Index;

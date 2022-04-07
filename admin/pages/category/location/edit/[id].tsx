@@ -38,7 +38,7 @@ interface typeFormSubmit {
 }
 
 /*===========> MAIN COMPONENT <==========*/
-function index() {
+function Index() {
     const router = useRouter();
     const { id } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
@@ -214,4 +214,4 @@ function index() {
     );
 }
 
-export default memo(index);
+export default memo(Index);

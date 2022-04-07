@@ -9,7 +9,7 @@ import DataTable from '../../../components/site/Table';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 import { API_URL } from '../../../constants/config';
 
-function index() {
+function Index() {
     const router = useRouter();
 
     const [totalItem, setTotalItem] = useState<number>(0);
@@ -107,4 +107,4 @@ function index() {
     );
 }
 
-export default memo(index);
+export default memo(Index);

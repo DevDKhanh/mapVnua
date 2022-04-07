@@ -5,7 +5,7 @@ import Pagination from '../../../components/site/Pagination';
 import DataTable from '../../../components/site/Table';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 
-function index() {
+function Index() {
     const [totalItem, setTotalItem] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageCurrent, setPageCurrent] = useState<number>(1);
@@ -80,4 +80,4 @@ function index() {
     );
 }
 
-export default memo(index);
+export default memo(Index);

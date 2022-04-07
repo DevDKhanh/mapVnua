@@ -1,6 +1,6 @@
 import { Eye, Edit2, ClipboardClose } from 'iconsax-react';
 import { useRouter } from 'next/router';
-import { Fragment, memo, useState } from 'react';
+import { Fragment, memo, useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
@@ -11,13 +11,13 @@ import Popup from '../Popup';
 import siteAPI from '../../../api/site';
 import style from './ActionData.module.scss';
 import Link from 'next/link';
-function index(props: any) {
+function Index(props: any) {
     const router = useRouter();
     const { token } = useSelector((state: RootState) => state.auth);
     const [showPopupDel, setShowPopupDel] = useState<boolean>(false);
     const [showPopupDetail, setShowPopupDetail] = useState<boolean>(false);
 
-    const handleDelete = () => {
+    const handleDelete = useCallback(() => {
         (async () => {
             try {
                 const [res, status]: any = await siteAPI.del(
@@ -38,7 +38,7 @@ function index(props: any) {
                 setShowPopupDel(false);
             }
         })();
-    };
+    }, [token, router]);
 
     return (
         <Fragment>
@@ -92,4 +92,4 @@ function index(props: any) {
     );
 }
 
-export default memo(index);
+export default memo(Index);

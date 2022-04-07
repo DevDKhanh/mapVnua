@@ -27,7 +27,7 @@ interface typeFormSubmit {
 }
 
 /*===========> MAIN COMPONENT <==========*/
-function index() {
+function Index() {
     const router = useRouter();
     const { id } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
@@ -177,7 +177,7 @@ function index() {
     );
 }
 
-export default memo(index);
+export default memo(Index);
 
 // You should use getServerSideProps when:
 // - Only if you need to pre-render a page whose data must be fetched at request time
