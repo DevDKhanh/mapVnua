@@ -37,9 +37,9 @@ const Map = ({ position, onSetPosition }: any) => {
     const [showMap, setShowMap] = useState<boolean>(false);
     return (
         <Fragment>
-            <button className={style.btnShow} onClick={() => setShowMap(true)}>
+            <div className={style.btnShow} onClick={() => setShowMap(true)}>
                 Chọn tọa độ
-            </button>
+            </div>
             {showMap && (
                 <div className={style.container}>
                     <Fragment>

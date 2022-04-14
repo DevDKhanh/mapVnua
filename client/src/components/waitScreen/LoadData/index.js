@@ -22,6 +22,7 @@ function LoadData({ children }) {
                     settingAPI.getList(null, page, pageSize),
                     layerAPI.getList(null, page, pageSize),
                 ]);
+
                 dispacth(
                     dataMapAdd(
                         layers.records,

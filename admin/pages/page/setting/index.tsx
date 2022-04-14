@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import settingAPI from '../../../api/setting';
+import ButtonCreate from '../../../components/controls/ButtonCreate';
 import ActionData from '../../../components/site/ActionData';
 import Pagination from '../../../components/site/Pagination';
 import DataTable from '../../../components/site/Table';
@@ -42,9 +43,7 @@ function Index() {
 
     return (
         <DashboardLayout title="Cấu hình">
-            <Link href="/page/setting/create">
-                <a className="btn-create">Thêm mới</a>
-            </Link>
+            <ButtonCreate href="/page/setting/create" />
             <DataTable
                 data={list}
                 columns={[

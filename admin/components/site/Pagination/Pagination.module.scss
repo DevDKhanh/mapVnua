@@ -17,11 +17,12 @@
     .limit {
         select {
             margin: 0 8px;
-            background: #481eff;
+            background: #0060ff;
             box-sizing: border-box;
             border-radius: 6px;
             color: #ffffff;
             padding: 8px;
+            border: none;
         }
     }
     .pagination {
@@ -32,7 +33,7 @@
         align-items: center;
         font-size: 1rem;
         .page {
-            background: #481eff;
+            background: #0060ff;
             color: #fff;
             border-radius: 6px;
             padding: 8px 20px;

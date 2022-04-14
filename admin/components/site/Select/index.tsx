@@ -43,7 +43,13 @@ function Select({ title, data, value, onChange }: props) {
                 onClick={() => setShow(!show)}
             >
                 <div>
-                    <p>{value || title}</p>
+                    <p>
+                        {value || (
+                            <span className={style.placeholder}>
+                                Chọn {title.toLowerCase()}
+                            </span>
+                        )}
+                    </p>
                 </div>
                 <span className={style.icon}>
                     <RiArrowDownSLine />
@@ -63,6 +69,11 @@ function Select({ title, data, value, onChange }: props) {
                                 {item.txt}
                             </div>
                         ))}
+                        {data.length <= 0 && (
+                            <div className={style.item}>
+                                Không có dữ liệu phù hợp
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

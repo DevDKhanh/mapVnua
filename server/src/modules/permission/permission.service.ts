@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Req } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { I18nRequestScopeService } from 'nestjs-i18n';
 import { createPagination, resultData } from '../../common/text.helper';
@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../users/entities/user.entity';
 import { AddPermissionAdminDto } from './dto/post.dto';
 import { PermissionEntity } from './entities/permission.entity';
+import { IUserInfo } from 'src/common/decorators/user.decorator';
 
 @Injectable()
 export class PermissionService {
@@ -54,5 +55,9 @@ export class PermissionService {
       await this.i18n.translate('site.SUCCESS_CREATE'),
       permission,
     );
+  }
+
+  async getPermission(user: IUserInfo) {
+    return { role: user.role, ...user.permission };
   }
 }

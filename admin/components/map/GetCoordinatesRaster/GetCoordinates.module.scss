@@ -20,16 +20,20 @@
 }
 
 .btnShow {
-    position: fixed;
-    padding: 12px 24px;
+    padding: 8px 12px;
     border: none;
     outline: none;
+    max-width: max-content;
     cursor: pointer;
-    background-color: #ff8a65;
+    background-color: #b3cce6;
     border-radius: 8px;
     font-weight: bold;
+    font-size: 14px;
     color: #fff;
     transition: 0.3s;
+    &:hover {
+        background-color: #8ebef1;
+    }
     &:active {
         transform: scale(0.9);
     }

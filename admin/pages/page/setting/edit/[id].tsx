@@ -8,6 +8,7 @@ import languageAPI from '../../../../api/language';
 import settingAPI from '../../../../api/setting';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
+import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import Select from '../../../../components/site/Select';
 import { DashboardLayout } from '../../../../components/widgets/Layout';
@@ -168,57 +169,61 @@ function Index() {
 
     return (
         <DashboardLayout title="Chỉnh sửa cấu hình" hrefBack="/page/setting/">
-            <div>
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
-                        <Input
-                            title="Tiêu đề"
-                            value={dataForm?.title}
-                            name="title"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lat"
-                            value={dataForm?.lat}
-                            name="lat"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lng"
-                            value={dataForm?.lng}
-                            name="lng"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Zoom"
-                            value={dataForm?.zoom}
-                            name="zoom"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Icon"
-                            value={dataForm?.icon?.path}
-                            name="icon"
-                            type="file"
-                            onChange={handleChangeFile}
-                        />
-                        <button className="btn-create">Cập nhật</button>
-                    </form>
+            <RequiredPermision isEdit>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Input
+                                title="Tiêu đề"
+                                value={dataForm?.title}
+                                name="title"
+                                onChange={handleChange}
+                            />
+                            <GetCoordinates
+                                position={[dataForm.lat, dataForm.lng]}
+                                onSetPosition={handleSetPosition}
+                            />
+                            <Input
+                                title="Tọa độ Lat"
+                                value={dataForm?.lat}
+                                name="lat"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tọa độ Lng"
+                                value={dataForm?.lng}
+                                name="lng"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Zoom"
+                                value={dataForm?.zoom}
+                                name="zoom"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Icon"
+                                value={dataForm?.icon?.path}
+                                name="icon"
+                                type="file"
+                                onChange={handleChangeFile}
+                            />
+                            <button className="btn-create">Cập nhật</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <GetCoordinates
-                position={[dataForm.lat, dataForm.lng]}
-                onSetPosition={handleSetPosition}
-            />
+            </RequiredPermision>
         </DashboardLayout>
     );
 }

@@ -2,43 +2,72 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Home, Category, Bookmark, SecuritySafe } from 'iconsax-react';
+import { Box, Divider, Drawer, useMediaQuery } from '@mui/material';
 
-import { Box, Button, Divider, Drawer, useMediaQuery } from '@mui/material';
 import { Logo } from './logo';
 import { NavItem } from './item';
 import { RootState } from '../../../redux/reducers';
-import { logout } from '../../../redux/actions/auth';
-import { toast } from 'react-toastify';
 
 const items = [
     {
         href: '/home',
-        icon: <Home size="24" color="#5047e5" variant="Bold" />,
+        icon: <Home size="24" color="#0060ff" variant="Bold" />,
         title: 'Trang chủ',
+        tabList: [],
     },
     {
         href: '/category',
-        icon: <Category color="#5047e5" variant="Bold" />,
+        icon: <Category color="#0060ff" variant="Bold" />,
         title: 'Quản lí danh mục',
+        tabList: [
+            {
+                href: '/category/location',
+                txt: 'Khu vực',
+            },
+            {
+                href: '/category/classify',
+                txt: 'Phân loại',
+            },
+            {
+                href: '/category/layer',
+                txt: 'Lớp bản đồ',
+            },
+        ],
     },
     {
         href: '/page',
-        icon: <Bookmark color="#5047e5" variant="Bold" />,
+        icon: <Bookmark color="#0060ff" variant="Bold" />,
         title: 'Quản lí trang',
+        tabList: [
+            {
+                href: '/page/setting',
+                txt: 'Cấu hình',
+            },
+            {
+                href: '/page/display',
+                txt: 'Giao diện ',
+            },
+            {
+                href: '/page/language',
+                txt: 'Ngôn ngữ',
+            },
+        ],
     },
     {
         href: '/security',
-        icon: <SecuritySafe color="#5047e5" variant="Bold" />,
+        icon: <SecuritySafe color="#0060ff" variant="Bold" />,
         title: 'Quản lí bảo mật',
+        tabList: [],
     },
 ];
 
 export const DashboardSidebar = (props: any) => {
     const { open, onClose } = props;
-    const { dataUser } = useSelector((state: RootState) => state.auth);
-    const dispatch = useDispatch();
+    const { dataUser, permission } = useSelector(
+        (state: RootState) => state.auth
+    );
 
     const router = useRouter();
     const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'), {
@@ -79,7 +108,7 @@ export const DashboardSidebar = (props: any) => {
                         </Link>
                         <Box
                             sx={{
-                                color: '#5047e5',
+                                color: '#0060ff',
                             }}
                         >
                             <h3>Xin chào {dataUser?.userName}</h3>
@@ -88,40 +117,39 @@ export const DashboardSidebar = (props: any) => {
                 </div>
                 <Divider
                     sx={{
-                        borderColor: '#5047e5',
+                        borderColor: '#0060ff',
                         my: 3,
                     }}
                 />
                 <Box sx={{ flexGrow: 1 }}>
-                    {items.map((item) => (
-                        <NavItem
-                            key={item.title}
-                            icon={item.icon}
-                            href={item.href}
-                            title={item.title}
-                        />
-                    ))}
-                </Box>
-                <Box
-                    sx={{
-                        width: 1,
-                        flexGrow: 1,
-                        mb: 0.5,
-                        py: 0,
-                        px: 2,
-                    }}
-                >
-                    <Button
-                        className="button-logout"
-                        color="primary"
-                        onClick={() => {
-                            dispatch(logout());
-                            router.push('/');
-                            toast.info('Đã đăng xuất tài khoản');
-                        }}
-                    >
-                        Đăng xuất
-                    </Button>
+                    {items.map((item) => {
+                        /*---------- Kiểm tra nếu tài khoản có role lớn hơn 1 hiển thị nút truy cập trang bảo mật ----------*/
+                        if (item.href === '/security') {
+                            if (permission?.role >= 1) {
+                                return (
+                                    <NavItem
+                                        key={item.title}
+                                        icon={item.icon}
+                                        href={item.href}
+                                        tabList={item.tabList}
+                                        title={item.title}
+                                    />
+                                );
+                            }
+
+                            return null;
+                        } else {
+                            return (
+                                <NavItem
+                                    key={item.title}
+                                    icon={item.icon}
+                                    href={item.href}
+                                    tabList={item.tabList}
+                                    title={item.title}
+                                />
+                            );
+                        }
+                    })}
                 </Box>
             </Box>
         </>

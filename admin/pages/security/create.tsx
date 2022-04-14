@@ -3,13 +3,13 @@ import { memo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import languageAPI from '../../../api/language';
-import uploadAPI from '../../../api/upload';
-import { useValidateAll } from '../../../common/hooks/useValidate';
-import RequiredPermision from '../../../components/protected/requiredPermision';
-import Input from '../../../components/site/Input';
-import { DashboardLayout } from '../../../components/widgets/Layout';
-import { RootState } from '../../../redux/reducers';
+import languageAPI from '../../api/language';
+import uploadAPI from '../../api/upload';
+import { useValidateAll } from '../../common/hooks/useValidate';
+import RequiredPermision from '../../components/protected/requiredPermision';
+import Input from '../../components/site/Input';
+import { DashboardLayout } from '../../components/widgets/Layout';
+import { RootState } from '../../redux/reducers';
 
 /*---------- type form input ----------*/
 interface typeForm {
@@ -86,9 +86,9 @@ function Index() {
     };
 
     return (
-        <DashboardLayout title="Thêm ngôn ngữ mới" hrefBack="/page/language/">
-            <RequiredPermision isCreate>
-                <div>
+        <DashboardLayout title="Thêm tài khoản" hrefBack="/security/">
+            <div>
+                <RequiredPermision role={1}>
                     <div className="form">
                         <form onSubmit={handleSubmit}>
                             <Input
@@ -113,8 +113,8 @@ function Index() {
                             <button className="btn-create">Thêm mới</button>
                         </form>
                     </div>
-                </div>
-            </RequiredPermision>
+                </RequiredPermision>
+            </div>
         </DashboardLayout>
     );
 }

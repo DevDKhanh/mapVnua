@@ -5,6 +5,7 @@ const initialState = {
     dataUser: null,
     isLoading: true,
     isLogged: false,
+    permission: null,
 };
 
 export default (state = initialState, { type, payload }: any) => {
@@ -21,6 +22,8 @@ export default (state = initialState, { type, payload }: any) => {
             };
         case AUTH.DONE_LOAD:
             return { ...state, isLoading: false };
+        case AUTH.UPDATE_PERMISSIONS:
+            return { ...state, permission: payload };
         default:
             return state;
     }

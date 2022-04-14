@@ -24,3 +24,10 @@ export const logout = () => {
         type: AUTH.LOGOUT,
     };
 };
+
+export const updatePermission = (payload: any) => {
+    return {
+        type: AUTH.UPDATE_PERMISSIONS,
+        payload,
+    };
+};

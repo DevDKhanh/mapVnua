@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -6,6 +7,7 @@ import { toast } from 'react-toastify';
 import areaAPI from '../../../api/area';
 import languageAPI from '../../../api/language';
 import { useValidateAll } from '../../../common/hooks/useValidate';
+import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
 import { DashboardLayout } from '../../../components/widgets/Layout';
@@ -40,6 +42,7 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const validator = useValidateAll;
+    const router = useRouter();
     const { token } = useSelector((state: RootState) => state.auth);
 
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -112,20 +115,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        id: '',
-                        nameArea: '',
-                        language: null,
-                        lat: '',
-                        lng: '',
-                        active: {
-                            txt: 'Có',
-                            value: 1,
-                        },
-                        zoom: '',
-                    });
+                    router.push('/category/location/');
                 } else {
                     toast.warn(res?.message);
                 }
@@ -140,72 +130,77 @@ function Index() {
             title="Thêm khu vực mới"
             hrefBack="/category/location/"
         >
-            <div>
-                {console.log(dataForm)}
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Input
-                            title="ID khu vực"
-                            value={dataForm?.id}
-                            name="id"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tên khu vực"
-                            value={dataForm?.nameArea}
-                            name="nameArea"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lat"
-                            value={dataForm?.lat}
-                            name="lat"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lng"
-                            value={dataForm?.lng}
-                            name="lng"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Zoom"
-                            value={dataForm?.zoom}
-                            name="zoom"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
-                        <Select
-                            title="Hiển thị"
-                            value={dataForm?.active?.txt}
-                            data={[
-                                {
-                                    txt: 'Có',
-                                    value: 1,
-                                },
-                                {
-                                    txt: 'Không',
-                                    value: 0,
-                                },
-                            ]}
-                            onChange={(v) => handleChangeSelect(v, 'active')}
-                        />
-                        <button className="btn-create">Thêm mới</button>
-                    </form>
+            <RequiredPermision isCreate>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Input
+                                title="ID khu vực"
+                                value={dataForm?.id}
+                                name="id"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tên khu vực"
+                                value={dataForm?.nameArea}
+                                name="nameArea"
+                                onChange={handleChange}
+                            />
+                            <GetCoordinates
+                                position={[dataForm.lat, dataForm.lng]}
+                                onSetPosition={handleSetPosition}
+                            />
+                            <Input
+                                title="Tọa độ Lat"
+                                value={dataForm?.lat}
+                                name="lat"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tọa độ Lng"
+                                value={dataForm?.lng}
+                                name="lng"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Zoom"
+                                value={dataForm?.zoom}
+                                name="zoom"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Select
+                                title="Hiển thị"
+                                value={dataForm?.active?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'active')
+                                }
+                            />
+                            <button className="btn-create">Thêm mới</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <GetCoordinates
-                position={[dataForm.lat, dataForm.lng]}
-                onSetPosition={handleSetPosition}
-            />
+            </RequiredPermision>
         </DashboardLayout>
     );
 }

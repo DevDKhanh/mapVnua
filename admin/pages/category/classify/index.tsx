@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import classifyAPI from '../../../api/classify';
+import ButtonCreate from '../../../components/controls/ButtonCreate';
 import ActionData from '../../../components/site/ActionData';
 import Pagination from '../../../components/site/Pagination';
 import DataTable from '../../../components/site/Table';
@@ -41,9 +41,7 @@ function Index() {
 
     return (
         <DashboardLayout title="Phân loại">
-            <Link href="/category/classify/create">
-                <a className="btn-create">Thêm mới</a>
-            </Link>
+            <ButtonCreate href="/category/classify/create" />
             <DataTable
                 data={list}
                 columns={[

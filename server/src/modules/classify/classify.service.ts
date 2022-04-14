@@ -113,20 +113,42 @@ export class ClassifyService {
   }
 
   async getList(getListDto: GetListDto) {
-    const result = await this.classifyRepository
-      .createQueryBuilder('classify')
-      .leftJoinAndSelect('classify.language', 'language')
-      .leftJoinAndSelect('classify.layers', 'layers')
-      .skip((+getListDto.page - 1) * getListDto.pageSize)
-      .take(+getListDto.pageSize)
-      .getManyAndCount();
+    if (!!getListDto.langId && getListDto.langId !== '') {
+      const result = await this.classifyRepository
+        .createQueryBuilder('classify')
+        .where('classify.languageId = :languageId', {
+          languageId: getListDto.langId,
+        })
+        .leftJoinAndSelect('classify.language', 'language')
+        .leftJoinAndSelect('classify.layers', 'layers')
+        .skip((+getListDto.page - 1) * getListDto.pageSize)
+        .take(+getListDto.pageSize)
+        .orderBy('classify.no', 'ASC')
+        .getManyAndCount();
 
-    return createPagination(
-      result[0],
-      result[1],
-      getListDto.page,
-      getListDto.pageSize,
-    );
+      return createPagination(
+        result[0],
+        result[1],
+        getListDto.page,
+        getListDto.pageSize,
+      );
+    } else {
+      const result = await this.classifyRepository
+        .createQueryBuilder('classify')
+        .leftJoinAndSelect('classify.language', 'language')
+        .leftJoinAndSelect('classify.layers', 'layers')
+        .skip((+getListDto.page - 1) * getListDto.pageSize)
+        .take(+getListDto.pageSize)
+        .orderBy('classify.no', 'ASC')
+        .getManyAndCount();
+
+      return createPagination(
+        result[0],
+        result[1],
+        getListDto.page,
+        getListDto.pageSize,
+      );
+    }
   }
 
   async getDetail(id: string) {

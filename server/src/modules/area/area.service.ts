@@ -95,19 +95,38 @@ export class AreaService {
   }
 
   async getList(getListDto: GetListDto) {
-    const result = await this.areaRepository
-      .createQueryBuilder('area')
-      .leftJoinAndSelect('area.language', 'language')
-      .skip((+getListDto.page - 1) * getListDto.pageSize)
-      .take(+getListDto.pageSize)
-      .getManyAndCount();
+    if (!!getListDto.langId && getListDto.langId !== '') {
+      const result = await this.areaRepository
+        .createQueryBuilder('area')
+        .where('area.languageId = :languageId', {
+          languageId: getListDto.langId,
+        })
+        .leftJoinAndSelect('area.language', 'language')
+        .skip((+getListDto.page - 1) * getListDto.pageSize)
+        .take(+getListDto.pageSize)
+        .getManyAndCount();
 
-    return createPagination(
-      result[0],
-      result[1],
-      getListDto.page,
-      getListDto.pageSize,
-    );
+      return createPagination(
+        result[0],
+        result[1],
+        getListDto.page,
+        getListDto.pageSize,
+      );
+    } else {
+      const result = await this.areaRepository
+        .createQueryBuilder('area')
+        .leftJoinAndSelect('area.language', 'language')
+        .skip((+getListDto.page - 1) * getListDto.pageSize)
+        .take(+getListDto.pageSize)
+        .getManyAndCount();
+
+      return createPagination(
+        result[0],
+        result[1],
+        getListDto.page,
+        getListDto.pageSize,
+      );
+    }
   }
 
   async getDetail(id: string) {

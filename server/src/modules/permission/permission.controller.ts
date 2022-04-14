@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -16,7 +17,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { AdminAuthGuard } from '../auth/jwt.strategy';
+import { IUserInfo, UserInfo } from 'src/common/decorators/user.decorator';
+import { AdminAuthGuard, JwtAuthGuard } from '../auth/jwt.strategy';
 import { AddPermissionAdminDto } from './dto/post.dto';
 import { PermissionService } from './permission.service';
 @ApiTags('Phân quyền admin')
@@ -37,5 +39,16 @@ export class PermissionController {
     @Param('id') id: string,
   ) {
     return this.permissionService.create(id, addPermissionAdminDto);
+  }
+
+  @Get('/')
+  @ApiOperation({
+    description: 'Lấy thông tin về các quyền',
+  })
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(200)
+  @ApiOkResponse({ status: 200, type: null })
+  async getPermission(@UserInfo() user: IUserInfo) {
+    return this.permissionService.getPermission(user);
   }
 }

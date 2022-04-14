@@ -10,15 +10,15 @@ const Map = ({ file, dataForm, onSetPosition }: any) => {
     const [showMap, setShowMap] = useState<boolean>(false);
 
     const handleShowMap = () => {
-        if (typeof file === 'string') {
-            setShowMap(true);
-            return;
-        }
-
         if (!file) {
             toast.warning(
                 'Vui lòng chọn hình ảnh trước khi thực hiện thao tác này'
             );
+            return;
+        }
+
+        if (typeof file === 'string') {
+            setShowMap(true);
             return;
         }
 
@@ -39,9 +39,9 @@ const Map = ({ file, dataForm, onSetPosition }: any) => {
 
     return (
         <Fragment>
-            <button className={style.btnShow} onClick={handleShowMap}>
+            <div className={style.btnShow} onClick={handleShowMap}>
                 Chọn tọa độ
-            </button>
+            </div>
             {showMap && (
                 <div className={style.container}>
                     <Fragment>

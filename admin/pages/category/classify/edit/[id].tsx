@@ -1,10 +1,12 @@
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import classifyAPI from '../../../../api/classify';
 import languageAPI from '../../../../api/language';
-import { useValidateAll } from '../../../../common/hooks/useValidate';
+import siteAPI from '../../../../api/site';
+import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import Select from '../../../../components/site/Select';
 import { DashboardLayout } from '../../../../components/widgets/Layout';
@@ -132,55 +134,55 @@ function Index() {
             title="Chỉnh sửa phân loại"
             hrefBack="/category/classify/"
         >
-            <div>
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Input
-                            title="Số thứ tự"
-                            value={dataForm?.no}
-                            name="no"
-                            typr="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tên phân loại"
-                            value={dataForm?.nameClassify}
-                            name="nameClassify"
-                            onChange={handleChange}
-                        />
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
-                        <Select
-                            title="Hiển thị"
-                            value={dataForm?.active?.txt}
-                            data={[
-                                {
-                                    txt: 'Có',
-                                    value: 1,
-                                },
-                                {
-                                    txt: 'Không',
-                                    value: 0,
-                                },
-                            ]}
-                            onChange={(v) => handleChangeSelect(v, 'active')}
-                        />
-                        <button className="btn-create">Cập nhật</button>
-                    </form>
+            <RequiredPermision isEdit>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Input
+                                title="Số thứ tự"
+                                value={dataForm?.no}
+                                name="no"
+                                typr="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tên phân loại"
+                                value={dataForm?.nameClassify}
+                                name="nameClassify"
+                                onChange={handleChange}
+                            />
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Select
+                                title="Hiển thị"
+                                value={dataForm?.active?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'active')
+                                }
+                            />
+                            <button className="btn-create">Cập nhật</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </RequiredPermision>
         </DashboardLayout>
     );
 }
 
 export default memo(Index);
-
-// You should use getServerSideProps when:
-// - Only if you need to pre-render a page whose data must be fetched at request time
-import { GetServerSideProps } from 'next';
-import siteAPI from '../../../../api/site';
-import { useRouter } from 'next/router';

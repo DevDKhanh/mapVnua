@@ -20,7 +20,7 @@ export default function Homepage() {
         <DashboardLayout title="Trang chủ">
             <Box sx={{ padding: 5 }}>
                 <Lottie options={defaultOptions} height={450} width={650} />
-                <Box sx={{ textAlign: 'center', my: 3, color: '#5047e5' }}>
+                <Box sx={{ textAlign: 'center', my: 3, color: '#0060ff' }}>
                     <h1>Chào mừng bạn trở lại!</h1>
                 </Box>
             </Box>
