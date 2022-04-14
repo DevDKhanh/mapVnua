@@ -2,9 +2,14 @@ import axiosClient from '.';
 const base: string = '/classify';
 
 const classifyAPI = {
-    get: (data: { page: number; pageSize: number }, tokenAxios?: any) => {
+    get: (
+        data: { page: number; pageSize: number; langId?: string },
+        tokenAxios?: any
+    ) => {
         return axiosClient.get(
-            `${base}?page=${data.page}&pageSize=${data.pageSize}`,
+            `${base}?page=${data.page}&pageSize=${data.pageSize}&langId=${
+                data.langId || ''
+            }`,
             {
                 cancelToken: tokenAxios,
             }

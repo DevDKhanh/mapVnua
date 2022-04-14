@@ -134,7 +134,7 @@ export class AuthService {
 
     return resultData(
       await this.i18n.translate('site.DETAIL_DATA', {
-        args: { name: 'phân loại' },
+        args: { name: 'account' },
       }),
       { ...result },
     );

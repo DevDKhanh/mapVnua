@@ -13,7 +13,7 @@ import style from './ActionData.module.scss';
 import Link from 'next/link';
 function Index(props: any) {
     const router = useRouter();
-    const { token } = useSelector((state: RootState) => state.auth);
+    const { token, permission } = useSelector((state: RootState) => state.auth);
     const [showPopupDel, setShowPopupDel] = useState<boolean>(false);
     const [showPopupDetail, setShowPopupDetail] = useState<boolean>(false);
 
@@ -30,7 +30,9 @@ function Index(props: any) {
                     router.replace(router);
                     toast.success(res?.message || 'Xóa dữ liệu thành công!');
                 } else {
-                    toast.warn(res?.message || 'Không thể xóa mục này');
+                    toast.warn(
+                        'Dữ liệu đang được sử dụng ở một bảng khác, không thể xóa bây giờ'
+                    );
                 }
                 setShowPopupDel(false);
             } catch (err) {
@@ -50,18 +52,24 @@ function Index(props: any) {
                 >
                     <Eye variant="Bold" />
                 </div>
-                <Link href={`${router.pathname}/edit/${props.id}`}>
-                    <a className={style.item} title="Sửa">
-                        <Edit2 variant="Bold" />
-                    </a>
-                </Link>
-                <div
-                    className={style.item}
-                    title="Xóa"
-                    onClick={() => setShowPopupDel(true)}
-                >
-                    <ClipboardClose variant="Bold" />
-                </div>
+
+                {permission?.permissionEdit && (
+                    <Link href={`${router.pathname}/edit/${props.id}`}>
+                        <a className={style.item} title="Sửa">
+                            <Edit2 variant="Bold" />
+                        </a>
+                    </Link>
+                )}
+
+                {permission?.permissionDelete && (
+                    <div
+                        className={style.item}
+                        title="Xóa"
+                        onClick={() => setShowPopupDel(true)}
+                    >
+                        <ClipboardClose variant="Bold" />
+                    </div>
+                )}
             </div>
             {/*---------- Delete ----------*/}
             <Popup

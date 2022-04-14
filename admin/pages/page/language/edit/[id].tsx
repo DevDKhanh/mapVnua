@@ -7,6 +7,7 @@ import languageAPI from '../../../../api/language';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
 import { useValidateAll } from '../../../../common/hooks/useValidate';
+import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import { DashboardLayout } from '../../../../components/widgets/Layout';
 import { RootState } from '../../../../redux/reducers';
@@ -117,26 +118,28 @@ function Index() {
 
     return (
         <DashboardLayout title="Chỉnh sửa ngôn ngữ" hrefBack="/page/language/">
-            <div>
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Input
-                            title="Tên ngôn ngữ"
-                            value={dataForm?.nameLanguage}
-                            name="nameLanguage"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Icon"
-                            value={dataForm?.icon?.path}
-                            name="icon"
-                            type="file"
-                            onChange={handleChangeFile}
-                        />
-                        <button className="btn-create">Cập nhật</button>
-                    </form>
+            <RequiredPermision isEdit>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Input
+                                title="Tên ngôn ngữ"
+                                value={dataForm?.nameLanguage}
+                                name="nameLanguage"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Icon"
+                                value={dataForm?.icon?.path}
+                                name="icon"
+                                type="file"
+                                onChange={handleChangeFile}
+                            />
+                            <button className="btn-create">Cập nhật</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </RequiredPermision>
         </DashboardLayout>
     );
 }

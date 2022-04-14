@@ -8,6 +8,7 @@ import areaAPI from '../../../../api/area';
 import languageAPI from '../../../../api/language';
 import siteAPI from '../../../../api/site';
 import { useValidateAll } from '../../../../common/hooks/useValidate';
+import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import Select from '../../../../components/site/Select';
 import { DashboardLayout } from '../../../../components/widgets/Layout';
@@ -151,65 +152,71 @@ function Index() {
             title="Chỉnh sửa khu vực"
             hrefBack="/category/location/"
         >
-            <div>
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Input
-                            title="Tên khu vực"
-                            value={dataForm?.nameArea}
-                            name="nameArea"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lat"
-                            value={dataForm?.lat}
-                            name="lat"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lng"
-                            value={dataForm?.lng}
-                            name="lng"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Zoom"
-                            value={dataForm?.zoom}
-                            name="zoom"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
-                        <Select
-                            title="Hiển thị"
-                            value={dataForm?.active?.txt}
-                            data={[
-                                {
-                                    txt: 'Có',
-                                    value: 1,
-                                },
-                                {
-                                    txt: 'Không',
-                                    value: 0,
-                                },
-                            ]}
-                            onChange={(v) => handleChangeSelect(v, 'active')}
-                        />
-                        <button className="btn-create">Cập nhật</button>
-                    </form>
+            <RequiredPermision isEdit>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Input
+                                title="Tên khu vực"
+                                value={dataForm?.nameArea}
+                                name="nameArea"
+                                onChange={handleChange}
+                            />
+                            <GetCoordinates
+                                position={[dataForm.lat, dataForm.lng]}
+                                onSetPosition={handleSetPosition}
+                            />
+                            <Input
+                                title="Tọa độ Lat"
+                                value={dataForm?.lat}
+                                name="lat"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tọa độ Lng"
+                                value={dataForm?.lng}
+                                name="lng"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Zoom"
+                                value={dataForm?.zoom}
+                                name="zoom"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Select
+                                title="Hiển thị"
+                                value={dataForm?.active?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'active')
+                                }
+                            />
+                            <button className="btn-create">Cập nhật</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <GetCoordinates
-                position={[dataForm.lat, dataForm.lng]}
-                onSetPosition={handleSetPosition}
-            />
+            </RequiredPermision>
         </DashboardLayout>
     );
 }

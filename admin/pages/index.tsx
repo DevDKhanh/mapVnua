@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { toast } from 'react-toastify';
 import authAPI from '../api/auth';
-import { login } from '../redux/actions/auth';
+import { login, updatePermission } from '../redux/actions/auth';
 import RequiredLogout from '../components/protected/requiredLogout';
 import { useRouter } from 'next/router';
 
@@ -35,7 +35,8 @@ export default function Homepage() {
                 });
 
                 if (res && status === 201) {
-                    const { token, ...data } = res.data;
+                    const { token, role, permission, ...data } = res.data;
+                    dispatch(updatePermission({ role, ...permission }));
                     dispatch(login({ token, dataUser: data }));
                     toast.success('Đăng nhập thành công!');
                     router.push('/home');

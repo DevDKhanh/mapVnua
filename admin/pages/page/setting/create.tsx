@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -7,6 +8,7 @@ import languageAPI from '../../../api/language';
 import settingAPI from '../../../api/setting';
 import uploadAPI from '../../../api/upload';
 import { useValidateAll } from '../../../common/hooks/useValidate';
+import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
 import { DashboardLayout } from '../../../components/widgets/Layout';
@@ -40,6 +42,8 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const validator = useValidateAll;
+    const router = useRouter();
+
     const { token } = useSelector((state: RootState) => state.auth);
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
@@ -119,16 +123,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        language: '',
-                        icon: '',
-                        title: '',
-                        zoom: '6',
-                        lat: '',
-                        lng: '',
-                    });
+                    router.push('/page/setting/"');
                 } else {
                     toast.warn(res?.message);
                 }
@@ -140,57 +135,61 @@ function Index() {
 
     return (
         <DashboardLayout title="Thêm cấu hình mới" hrefBack="/page/setting/">
-            <div>
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
-                        <Input
-                            title="Tiêu đề"
-                            value={dataForm?.title}
-                            name="title"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lat"
-                            value={dataForm?.lat}
-                            name="lat"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tọa độ Lng"
-                            value={dataForm?.lng}
-                            name="lng"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Zoom"
-                            value={dataForm?.zoom}
-                            name="zoom"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Icon"
-                            value={dataForm?.icon?.path}
-                            name="icon"
-                            type="file"
-                            onChange={handleChangeFile}
-                        />
-                        <button className="btn-create">Thêm mới</button>
-                    </form>
+            <RequiredPermision isCreate>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Input
+                                title="Tiêu đề"
+                                value={dataForm?.title}
+                                name="title"
+                                onChange={handleChange}
+                            />
+                            <GetCoordinates
+                                position={[dataForm.lat, dataForm.lng]}
+                                onSetPosition={handleSetPosition}
+                            />
+                            <Input
+                                title="Tọa độ Lat"
+                                value={dataForm?.lat}
+                                name="lat"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tọa độ Lng"
+                                value={dataForm?.lng}
+                                name="lng"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Zoom"
+                                value={dataForm?.zoom}
+                                name="zoom"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Icon"
+                                value={dataForm?.icon?.path}
+                                name="icon"
+                                type="file"
+                                onChange={handleChangeFile}
+                            />
+                            <button className="btn-create">Thêm mới</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <GetCoordinates
-                position={[dataForm.lat, dataForm.lng]}
-                onSetPosition={handleSetPosition}
-            />
+            </RequiredPermision>
         </DashboardLayout>
     );
 }

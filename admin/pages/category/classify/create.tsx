@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -5,6 +6,7 @@ import { toast } from 'react-toastify';
 import classifyAPI from '../../../api/classify';
 import languageAPI from '../../../api/language';
 import { useValidateAll } from '../../../common/hooks/useValidate';
+import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
 import { DashboardLayout } from '../../../components/widgets/Layout';
@@ -31,6 +33,8 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const validator = useValidateAll;
+    const router = useRouter();
+
     const { token } = useSelector((state: RootState) => state.auth);
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
@@ -94,18 +98,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        id: '',
-                        nameClassify: '',
-                        language: null,
-                        active: {
-                            txt: 'Có',
-                            value: 1,
-                        },
-                        no: '',
-                    });
+                    router.push('/category/classify/');
                 } else {
                     toast.warn(res?.message);
                 }
@@ -117,53 +110,59 @@ function Index() {
 
     return (
         <DashboardLayout title="Thêm loại mới" hrefBack="/category/classify/">
-            <div>
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Input
-                            title="Số thứ tự"
-                            value={dataForm?.no}
-                            name="no"
-                            typr="number"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="ID phân loại"
-                            value={dataForm?.id}
-                            name="id"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Tên phân loại"
-                            value={dataForm?.nameClassify}
-                            name="nameClassify"
-                            onChange={handleChange}
-                        />
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
-                        <Select
-                            title="Hiển thị"
-                            value={dataForm?.active?.txt}
-                            data={[
-                                {
-                                    txt: 'Có',
-                                    value: 1,
-                                },
-                                {
-                                    txt: 'Không',
-                                    value: 0,
-                                },
-                            ]}
-                            onChange={(v) => handleChangeSelect(v, 'active')}
-                        />
-                        <button className="btn-create">Thêm mới</button>
-                    </form>
+            <RequiredPermision isCreate>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Input
+                                title="Số thứ tự"
+                                value={dataForm?.no}
+                                name="no"
+                                typr="number"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="ID phân loại"
+                                value={dataForm?.id}
+                                name="id"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tên phân loại"
+                                value={dataForm?.nameClassify}
+                                name="nameClassify"
+                                onChange={handleChange}
+                            />
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Select
+                                title="Hiển thị"
+                                value={dataForm?.active?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'active')
+                                }
+                            />
+                            <button className="btn-create">Thêm mới</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </RequiredPermision>
         </DashboardLayout>
     );
 }

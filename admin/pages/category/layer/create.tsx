@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { Fragment, memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -9,6 +10,7 @@ import languageAPI from '../../../api/language';
 import layerAPI from '../../../api/layer';
 import uploadAPI from '../../../api/upload';
 import { useValidateAll } from '../../../common/hooks/useValidate';
+import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
 import { DashboardLayout } from '../../../components/widgets/Layout';
@@ -68,6 +70,7 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const validator = useValidateAll;
+    const router = useRouter();
     const { token } = useSelector((state: RootState) => state.auth);
 
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -105,28 +108,43 @@ function Index() {
     /*---------- get list language insert select language ----------*/
     useEffect(() => {
         (async () => {
-            const [[resLang], [resArea], [resClassify]]: any =
-                await Promise.all([
-                    languageAPI.get({
-                        page: 1,
-                        pageSize: 1000,
-                    }),
-                    areaAPI.get({
-                        page: 1,
-                        pageSize: 1000,
-                    }),
-                    classifyAPI.get({
-                        page: 1,
-                        pageSize: 1000,
-                    }),
-                ]);
-            if (resLang?.records && resArea?.records && resClassify?.records) {
+            const [[resLang]]: any = await Promise.all([
+                languageAPI.get({
+                    page: 1,
+                    pageSize: 1000,
+                }),
+            ]);
+            if (resLang?.records) {
                 setListLanguage(
                     resLang.records.map((item: any) => ({
                         txt: item.nameLanguage,
                         value: item.id,
                     }))
                 );
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        /*---------- Xóa dữ liệu hiện có nếu thay đổi ngôn ngữ  ----------*/
+        setDataForm((prev: any) => ({ ...prev, classify: null, area: null }));
+
+        /*---------- Lọc khu vực và phân loại theo id ngôn ngữ  ----------*/
+        (async () => {
+            const [[resArea], [resClassify]]: any = await Promise.all([
+                areaAPI.get({
+                    page: 1,
+                    pageSize: 1000,
+                    langId: dataForm.language?.value,
+                }),
+                classifyAPI.get({
+                    page: 1,
+                    pageSize: 1000,
+                    langId: dataForm.language?.value,
+                }),
+            ]);
+
+            if (resArea?.records && resClassify?.records) {
                 setListArea(
                     resArea.records.map((item: any) => ({
                         txt: item.nameArea,
@@ -141,7 +159,7 @@ function Index() {
                 );
             }
         })();
-    }, []);
+    }, [dataForm.language]);
 
     const handleChange = (e: any, key?: any) => {
         if (key) {
@@ -227,7 +245,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-
+                    router.push('/category/layer/');
                     /*---------- Clear form ----------*/
                     setDataForm({
                         active: {
@@ -264,178 +282,184 @@ function Index() {
 
     return (
         <DashboardLayout title="Thêm lớp mới" hrefBack="/category/layer/">
-            <div>
-                <div className="form">
-                    <form onSubmit={handleSubmit}>
-                        <Input
-                            title="ID lớp"
-                            value={dataForm?.id}
-                            name="id"
-                            onChange={handleChange}
-                        />
-                        <Select
-                            title="Tên khu vực"
-                            value={dataForm?.area?.txt}
-                            data={listArea}
-                            onChange={(v) => handleChangeSelect(v, 'area')}
-                        />
-                        <Select
-                            title="Ngôn ngữ"
-                            value={dataForm?.language?.txt}
-                            data={listLanguage}
-                            onChange={(v) => handleChangeSelect(v, 'language')}
-                        />
-                        <Select
-                            title="Tên phân loại"
-                            value={dataForm?.classify?.txt}
-                            data={listClassify}
-                            onChange={(v) => handleChangeSelect(v, 'classify')}
-                        />
-                        <Input
-                            title="Tên lớp"
-                            value={dataForm?.nameLayer}
-                            name="nameLayer"
-                            onChange={handleChange}
-                        />
-                        <Input
-                            title="Đường dẫn tệp hoặc ảnh"
-                            value={dataForm?.path?.path}
-                            name="path"
-                            type="file"
-                            onChange={handleChangeFile}
-                        />
-                        <Input
-                            title="Icon của lớp"
-                            value={dataForm?.icon?.path}
-                            name="icon"
-                            type="file"
-                            onChange={handleChangeFile}
-                        />
-                        <Input
-                            title="Lớp xếp chồng"
-                            value={dataForm?.zIndex}
-                            name="zIndex"
-                            type="number"
-                            onChange={handleChange}
-                        />
-                        <Select
-                            title="Kiểu lớp"
-                            value={dataForm?.style?.txt}
-                            data={[
-                                {
-                                    txt: 'Vector',
-                                    value: 'Vector',
-                                },
-                                {
-                                    txt: 'Raster',
-                                    value: 'Raster',
-                                },
-                            ]}
-                            onChange={(v) => handleChangeSelect(v, 'style')}
-                        />
-                        {/*---------- Vector ----------*/}
-                        {dataForm?.style?.value === 'Vector' && (
-                            <Fragment>
-                                <Input
-                                    title="Màu viền"
-                                    isColorPicker
-                                    value={dataForm?.borderColor}
-                                    name="borderColor"
-                                    type="text"
-                                    onChange={handleChange}
-                                />
-                                <Input
-                                    title="Màu nền"
-                                    isColorPicker
-                                    value={dataForm?.backgroundColor}
-                                    name="backgroundColor"
-                                    type="text"
-                                    onChange={handleChange}
-                                />
-                                <Input
-                                    title="Độ trong suốt viền"
-                                    value={dataForm?.opacityBorder}
-                                    name="opacityBorder"
-                                    type="number"
-                                    onChange={handleChange}
-                                />
-                                <Input
-                                    title="Độ rộng viền"
-                                    value={dataForm?.widthBorder}
-                                    name="widthBorder"
-                                    type="number"
-                                    onChange={handleChange}
-                                />
-                                <Input
-                                    title="Độ trong nền viền"
-                                    value={dataForm?.opacityBackground}
-                                    name="opacityBackground"
-                                    type="number"
-                                    onChange={handleChange}
-                                />
-                            </Fragment>
-                        )}
-                        {/*---------- Raster ----------*/}
-                        {dataForm?.style?.value === 'Raster' && (
-                            <Fragment>
-                                <Input
-                                    title="Tọa độ LatSW"
-                                    value={dataForm?.latSW}
-                                    name="latSW"
-                                    type="number"
-                                    onChange={handleChange}
-                                />
-                                <Input
-                                    title="Tọa độ LngSW"
-                                    value={dataForm?.lngSW}
-                                    name="lngSW"
-                                    type="number"
-                                    onChange={handleChange}
-                                />
-                                <Input
-                                    title="Tọa độ LatNE"
-                                    value={dataForm?.latNE}
-                                    name="latNE"
-                                    type="number"
-                                    onChange={handleChange}
-                                />
-                                <Input
-                                    title="Tọa độ LngNE"
-                                    value={dataForm?.lngNE}
-                                    name="lngNE"
-                                    type="number"
-                                    onChange={handleChange}
-                                />
-                            </Fragment>
-                        )}
+            <RequiredPermision isCreate>
+                <div>
+                    <div className="form">
+                        <form onSubmit={handleSubmit}>
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Select
+                                title="Tên khu vực"
+                                value={dataForm?.area?.txt}
+                                data={listArea}
+                                onChange={(v) => handleChangeSelect(v, 'area')}
+                            />
+                            <Select
+                                title="Tên phân loại"
+                                value={dataForm?.classify?.txt}
+                                data={listClassify}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'classify')
+                                }
+                            />
+                            <Input
+                                title="ID lớp"
+                                value={dataForm?.id}
+                                name="id"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Tên lớp"
+                                value={dataForm?.nameLayer}
+                                name="nameLayer"
+                                onChange={handleChange}
+                            />
+                            <Input
+                                title="Đường dẫn tệp hoặc ảnh"
+                                value={dataForm?.path?.path}
+                                name="path"
+                                type="file"
+                                onChange={handleChangeFile}
+                            />
+                            <Input
+                                title="Icon của lớp"
+                                value={dataForm?.icon?.path}
+                                name="icon"
+                                type="file"
+                                onChange={handleChangeFile}
+                            />
+                            <Input
+                                title="Lớp xếp chồng"
+                                value={dataForm?.zIndex}
+                                name="zIndex"
+                                type="number"
+                                onChange={handleChange}
+                            />
+                            <Select
+                                title="Kiểu lớp"
+                                value={dataForm?.style?.txt}
+                                data={[
+                                    {
+                                        txt: 'Vector',
+                                        value: 'Vector',
+                                    },
+                                    {
+                                        txt: 'Raster',
+                                        value: 'Raster',
+                                    },
+                                ]}
+                                onChange={(v) => handleChangeSelect(v, 'style')}
+                            />
+                            {/*---------- Vector ----------*/}
+                            {dataForm?.style?.value === 'Vector' && (
+                                <Fragment>
+                                    <Input
+                                        title="Màu viền"
+                                        isColorPicker
+                                        value={dataForm?.borderColor}
+                                        name="borderColor"
+                                        type="text"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Màu nền"
+                                        isColorPicker
+                                        value={dataForm?.backgroundColor}
+                                        name="backgroundColor"
+                                        type="text"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Độ trong suốt viền"
+                                        value={dataForm?.opacityBorder}
+                                        name="opacityBorder"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Độ rộng viền"
+                                        value={dataForm?.widthBorder}
+                                        name="widthBorder"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Độ trong nền viền"
+                                        value={dataForm?.opacityBackground}
+                                        name="opacityBackground"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                </Fragment>
+                            )}
+                            {/*---------- Raster ----------*/}
+                            {dataForm?.style?.value === 'Raster' && (
+                                <Fragment>
+                                    <GetCoordinatesRaster
+                                        file={dataForm.path}
+                                        dataForm={dataForm}
+                                        onSetPosition={handleSetPosition}
+                                    />
+                                    <Input
+                                        title="Tọa độ LatSW"
+                                        value={dataForm?.latSW}
+                                        name="latSW"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Tọa độ LngSW"
+                                        value={dataForm?.lngSW}
+                                        name="lngSW"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Tọa độ LatNE"
+                                        value={dataForm?.latNE}
+                                        name="latNE"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Tọa độ LngNE"
+                                        value={dataForm?.lngNE}
+                                        name="lngNE"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                </Fragment>
+                            )}
 
-                        {/*---------- Default ----------*/}
-                        <Select
-                            title="Hiển thị"
-                            value={dataForm?.active?.txt}
-                            data={[
-                                {
-                                    txt: 'Có',
-                                    value: 1,
-                                },
-                                {
-                                    txt: 'Không',
-                                    value: 0,
-                                },
-                            ]}
-                            onChange={(v) => handleChangeSelect(v, 'active')}
-                        />
-                        <button className="btn-create">Thêm mới</button>
-                    </form>
+                            {/*---------- Default ----------*/}
+                            <Select
+                                title="Hiển thị"
+                                value={dataForm?.active?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'active')
+                                }
+                            />
+                            <button className="btn-create">Thêm mới</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            {dataForm?.style?.value === 'Raster' && (
-                <GetCoordinatesRaster
-                    file={dataForm.path}
-                    dataForm={dataForm}
-                    onSetPosition={handleSetPosition}
-                />
-            )}
+            </RequiredPermision>
         </DashboardLayout>
     );
 }
