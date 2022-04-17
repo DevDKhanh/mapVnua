@@ -105,7 +105,7 @@ function Index() {
                             },
                         },
                         {
-                            title: 'Ngày tạo',
+                            title: 'Thời gian tạo',
                             template: (data: any) => {
                                 return `${date(
                                     data.createdAt
@@ -116,9 +116,15 @@ function Index() {
                             title: 'Thao tác',
                             template: (data: any) => {
                                 return (
-                                    <div className={style.btnAction}>
-                                        Chi tiết
-                                    </div>
+                                    <>
+                                        {permission?.role >= 1 && (
+                                            <Link href={`/security/${data.id}`}>
+                                                <a className={style.btnAction}>
+                                                    Chi tiết
+                                                </a>
+                                            </Link>
+                                        )}
+                                    </>
                                 );
                             },
                         },

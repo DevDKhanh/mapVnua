@@ -1,11 +1,15 @@
+import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
-import classifyAPI from '../../../api/classify';
+import displayAPI from '../../../api/display';
+import ButtonCreate from '../../../components/controls/ButtonCreate';
 import ActionData from '../../../components/site/ActionData';
 import Pagination from '../../../components/site/Pagination';
 import DataTable from '../../../components/site/Table';
 import { DashboardLayout } from '../../../components/widgets/Layout';
 
 function Index() {
+    const router = useRouter();
+
     const [totalItem, setTotalItem] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageCurrent, setPageCurrent] = useState<number>(1);
@@ -14,7 +18,7 @@ function Index() {
     useEffect(() => {
         (async () => {
             try {
-                const [res, status]: any = await classifyAPI.get({
+                const [res, status]: any = await displayAPI.get({
                     page: pageCurrent,
                     pageSize,
                 });
@@ -24,10 +28,18 @@ function Index() {
                 }
             } catch (err) {}
         })();
-    }, [pageCurrent, pageSize]);
+    }, [pageCurrent, pageSize, router]);
+
+    const detailData = {
+        id: 'id',
+        'Từ khóa': 'keyword',
+        'Ngôn ngữ': 'language.nameLanguage',
+        Dịch: 'trans',
+    };
 
     return (
-        <DashboardLayout title="Giao diện" isNotReady>
+        <DashboardLayout title="Giao diện">
+            <ButtonCreate href="/page/display/create" />
             <DataTable
                 data={list}
                 columns={[
@@ -38,15 +50,15 @@ function Index() {
                         },
                     },
                     {
-                        title: 'ID phân loại',
+                        title: 'ID',
                         template: (data: any) => {
                             return data.id;
                         },
                     },
                     {
-                        title: 'Tên phân loại',
+                        title: 'Từ khóa',
                         template: (data: any) => {
-                            return data.nameClassify;
+                            return data.keyword;
                         },
                     },
                     {
@@ -56,15 +68,15 @@ function Index() {
                         },
                     },
                     {
-                        title: 'Hiển thị',
-                        template: (data: any) => {
-                            return data.active ? 'Có' : 'Không';
-                        },
-                    },
-                    {
                         title: 'Hành động',
                         template: (data: any) => {
-                            return <ActionData />;
+                            return (
+                                <ActionData
+                                    id={data.id}
+                                    url="display"
+                                    detailData={detailData}
+                                />
+                            );
                         },
                     },
                 ]}

@@ -2,7 +2,7 @@ import axiosClient from '.';
 
 const siteAPI = {
     del: (
-        url: 'setting' | 'language' | 'layer' | 'classify' | 'area',
+        url: 'setting' | 'language' | 'layer' | 'classify' | 'area' | 'display',
         id: number,
         token: string,
         tokenAxios?: any
@@ -15,7 +15,7 @@ const siteAPI = {
         });
     },
     get: (
-        url: 'setting' | 'language' | 'layer' | 'classify' | 'area',
+        url: 'setting' | 'language' | 'layer' | 'classify' | 'area' | 'display',
         id: any,
         token: string,
         tokenAxios?: any

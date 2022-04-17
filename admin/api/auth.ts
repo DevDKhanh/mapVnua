@@ -6,8 +6,8 @@ const authAPI = {
             cancelToken: tokenAxios,
         });
     },
-    signup: (data: any, tokenAxios?: any) => {
-        return axiosClient.post('/auth/login', data, {
+    register: (data: any, tokenAxios?: any) => {
+        return axiosClient.post('/auth/register', data, {
             cancelToken: tokenAxios,
         });
     },
@@ -33,8 +33,26 @@ const authAPI = {
             }
         );
     },
-    getDetail: (id: string, token: string, tokenAxios?: any) => {
+    getDetail: (id: string | string[], token: string, tokenAxios?: any) => {
         return axiosClient.get(`/auth/users/user/${id}`, {
+            cancelToken: tokenAxios,
+            headers: {
+                authorization: 'Bearer ' + token,
+            },
+        });
+    },
+    permissionUpdate: (
+        data: {
+            permissionSeen?: boolean;
+            permissionEdit?: boolean;
+            permissionDelete?: boolean;
+            permissionCreate?: boolean;
+        },
+        id: string | string[],
+        token: string,
+        tokenAxios?: any
+    ) => {
+        return axiosClient.post(`/permission/${id}`, data, {
             cancelToken: tokenAxios,
             headers: {
                 authorization: 'Bearer ' + token,
