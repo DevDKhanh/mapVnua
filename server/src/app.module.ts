@@ -16,6 +16,7 @@ import { ClassifyModule } from './modules/classify/classify.module';
 import { AreaModule } from './modules/area/area.module';
 import { LayerModule } from './modules/layer/layer.module';
 import { PermissionModule } from './modules/permission/permission.module';
+import { DisplayModule } from './modules/\bdisplay/display.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -43,6 +44,7 @@ import { PermissionModule } from './modules/permission/permission.module';
     LanguageModule,
     ClassifyModule,
     AreaModule,
+    DisplayModule,
     LayerModule,
     UploadModule,
     PermissionModule,

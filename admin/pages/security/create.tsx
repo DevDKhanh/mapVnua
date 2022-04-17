@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { memo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import authAPI from '../../api/auth';
 
 import languageAPI from '../../api/language';
 import uploadAPI from '../../api/upload';
@@ -13,16 +14,10 @@ import { RootState } from '../../redux/reducers';
 
 /*---------- type form input ----------*/
 interface typeForm {
-    id: string;
-    nameLanguage: string;
-    icon: any;
-}
-
-/*---------- type form submit ----------*/
-interface typeFormSubmit {
-    id: string;
-    nameLanguage: string;
-    icon: string;
+    fullName: string;
+    userName: string;
+    password: any;
+    role: string;
 }
 
 /*===========> MAIN COMPONENT <==========*/
@@ -30,21 +25,16 @@ function Index() {
     const validator = useValidateAll;
     const router = useRouter();
 
-    const { token } = useSelector((state: RootState) => state.auth);
     const [dataForm, setDataForm] = useState<typeForm>({
-        icon: '',
-        nameLanguage: '',
-        id: '',
+        fullName: '',
+        userName: '',
+        password: '',
+        role: '0',
     });
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
         setDataForm((prev: any) => ({ ...prev, [name]: value }));
-    };
-
-    const handleChangeFile = (e: any) => {
-        const { name } = e.target;
-        setDataForm((prev: any) => ({ ...prev, [name]: e.target.files[0] }));
     };
 
     const handleSubmit = (e: any) => {
@@ -56,31 +46,15 @@ function Index() {
 
         (async () => {
             try {
-                /*---------- Create file form updaload icon ----------*/
-                const file: any = new FormData();
-                file.append('file', dataForm.icon);
-
-                /*---------- upload icon and get link icon ----------*/
-                const [URL]: any = await uploadAPI.upload('image', file, token);
-
-                /*---------- create submit form ----------*/
-                const formSubmit: typeFormSubmit = {
-                    ...dataForm,
-                    icon: `${URL.filename}`,
-                };
-
-                const [res, status]: any = await languageAPI.post(
-                    formSubmit,
-                    token
-                );
-                if (res && status === 200) {
+                const [res, status]: any = await authAPI.register(dataForm);
+                if (res && status === 201) {
+                    router.push('/security');
                     toast.success(res?.message);
-                    router.push('/page/language/');
                 } else {
                     toast.warn(res?.message);
                 }
-            } catch (err: any) {
-                toast.error(err?.message || 'Thêm mới thất bại');
+            } catch (err) {
+                toast.error('Đã xảy ra lỗi vui lòng đăng nhập lại');
             }
         })();
     };
@@ -92,25 +66,27 @@ function Index() {
                     <div className="form">
                         <form onSubmit={handleSubmit}>
                             <Input
-                                title="ID ngôn ngữ"
-                                value={dataForm?.id}
-                                name="id"
+                                title="Họ và tên"
+                                value={dataForm?.fullName}
+                                name="fullName"
                                 onChange={handleChange}
                             />
                             <Input
-                                title="Tên ngôn ngữ"
-                                value={dataForm?.nameLanguage}
-                                name="nameLanguage"
+                                title="Tên tài khoản"
+                                value={dataForm?.userName}
+                                name="userName"
                                 onChange={handleChange}
                             />
                             <Input
-                                title="Icon"
-                                value={dataForm?.icon?.path}
-                                name="icon"
-                                type="file"
-                                onChange={handleChangeFile}
+                                title="Mật khẩu"
+                                value={dataForm?.password}
+                                type="password"
+                                name="password"
+                                onChange={handleChange}
                             />
-                            <button className="btn-create">Thêm mới</button>
+                            <button className="btn-create">
+                                Tạo tài khoản
+                            </button>
                         </form>
                     </div>
                 </RequiredPermision>
