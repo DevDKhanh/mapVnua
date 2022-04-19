@@ -112,6 +112,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+                    router.push('/page/display/');
                 } else {
                     toast.warn(res?.message);
                 }

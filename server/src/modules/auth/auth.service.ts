@@ -64,6 +64,14 @@ export class AuthService {
       );
     }
 
+    /********** Check userName **********/
+    if (!user.actived) {
+      throw new HttpException(
+        await this.i18n.translate('user.USER_IS_BLOCK'),
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     /********** Check Password **********/
     if (!bcrypt.compareSync(loginUserDto.password.trim(), user.password)) {
       throw new HttpException(
@@ -81,6 +89,7 @@ export class AuthService {
       { expiresIn: '365d' },
     );
 
+    await this.usersRepository.update({ id: user.id }, { token });
     return resultData(await this.i18n.translate('auth.AUTH_LOGIN_SUCCESS'), {
       token,
       role: user.role,
@@ -141,27 +150,34 @@ export class AuthService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.usersRepository.findOne(id);
+    try {
+      const user = this.usersRepository.findOne(id);
 
-    if (!user) {
+      if (!user) {
+        throw new HttpException(
+          await this.i18n.translate('site.IS_NOT_EXISTS', {
+            args: { name: 'Tài khoản' },
+          }),
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      await this.usersRepository.update({ id }, { ...updateUserDto });
+      const userUpdate = await this.usersRepository.findOne(id, {
+        select: ['id', 'fullName', 'actived', 'role'],
+        relations: ['permission'],
+      });
+
+      return resultData(
+        await this.i18n.translate('site.SUCCESS_UPDATE'),
+        userUpdate,
+      );
+    } catch (err) {
       throw new HttpException(
-        await this.i18n.translate('site.IS_NOT_EXISTS', {
-          args: { name: 'Tài khoản' },
-        }),
-        HttpStatus.NOT_FOUND,
+        await this.i18n.translate('site.FAILED_UPDATE'),
+        HttpStatus.BAD_REQUEST,
       );
     }
-
-    await this.usersRepository.update({ id }, { ...updateUserDto });
-    const userUpdate = this.usersRepository.findOne(id, {
-      select: ['id', 'fullName', 'actived', 'role'],
-      relations: ['permission'],
-    });
-
-    return resultData(
-      await this.i18n.translate('site.SUCCESS_UPDATE'),
-      userUpdate,
-    );
   }
 
   async delete(id: string) {

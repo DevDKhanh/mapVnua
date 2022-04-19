@@ -310,6 +310,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+                    router.push('/category/layer/');
                 } else {
                     toast.warn(res?.message);
                 }

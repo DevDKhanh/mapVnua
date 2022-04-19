@@ -58,6 +58,28 @@ function Index() {
         [id, token]
     );
 
+    const handleUpdate = useCallback(
+        async (key: string, value: boolean) => {
+            if (id && token) {
+                try {
+                    const [res, status]: any = await authAPI.update(
+                        { [key]: value },
+                        id,
+                        token
+                    );
+
+                    if (res && status === 200) {
+                        toast.success('Đã cập nhật trạng thái');
+                        router.replace(router.asPath);
+                    } else {
+                        toast.success(res?.message);
+                    }
+                } catch (err) {}
+            }
+        },
+        [id, token]
+    );
+
     return (
         <DashboardLayout title="Cấp quyền tài khoản" hrefBack="/security">
             <RequiredPermision role={1}>
@@ -83,6 +105,16 @@ function Index() {
                                 >
                                     {data?.role}
                                 </span>
+                                {permission?.role > data?.role && (
+                                    <span
+                                        className={style.btnChange}
+                                        onClick={() =>
+                                            handleUpdate('role', data?.role + 1)
+                                        }
+                                    >
+                                        Tăng cấp
+                                    </span>
+                                )}
                             </li>
                             <li>
                                 <p>Trạng thái tài khoản:</p>
@@ -100,11 +132,21 @@ function Index() {
                                             ? 'Hoạt động'
                                             : 'Đang khóa'}
                                     </span>
-                                    {/* {permission?.role > data?.role && (
-                                        <span className={style.btnChange}>
-                                            Thay đổi
+                                    {permission?.role > data?.role && (
+                                        <span
+                                            className={style.btnChange}
+                                            onClick={() =>
+                                                handleUpdate(
+                                                    'actived',
+                                                    !data?.actived
+                                                )
+                                            }
+                                        >
+                                            {data?.actived
+                                                ? 'Khóa tài khoản'
+                                                : 'Mở khóa'}
                                         </span>
-                                    )} */}
+                                    )}
                                 </div>
                             </li>
                             <li>

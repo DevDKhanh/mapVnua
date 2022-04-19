@@ -41,6 +41,19 @@ const authAPI = {
             },
         });
     },
+    update: (
+        data: any,
+        id: string | string[],
+        token: string,
+        tokenAxios?: any
+    ) => {
+        return axiosClient.put(`/auth/users/user/${id}`, data, {
+            cancelToken: tokenAxios,
+            headers: {
+                authorization: 'Bearer ' + token,
+            },
+        });
+    },
     permissionUpdate: (
         data: {
             permissionSeen?: boolean;

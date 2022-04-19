@@ -1,0 +1,91 @@
+.container {
+    position: fixed;
+    top: 120px;
+    right: 50px;
+    z-index: 10000;
+
+    .icon {
+        height: 50px;
+        width: 50px;
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.4s;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+        &:hover {
+            transform: scale(0.9);
+        }
+    }
+
+    .containerMap {
+        position: absolute;
+        width: 0;
+        height: 0;
+        background-color: rgb(236, 236, 236);
+        transform-origin: top left;
+        border-radius: 5px;
+        transition: all 0.2s;
+        right: 30px;
+        top: 70px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .zoomBtn {
+            user-select: none;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 20px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            display: none;
+            z-index: 1000000;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            transition: all 0.4s;
+            border-radius: 5px;
+            &:hover {
+                transform: scale(0.9);
+            }
+        }
+
+        .map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    .containerMap.active {
+        width: 30vw;
+        height: 70vh;
+
+        .zoomBtn {
+            display: flex;
+        }
+    }
+
+    .containerMap.activeFull {
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        z-index: 1000;
+        transition: all 0.2;
+        .zoomBtn {
+            display: flex;
+        }
+    }
+}

@@ -9,7 +9,6 @@ import {
 import L from 'leaflet';
 
 import icon from '../../../assets/image/location.svg';
-import 'leaflet/dist/leaflet.css';
 import style from './GetCoordinates.module.scss';
 
 function LocationMarker({ position, onSetPosition }: any) {
@@ -50,7 +49,7 @@ const Map = ({ position, onSetPosition }: any) => {
                         <MapContainer
                             center={[9.975896274502997, 105.77857732772829]}
                             zoom={6}
-                            scrollWheelZoom={false}
+                            scrollWheelZoom={true}
                             style={{
                                 height: '80vh',
                                 width: '90%',

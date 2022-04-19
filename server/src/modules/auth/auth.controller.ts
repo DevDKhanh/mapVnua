@@ -64,7 +64,8 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(AdminAuthGuard)
   @ApiOperation({ summary: 'Update User . SPAdmin' })
-  async update(@Param('id') id: string, updateUserDto: UpdateUserDto) {
+  @ApiOkResponse({ type: UpdateUserDto, status: 200 })
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.authService.update(id, updateUserDto);
   }
 

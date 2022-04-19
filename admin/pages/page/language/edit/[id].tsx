@@ -107,6 +107,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+                    router.push('/page/language/');
                 } else {
                     toast.warn(res?.message);
                 }
