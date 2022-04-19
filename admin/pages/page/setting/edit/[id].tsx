@@ -158,6 +158,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+                    router.push('/page/setting/');
                 } else {
                     toast.warn(res?.message);
                 }

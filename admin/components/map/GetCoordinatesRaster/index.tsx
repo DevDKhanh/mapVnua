@@ -1,7 +1,6 @@
 import { Fragment, useState } from 'react';
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 
-import 'leaflet/dist/leaflet.css';
 import style from './GetCoordinates.module.scss';
 import MoveRaster from './MoveRaster';
 import { toast } from 'react-toastify';
@@ -52,7 +51,7 @@ const Map = ({ file, dataForm, onSetPosition }: any) => {
                         <MapContainer
                             center={[9.975896274502997, 105.77857732772829]}
                             zoom={6}
-                            scrollWheelZoom={false}
+                            scrollWheelZoom={true}
                             style={{
                                 height: '80vh',
                                 width: '90%',

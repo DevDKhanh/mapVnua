@@ -2,6 +2,7 @@
   "SUCCESS_SIGNUP": "Tạo tài khoản thành công.",
   "USER_IS_EXIST": "Tên tài khoản này đã tồn tại.",
   "USER_IS_NOT_EXIST": "Tên tài khoản chưa tồn tại.",
+  "USER_IS_BLOCK": "Tài khoản của bạn đang bị khóa",
   "EMAIL_IS_EXIST": "Email này đã tồn tại.",
   "EMAIL_IS_NOT_EXIST": "Email chưa tồn tại.",
   "PASSWORD_IS_INCORRECT": "Mật khẩu chưa chính xác.",

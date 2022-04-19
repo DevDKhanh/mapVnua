@@ -120,6 +120,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+                    router.push('/category/classify/');
                 } else {
                     toast.warn(res?.message);
                 }

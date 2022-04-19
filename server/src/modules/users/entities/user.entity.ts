@@ -45,6 +45,10 @@ export class UserEntity {
   actived: boolean;
 
   @ApiProperty()
+  @Column('varchar', { default: '', length: 1024 })
+  token: string;
+
+  @ApiProperty()
   @CreateDateColumn()
   createdAt: Date;
 

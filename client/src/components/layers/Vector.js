@@ -55,6 +55,7 @@ function Vector({ path, data }) {
                     style={{
                         color: data.borderColor,
                         opacity: data.opacityBorder,
+                        weight: data.widthBorder,
                         fillOpacity: data.opacityBackground,
                         fillColor: data.backgroundColor,
                     }}
