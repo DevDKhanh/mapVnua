@@ -33,7 +33,7 @@ function Vector({ fileData, data }: { fileData: any; data: dataType }) {
     };
 
     useEffect(() => {
-        if (data?.icon) {
+        if (data?.icon && typeof data?.icon !== 'string') {
             const link = URL.createObjectURL(data.icon);
             setIconPreview(link);
             return () => {

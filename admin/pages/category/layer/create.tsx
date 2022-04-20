@@ -385,6 +385,7 @@ function Index() {
                                         title="Độ trong suốt viền"
                                         value={dataForm?.opacityBorder}
                                         name="opacityBorder"
+                                        step={0.1}
                                         type="number"
                                         onChange={handleChange}
                                     />
@@ -393,6 +394,7 @@ function Index() {
                                         value={dataForm?.widthBorder}
                                         name="widthBorder"
                                         type="number"
+                                        step={0.1}
                                         onChange={handleChange}
                                     />
                                     <Input
@@ -400,6 +402,7 @@ function Index() {
                                         value={dataForm?.opacityBackground}
                                         name="opacityBackground"
                                         type="number"
+                                        step={0.1}
                                         onChange={handleChange}
                                     />
                                 </Fragment>

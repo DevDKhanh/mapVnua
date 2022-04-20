@@ -15,6 +15,11 @@ const uploadAPI = {
             },
         });
     },
+    getFile: (link: string, tokenAxios?: any) => {
+        return axiosClient.get(`${base}${link}`, {
+            cancelToken: tokenAxios,
+        });
+    },
 };
 
 export default uploadAPI;
