@@ -4,6 +4,7 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { BiFullscreen, BiExitFullscreen } from 'react-icons/bi';
 import { MapContainer, TileLayer, useMapEvents, Marker } from 'react-leaflet';
 import { toast } from 'react-toastify';
+import uploadAPI from '../../../api/upload';
 import Loading from '../../site/Loading';
 import style from './PreviewVector.module.scss';
 import Vector from './Vector';
@@ -25,7 +26,7 @@ function Index({ data }: any) {
             var obj = JSON.parse(event.target.result);
             setFileData(obj);
         }
-        if (data?.path) {
+        if (data?.path && typeof data?.path !== 'string') {
             if (data?.path?.type === 'application/json') {
                 var reader = new FileReader();
                 reader.onload = onReaderLoad;
@@ -33,6 +34,17 @@ function Index({ data }: any) {
             } else {
                 toast.warn('Sai định dạng đường dẫn');
             }
+        } else if (typeof data?.path === 'string') {
+            (async () => {
+                try {
+                    const [res, status]: any = await uploadAPI.getFile(
+                        data?.path
+                    );
+                    if (res && status === 200) {
+                        setFileData(res);
+                    }
+                } catch (err) {}
+            })();
         }
     }, [data]);
 

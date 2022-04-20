@@ -21,6 +21,11 @@ const GetCoordinatesRaster = dynamic(
     { ssr: false }
 );
 
+const PreviewVector = dynamic(
+    () => import('../../../../components/map/PreviewVector'),
+    { ssr: false }
+);
+
 /*---------- type form input ----------*/
 interface typeForm {
     nameLayer: string;
@@ -393,6 +398,7 @@ function Index() {
                             {/*---------- Vector ----------*/}
                             {dataForm?.style?.value === 'Vector' && (
                                 <Fragment>
+                                    <PreviewVector data={dataForm} />
                                     <Input
                                         title="Màu viền"
                                         isColorPicker
