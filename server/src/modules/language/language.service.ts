@@ -22,14 +22,13 @@ export class LanguageService {
     private readonly i18n: I18nRequestScopeService,
   ) {}
 
-  async create(createLanguageDto: CreateLanguageDto, file: any, header: any) {
-    const idLength: number = 2;
+  async create(createLanguageDto: CreateLanguageDto) {
     const languageNew = await this.languageRepository.create({
       ...createLanguageDto,
     });
     const checkId = await this.languageRepository.findOne({
       where: {
-        id: createLanguageDto.id,
+        id: createLanguageDto.idLanguage,
       },
     });
 
@@ -43,16 +42,6 @@ export class LanguageService {
       );
     }
 
-    if (createLanguageDto.id.length > idLength) {
-      await deleteFile(createLanguageDto.icon);
-      throw new HttpException(
-        await this.i18n.translate('site.LENGHT_IS_MAX', {
-          args: { name: 'id', max: idLength },
-        }),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     const saveNew = await this.languageRepository.save(languageNew);
     return resultData(
       await this.i18n.translate('site.SUCCESS_CREATE'),
@@ -60,7 +49,7 @@ export class LanguageService {
     );
   }
 
-  async update(id: string, updateLanguageDto: UpdateLanguageDto) {
+  async update(id: number, updateLanguageDto: UpdateLanguageDto) {
     const checkId = await this.languageRepository.findOne({
       where: {
         id,
@@ -103,7 +92,7 @@ export class LanguageService {
     );
   }
 
-  async getDetail(id: string) {
+  async getDetail(id: number) {
     const detail = await this.languageRepository.findOne({
       where: {
         id,
@@ -118,7 +107,7 @@ export class LanguageService {
     );
   }
 
-  async delete(id: string) {
+  async delete(id: number) {
     try {
       const language = await this.languageRepository.findOne(id);
       if (!language) {

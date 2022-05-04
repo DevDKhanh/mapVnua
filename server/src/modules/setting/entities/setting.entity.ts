@@ -16,9 +16,9 @@ export class SettingEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ApiProperty({ example: 'en' })
-  @Column({ type: 'char', name: 'idNgonNgu', length: 2, nullable: false })
-  languageId: string;
+  @ApiProperty({ example: 1 })
+  @Column({ type: 'int', name: 'idNgonNgu', nullable: false })
+  languageId: number;
 
   @ApiProperty()
   @ManyToOne(

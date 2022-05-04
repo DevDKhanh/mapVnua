@@ -14,4 +14,9 @@ export class GetListDto {
   @IsString()
   @IsOptional()
   langId: string;
+
+  @ApiProperty({ example: '12345' })
+  @IsString()
+  @IsOptional()
+  areaId: string;
 }

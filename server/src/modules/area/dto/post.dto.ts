@@ -9,9 +9,9 @@ export class CreateAreaDto {
   @IsString()
   nameArea: string;
 
-  @ApiProperty({ example: 'en' })
-  @IsString()
-  languageId: string;
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  languageId: number;
 
   @ApiProperty({ example: 15.14 })
   @IsNumber()

@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 
 export class CreateLanguageDto {
-  @ApiProperty({ example: 'vi' })
+  @ApiProperty({ example: 'DH_ABC' })
   @IsString()
-  id: string;
+  idLanguage: string;
 
   @ApiProperty({ example: 'Tiếng việt' })
   @IsString()

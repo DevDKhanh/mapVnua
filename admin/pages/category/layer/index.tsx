@@ -33,7 +33,7 @@ function Index() {
 
     const detailData = {
         'Hình ảnh kí hiệu': 'icon',
-        'ID khu vực': 'id',
+        'ID Lớp': 'id',
         'Tên Lớp': 'nameLayer',
         'Tên ngôn ngữ': 'language.nameLanguage',
         'Kiểu lớp': 'style',
