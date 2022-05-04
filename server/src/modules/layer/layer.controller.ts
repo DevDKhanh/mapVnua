@@ -17,7 +17,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { AdminAuthGuard, PermisionCreateGuard, PermisionDeleteGuard, PermisionEditGuard } from '../auth/jwt.strategy';
+import {
+  AdminAuthGuard,
+  PermisionCreateGuard,
+  PermisionDeleteGuard,
+  PermisionEditGuard,
+} from '../auth/jwt.strategy';
 import { LayerService } from './layer.service';
 import { CreateLayerDto } from './dto/post.dto';
 import { UpdateLayerDto } from './dto/put.dto';
@@ -36,6 +41,14 @@ export class LayerController {
   @ApiOkResponse({ type: CreateLayerDto, status: 201 })
   async create(@Body() createLayerDto: CreateLayerDto) {
     return this.layerService.create(createLayerDto);
+  }
+
+  @Get('/data')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Get data with area and language' })
+  @ApiOkResponse({ type: null, status: 201 })
+  async getData(@Query() getListDto: GetListDto) {
+    return this.layerService.getData(getListDto);
   }
 
   @Put('/:id')

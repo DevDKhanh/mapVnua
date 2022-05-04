@@ -9,9 +9,9 @@ export class CreateClassifyDto {
   @IsString()
   nameClassify: string;
 
-  @ApiProperty({ example: 'en' })
-  @IsString()
-  languageId: string;
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  languageId: number;
 
   @ApiProperty({ example: 1 })
   @IsNumber()

@@ -3,10 +3,10 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { CreateSettingDto } from './post.dto';
 
 export class UpdateSettingDto {
-  @ApiProperty({ example: 'en' })
-  @IsString()
+  @ApiProperty({ example: 1 })
+  @IsNumber()
   @IsOptional()
-  languageId: string;
+  languageId: number;
 
   @ApiProperty({ example: 'Bản đồ Hà Nội' })
   @IsString()
