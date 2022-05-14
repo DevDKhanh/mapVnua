@@ -84,6 +84,13 @@ function Index() {
                                 name="password"
                                 onChange={handleChange}
                             />
+                            <Input
+                                title="Cấp độ tài khoản"
+                                value={dataForm?.role}
+                                type="number"
+                                name="role"
+                                onChange={handleChange}
+                            />
                             <button className="btn-create">
                                 Tạo tài khoản
                             </button>
