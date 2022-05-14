@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet';
 import { useSelector } from 'react-redux';
 
+import Menu from '../../components/menu/Menu';
 import FullScreen from '../../components/map/FullScreen';
 import ButtonDisplayLayer from '../../components/map/ButtonDisplayLayer';
 import ContainerLayer from '../../components/map/ContainerLayer';
@@ -31,6 +32,7 @@ function Map() {
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <ZoomControl position="bottomright" />
+                <Menu />
                 <FullScreen />
                 <ContainerLayer />
             </MapContainer>

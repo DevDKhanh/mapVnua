@@ -7,8 +7,6 @@ import Raster from '../../layers/Raster';
 function ContainerLayer() {
     const { layers, classifys } = useSelector((state) => state.dataMap);
 
-    console.log(classifys);
-
     const render = useMemo(() => {
         return layers.map((item) => {
             if (item.style === 'Vector') {

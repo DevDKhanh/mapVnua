@@ -28,7 +28,7 @@ const PreviewVector = dynamic(
 
 /*---------- type form input ----------*/
 interface typeForm {
-    id: string;
+    // id: string;
     nameLayer: string;
     language: any;
     classify: any;
@@ -51,7 +51,7 @@ interface typeForm {
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
-    id: string;
+    // id: string;
     nameLayer: string;
     languageId: string;
     classifyId: string;
@@ -87,14 +87,14 @@ function Index() {
             txt: 'Có',
             value: 1,
         },
-        id: '',
+        // id: '',
         nameLayer: '',
         language: null,
         classify: null,
         area: null,
         style: {
-            txt: 'Vector',
-            value: 'Vector',
+            txt: 'Raster',
+            value: 'Raster',
         },
         path: '',
         icon: '',
@@ -224,7 +224,7 @@ function Index() {
 
             try {
                 const formSubmit: typeFormSubmit = {
-                    id: dataForm.id,
+                    // id: dataForm.id,
                     nameLayer: dataForm.nameLayer,
                     languageId: dataForm.language.value,
                     classifyId: dataForm.classify.value,
@@ -250,32 +250,6 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-                    router.push('/category/layer/');
-                    /*---------- Clear form ----------*/
-                    setDataForm({
-                        active: {
-                            txt: 'Có',
-                            value: 1,
-                        },
-                        id: '',
-                        nameLayer: '',
-                        language: null,
-                        classify: null,
-                        area: null,
-                        style: '',
-                        path: '',
-                        icon: '',
-                        borderColor: '',
-                        widthBorder: '',
-                        opacityBorder: '',
-                        backgroundColor: '',
-                        opacityBackground: '',
-                        latNE: '',
-                        lngNE: '',
-                        latSW: '',
-                        lngSW: '',
-                        zIndex: '',
-                    });
                 } else {
                     toast.warn(res?.message);
                 }
@@ -313,17 +287,32 @@ function Index() {
                                     handleChangeSelect(v, 'classify')
                                 }
                             />
-                            <Input
+                            {/* <Input
                                 title="ID lớp"
                                 value={dataForm?.id}
                                 name="id"
                                 onChange={handleChange}
-                            />
+                            /> */}
                             <Input
                                 title="Tên lớp"
                                 value={dataForm?.nameLayer}
                                 name="nameLayer"
                                 onChange={handleChange}
+                            />
+                            <Select
+                                title="Kiểu lớp"
+                                value={dataForm?.style?.txt}
+                                data={[
+                                    {
+                                        txt: 'Vector',
+                                        value: 'Vector',
+                                    },
+                                    {
+                                        txt: 'Raster',
+                                        value: 'Raster',
+                                    },
+                                ]}
+                                onChange={(v) => handleChangeSelect(v, 'style')}
                             />
                             <Input
                                 title="Đường dẫn tệp hoặc ảnh"
@@ -346,21 +335,7 @@ function Index() {
                                 type="number"
                                 onChange={handleChange}
                             />
-                            <Select
-                                title="Kiểu lớp"
-                                value={dataForm?.style?.txt}
-                                data={[
-                                    {
-                                        txt: 'Vector',
-                                        value: 'Vector',
-                                    },
-                                    {
-                                        txt: 'Raster',
-                                        value: 'Raster',
-                                    },
-                                ]}
-                                onChange={(v) => handleChangeSelect(v, 'style')}
-                            />
+
                             {/*---------- Vector ----------*/}
                             {dataForm?.style?.value === 'Vector' && (
                                 <Fragment>

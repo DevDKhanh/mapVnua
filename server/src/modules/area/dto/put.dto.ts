@@ -2,6 +2,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateAreaDto {
+  @ApiProperty({ example: 'idkhuvuc' })
+  @IsString()
+  @IsOptional()
+  idArea: string;
+
   @ApiProperty({ example: 'tên Khu vực' })
   @IsString()
   @IsOptional()

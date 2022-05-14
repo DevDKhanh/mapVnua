@@ -126,3 +126,7 @@ a {
 .list-tab a.active-tab::before {
     background-color: #f35900;
 }
+
+input {
+    user-select: text !important;
+}

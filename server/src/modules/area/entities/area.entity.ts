@@ -5,16 +5,20 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { LanguageEntity } from '../../language/entities/language.entity';
 @Entity({ name: 'tblkhuvuc' })
 export class AreaEntity {
-  @ApiProperty({ example: 'id Khu vực' })
-  @PrimaryColumn({ type: 'varchar', length: 100, name: 'idKhuVuc' })
+  @ApiProperty()
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   id: string;
+
+  @ApiProperty({ example: 'id Khu vực' })
+  @Column({ type: 'varchar', length: 100, name: 'idKhuVuc' })
+  idArea: string;
 
   @ApiProperty({ example: 'tên Khu vực' })
   @Column({

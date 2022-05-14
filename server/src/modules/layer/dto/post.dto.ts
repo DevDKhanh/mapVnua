@@ -1,9 +1,9 @@
 import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateLayerDto {
-  @ApiProperty({ example: 'id Lớp' })
-  @IsString()
-  id: string;
+  // @ApiProperty({ example: 'id Lớp' })
+  // @IsString()
+  // id: string;
 
   @ApiProperty({ example: 'tên Lớp' })
   @IsString()

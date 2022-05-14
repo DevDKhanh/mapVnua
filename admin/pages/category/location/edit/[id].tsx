@@ -20,6 +20,7 @@ const GetCoordinates = dynamic(
 );
 /*---------- type form input ----------*/
 interface typeForm {
+    idArea: string;
     nameArea: string;
     language: any;
     lat: string;
@@ -30,6 +31,7 @@ interface typeForm {
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
+    idArea: string;
     nameArea: string;
     languageId: string;
     lat: number;
@@ -46,6 +48,7 @@ function Index() {
 
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
+        idArea: '',
         nameArea: '',
         language: null,
         lat: '',
@@ -121,6 +124,7 @@ function Index() {
         e.preventDefault();
 
         const formSubmit: typeFormSubmit = {
+            idArea: dataForm.idArea,
             nameArea: dataForm.nameArea,
             languageId: dataForm.language.value,
             lat: Number(dataForm.lat),
@@ -157,6 +161,20 @@ function Index() {
                 <div>
                     <div className="form">
                         <form onSubmit={handleSubmit}>
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
+                            <Input
+                                title="ID khu vực"
+                                value={dataForm?.idArea}
+                                name="idArea"
+                                onChange={handleChange}
+                            />
                             <Input
                                 title="Tên khu vực"
                                 value={dataForm?.nameArea}
@@ -187,14 +205,6 @@ function Index() {
                                 name="zoom"
                                 type="number"
                                 onChange={handleChange}
-                            />
-                            <Select
-                                title="Ngôn ngữ"
-                                value={dataForm?.language?.txt}
-                                data={listLanguage}
-                                onChange={(v) =>
-                                    handleChangeSelect(v, 'language')
-                                }
                             />
                             <Select
                                 title="Hiển thị"

@@ -8,14 +8,19 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { LanguageEntity } from '../../language/entities/language.entity';
 @Entity({ name: 'tblphanloai' })
 export class ClassifyEntity {
-  @ApiProperty({ example: 'id phân loại' })
-  @PrimaryColumn({ type: 'varchar', length: 100, name: 'idPhanLoai' })
+  // @ApiProperty({ example: 'id phân loại' })
+  // @PrimaryColumn({ type: 'varchar', length: 100, name: 'idPhanLoai' })
+  // id: string;
+
+  @ApiProperty()
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   id: string;
 
   @ApiProperty({ example: 'tên lớp' })

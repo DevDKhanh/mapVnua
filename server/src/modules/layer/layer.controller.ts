@@ -17,11 +17,16 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { AdminAuthGuard, PermisionCreateGuard, PermisionDeleteGuard, PermisionEditGuard } from '../auth/jwt.strategy';
+import {
+  AdminAuthGuard,
+  PermisionCreateGuard,
+  PermisionDeleteGuard,
+  PermisionEditGuard,
+} from '../auth/jwt.strategy';
 import { LayerService } from './layer.service';
 import { CreateLayerDto } from './dto/post.dto';
 import { UpdateLayerDto } from './dto/put.dto';
-import { GetListDto } from 'src/common/dto/index.dto';
+import { GetLayerDto, GetListDto } from 'src/common/dto/index.dto';
 
 @ApiTags('Layer API')
 @ApiConsumes('Layer Api')
@@ -58,11 +63,19 @@ export class LayerController {
     return this.layerService.getList(getListDto);
   }
 
+  @Get('/data')
+  @HttpCode(200)
+  @ApiOperation({ summary: "Get layer's data for client . Public" })
+  @ApiOkResponse({ type: null, status: 200 })
+  async getDataForClient(@Query() getListDto: GetLayerDto) {
+    return this.layerService.getDataForClient(getListDto);
+  }
+
   @Get('/:id')
   @HttpCode(200)
   @ApiOperation({ summary: 'Get detail Layer . Public' })
   @ApiOkResponse({ type: CreateLayerDto, status: 200 })
-  async getDetail(@Param() id: string) {
+  async getDetail(@Param('id') id: string) {
     return this.layerService.getDetail(id);
   }
 
