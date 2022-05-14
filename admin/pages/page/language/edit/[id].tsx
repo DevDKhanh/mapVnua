@@ -14,14 +14,14 @@ import { RootState } from '../../../../redux/reducers';
 
 /*---------- type form input ----------*/
 interface typeForm {
-    id: string;
+    idLanguage: string;
     nameLanguage: string;
     icon: any;
 }
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
-    id: string;
+    idLanguage: string;
     nameLanguage: string;
     icon: string;
 }
@@ -35,7 +35,7 @@ function Index() {
     const [dataForm, setDataForm] = useState<typeForm>({
         icon: '',
         nameLanguage: '',
-        id: '',
+        idLanguage: '',
     });
 
     /*---------- Get info data insert form ----------*/

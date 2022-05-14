@@ -4,14 +4,19 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'tblngonngu' })
 export class LanguageEntity {
-  @ApiProperty({ example: 'en' })
-  @PrimaryColumn({ type: 'char', name: 'idNgonNgu', length: 2 })
-  id: string;
+  @ApiProperty()
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ApiProperty({ example: 'DH_ABC' })
+  @Column({ type: 'varchar', name: 'idNgonNgu', length: 10 })
+  idLanguage: string;
 
   @ApiProperty({ example: 'Tiếng anh' })
   @Column({ type: 'varchar', length: 100, name: 'ten' })

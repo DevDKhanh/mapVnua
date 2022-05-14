@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class UpdateDisplayDto {
   @ApiProperty({ example: 'TIEU_DE_MAP' })
@@ -7,10 +7,10 @@ export class UpdateDisplayDto {
   @IsOptional()
   keyword: string;
 
-  @ApiProperty({ example: 'en' })
-  @IsString()
+  @ApiProperty({ example: 1 })
+  @IsNumber()
   @IsOptional()
-  languageId: string;
+  languageId: number;
 
   @ApiProperty({ example: 'Bản đồ - develop by teamVnua' })
   @IsString()

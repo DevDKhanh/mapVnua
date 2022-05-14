@@ -21,8 +21,8 @@ export class DisplayEntity {
   keyword: string;
 
   @ApiProperty({ example: 'en' })
-  @Column({ type: 'char', name: 'idNgonNgu', length: 2, nullable: false })
-  languageId: string;
+  @Column({ type: 'int', name: 'idNgonNgu', nullable: false })
+  languageId: number;
 
   @ApiProperty()
   @ManyToOne(() => LanguageEntity)
