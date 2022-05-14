@@ -43,12 +43,8 @@ export class LanguageController {
   @ApiOperation({ summary: 'Create language new . Admin' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 201 })
   @UseInterceptors(FileInterceptor('file'))
-  async create(
-    @Body() createLanguageDto: CreateLanguageDto,
-    @UploadedFile() file: Express.Multer.File,
-    @Headers() header: any,
-  ) {
-    return this.languageService.create(createLanguageDto, file, header);
+  async create(@Body() createLanguageDto: CreateLanguageDto) {
+    return this.languageService.create(createLanguageDto);
   }
 
   @Put('/:id')
@@ -58,7 +54,7 @@ export class LanguageController {
   @ApiOkResponse({ type: CreateLanguageDto, status: 200 })
   @UseInterceptors(FileInterceptor('file'))
   async update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateLanguageDto: UpdateLanguageDto,
     @UploadedFile() file: any,
   ) {
@@ -77,7 +73,7 @@ export class LanguageController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Get detail language . Public' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 200 })
-  async getDetail(@Param('id') id: string) {
+  async getDetail(@Param('id') id: number) {
     return this.languageService.getDetail(id);
   }
 
@@ -86,7 +82,7 @@ export class LanguageController {
   @HttpCode(200)
   @ApiOperation({ summary: 'Get detail language . Admin' })
   @ApiOkResponse({ type: CreateLanguageDto, status: 200 })
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: number) {
     return this.languageService.delete(id);
   }
 }

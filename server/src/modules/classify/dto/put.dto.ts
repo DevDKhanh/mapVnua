@@ -7,10 +7,10 @@ export class UpdateClassifyDto {
   @IsOptional()
   nameClassify: string;
 
-  @ApiProperty({ example: 'en' })
-  @IsString()
+  @ApiProperty({ example: 1 })
+  @IsNumber()
   @IsOptional()
-  languageId: string;
+  languageId: number;
 
   @ApiProperty({ example: 1 })
   @IsNumber()
