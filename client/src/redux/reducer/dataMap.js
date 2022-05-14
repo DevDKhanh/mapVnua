@@ -1,10 +1,18 @@
-import { DATA_ADD, DATA_ADD_LAYER, DATA_REMOVE_LAYER } from '../action/dataMap';
+import {
+    DATA_ADD,
+    DATA_ADD_LAYER,
+    DATA_REMOVE_LAYER,
+    UPDATE_LANGUAGE,
+    UPDATE_AREA,
+} from '../action/dataMap';
 
 const initialState = {
     dataLayers: [], //layers detail
     layers: [], //layers display
     classifys: [],
     setting: [],
+    language: [],
+    area: [],
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -25,6 +33,16 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 layers: [...state.layers.filter((item) => item.id !== payload)],
+            };
+        case UPDATE_LANGUAGE:
+            return {
+                ...state,
+                language: payload,
+            };
+        case UPDATE_AREA:
+            return {
+                ...state,
+                area: payload,
             };
         default:
             return state;

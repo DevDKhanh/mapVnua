@@ -30,21 +30,26 @@ export class AreaService {
     const checkLanguage = await this.languageRepository.findOne(
       createAreaDto.languageId,
     );
-    const checkClassId = await this.areaRepository.findOne(createAreaDto.id);
-
-    if (checkClassId) {
-      throw new HttpException(
-        await this.i18n.translate('site.IS_EXISTS', {
-          args: { name: 'Id khu vực' },
-        }),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    const checkArea = await this.areaRepository.findOne({
+      where: {
+        languageId: createAreaDto.languageId,
+        idArea: createAreaDto.idArea,
+      },
+    });
 
     if (!checkLanguage) {
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id ngôn ngữ' },
+        }),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (checkArea) {
+      throw new HttpException(
+        await this.i18n.translate('site.IS_EXISTS', {
+          args: { name: 'Khu vực sử dụng ngôn ngữ và id tương ứng' },
         }),
         HttpStatus.BAD_REQUEST,
       );
@@ -63,6 +68,12 @@ export class AreaService {
         id,
       },
     });
+    const checkArea = await this.areaRepository.findOne({
+      where: {
+        languageId: updateAreaDto.languageId,
+        idArea: updateAreaDto.idArea,
+      },
+    });
     const checkLanguage = await this.languageRepository.findOne(
       updateAreaDto.languageId,
     );
@@ -71,6 +82,15 @@ export class AreaService {
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'khu vực' },
+        }),
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (checkArea) {
+      throw new HttpException(
+        await this.i18n.translate('site.IS_EXISTS', {
+          args: { name: 'Khu vực sử dụng ngôn ngữ và id tương ứng' },
         }),
         HttpStatus.BAD_REQUEST,
       );

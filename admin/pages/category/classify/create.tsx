@@ -14,7 +14,7 @@ import { RootState } from '../../../redux/reducers';
 
 /*---------- type form input ----------*/
 interface typeForm {
-    id: string;
+    // id: string;
     nameClassify: string;
     language: any;
     active: any;
@@ -23,7 +23,7 @@ interface typeForm {
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
-    id: string;
+    // id: string;
     nameClassify: string;
     languageId: string;
     active: number;
@@ -38,7 +38,7 @@ function Index() {
     const { token } = useSelector((state: RootState) => state.auth);
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
-        id: '',
+        // id: '',
         nameClassify: '',
         language: null,
         active: {
@@ -83,7 +83,7 @@ function Index() {
         }
 
         const formSubmit: typeFormSubmit = {
-            id: dataForm.id,
+            // id: dataForm.id,
             nameClassify: dataForm.nameClassify,
             languageId: dataForm.language.value,
             active: Number(dataForm.active.value),
@@ -98,7 +98,6 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-                    router.push('/category/classify/');
                 } else {
                     toast.warn(res?.message);
                 }
@@ -114,25 +113,6 @@ function Index() {
                 <div>
                     <div className="form">
                         <form onSubmit={handleSubmit}>
-                            <Input
-                                title="Số thứ tự"
-                                value={dataForm?.no}
-                                name="no"
-                                typr="number"
-                                onChange={handleChange}
-                            />
-                            <Input
-                                title="ID phân loại"
-                                value={dataForm?.id}
-                                name="id"
-                                onChange={handleChange}
-                            />
-                            <Input
-                                title="Tên phân loại"
-                                value={dataForm?.nameClassify}
-                                name="nameClassify"
-                                onChange={handleChange}
-                            />
                             <Select
                                 title="Ngôn ngữ"
                                 value={dataForm?.language?.txt}
@@ -141,6 +121,26 @@ function Index() {
                                     handleChangeSelect(v, 'language')
                                 }
                             />
+                            <Input
+                                title="Số thứ tự"
+                                value={dataForm?.no}
+                                name="no"
+                                typr="number"
+                                onChange={handleChange}
+                            />
+                            {/* <Input
+                                title="ID phân loại"
+                                value={dataForm?.id}
+                                name="id"
+                                onChange={handleChange}
+                            /> */}
+                            <Input
+                                title="Tên phân loại"
+                                value={dataForm?.nameClassify}
+                                name="nameClassify"
+                                onChange={handleChange}
+                            />
+
                             <Select
                                 title="Hiển thị"
                                 value={dataForm?.active?.txt}

@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateAreaDto {
   @ApiProperty({ example: 'id Khu vực' })
   @IsString()
-  id: string;
+  idArea: string;
 
   @ApiProperty({ example: 'tên Khu vực' })
   @IsString()

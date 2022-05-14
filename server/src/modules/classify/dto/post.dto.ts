@@ -1,9 +1,9 @@
 import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateClassifyDto {
-  @ApiProperty({ example: 'id phân loại' })
-  @IsString()
-  id: string;
+  // @ApiProperty({ example: 'id phân loại' })
+  // @IsString()
+  // id: string;
 
   @ApiProperty({ example: 'tên lớp' })
   @IsString()

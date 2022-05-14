@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import images from '../../../constant/image';
 import classifyAPI from '../../../api/classify';
@@ -12,13 +12,15 @@ function LoadData({ children }) {
     const pageSize = 100;
     const dispacth = useDispatch();
     const [loading, setLoading] = useState(true);
-    const [page, setPage] = useState(1);
+    const [page] = useState(1);
+
+    const { language } = useSelector((state) => state.dataMap);
 
     useEffect(() => {
         (async () => {
             try {
                 const [[classifys], [setting], [layers]] = await Promise.all([
-                    classifyAPI.getList(null, page, pageSize),
+                    classifyAPI.getList(null, page, pageSize, language.id),
                     settingAPI.getList(null, page, pageSize),
                     layerAPI.getList(null, page, pageSize),
                 ]);
@@ -37,7 +39,7 @@ function LoadData({ children }) {
                 }, 1500);
             } catch (err) {}
         })();
-    }, []);
+    }, [language]);
 
     return <>{loading ? <Loading /> : children}</>;
 }

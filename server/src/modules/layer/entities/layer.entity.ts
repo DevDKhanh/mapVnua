@@ -6,6 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -14,15 +15,20 @@ import { AreaEntity } from './../../area/entities/area.entity';
 import { LanguageEntity } from '../../language/entities/language.entity';
 @Entity({ name: 'tbllop' })
 export class LayerEntity {
-  @ApiProperty({ example: 'id Lớp' })
-  @PrimaryColumn({ type: 'varchar', length: 100, name: 'idLop' })
+  // @ApiProperty({ example: 'id Lớp' })
+  // @PrimaryColumn({ type: 'varchar', length: 100, name: 'idLop' })
+  // id: string;
+
+  @ApiProperty()
+  @PrimaryGeneratedColumn('uuid', { name: 'id' })
   id: string;
 
   @ApiProperty({ example: 'tên Lớp' })
-  @Column({
+  @PrimaryColumn({
     type: 'varchar',
     name: 'tenLop',
     length: 100,
+    unique: true,
     nullable: false,
   })
   nameLayer: string;

@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 
 import { CreateLayerDto } from './dto/post.dto';
 import { UpdateLayerDto } from './dto/put.dto';
-import { GetListDto } from '../../common/dto/index.dto';
+import { GetLayerDto, GetListDto } from '../../common/dto/index.dto';
 import { ClassifyEntity } from './../classify/entities/classify.entity';
 import { LayerEntity } from './entities/layer.entity';
 import { LanguageEntity } from '../language/entities/language.entity';
@@ -53,10 +53,6 @@ export class LayerService {
   }
 
   async create(createLayerDto: CreateLayerDto) {
-    const createNew = await this.layerRepository.create({
-      ...createLayerDto,
-    });
-
     const checkLanguage = await this.languageRepository.findOne(
       createLayerDto.languageId,
     );
@@ -64,13 +60,17 @@ export class LayerService {
     const checkClassify = await this.classRepository.findOne(
       createLayerDto.classifyId,
     );
-    const checkLayerId = await this.layerRepository.findOne(createLayerDto.id);
+    const checkLayerId = await this.layerRepository.findOne({
+      where: {
+        nameLayer: createLayerDto.nameLayer,
+      },
+    });
 
     if (checkLayerId) {
       await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_EXISTS', {
-          args: { name: 'Id lớp' },
+          args: { name: 'Tên lớp' },
         }),
         HttpStatus.BAD_REQUEST,
       );
@@ -106,7 +106,9 @@ export class LayerService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
+    const createNew = await this.layerRepository.create({
+      ...createLayerDto,
+    });
     const saveLayer = await this.layerRepository.save(createNew);
     return resultData(
       await this.i18n.translate('site.SUCCESS_CREATE'),
@@ -219,6 +221,17 @@ export class LayerService {
       getListDto.page,
       getListDto.pageSize,
     );
+  }
+
+  async getDataForClient(getListDto: GetLayerDto) {
+    const result = await this.layerRepository.find({
+      where: {
+        areaId: getListDto.areaId,
+        languageId: getListDto.langId,
+        classifyId: getListDto.classifyId,
+      },
+    });
+    return result;
   }
 
   async getDetail(id: string) {

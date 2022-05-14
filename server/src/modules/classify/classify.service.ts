@@ -34,21 +34,10 @@ export class ClassifyService {
     const checkLanguage = await this.languageRepository.findOne(
       createClassifyDto.languageId,
     );
-    const checkClassId = await this.classifyRepository.findOne(
-      createClassifyDto.id,
-    );
+
     const checkNo = await this.classifyRepository.findOne({
       no: createClassifyDto.no,
     });
-
-    if (checkClassId) {
-      throw new HttpException(
-        await this.i18n.translate('site.IS_EXISTS', {
-          args: { name: 'Id phân loại' },
-        }),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     if (checkNo) {
       throw new HttpException(
@@ -120,7 +109,6 @@ export class ClassifyService {
           languageId: getListDto.langId,
         })
         .leftJoinAndSelect('classify.language', 'language')
-        .leftJoinAndSelect('classify.layers', 'layers')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)
         .orderBy('classify.no', 'ASC')
@@ -135,6 +123,7 @@ export class ClassifyService {
     } else {
       const result = await this.classifyRepository
         .createQueryBuilder('classify')
+
         .leftJoinAndSelect('classify.language', 'language')
         .leftJoinAndSelect('classify.layers', 'layers')
         .skip((+getListDto.page - 1) * getListDto.pageSize)

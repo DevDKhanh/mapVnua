@@ -139,6 +139,14 @@ function Index() {
                 <div>
                     <div className="form">
                         <form onSubmit={handleSubmit}>
+                            <Select
+                                title="Ngôn ngữ"
+                                value={dataForm?.language?.txt}
+                                data={listLanguage}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'language')
+                                }
+                            />
                             <Input
                                 title="Số thứ tự"
                                 value={dataForm?.no}
@@ -152,14 +160,7 @@ function Index() {
                                 name="nameClassify"
                                 onChange={handleChange}
                             />
-                            <Select
-                                title="Ngôn ngữ"
-                                value={dataForm?.language?.txt}
-                                data={listLanguage}
-                                onChange={(v) =>
-                                    handleChangeSelect(v, 'language')
-                                }
-                            />
+
                             <Select
                                 title="Hiển thị"
                                 value={dataForm?.active?.txt}

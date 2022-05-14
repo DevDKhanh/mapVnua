@@ -359,6 +359,21 @@ function Index() {
                                 name="nameLayer"
                                 onChange={handleChange}
                             />
+                            <Select
+                                title="Kiểu lớp"
+                                value={dataForm?.style?.txt}
+                                data={[
+                                    {
+                                        txt: 'Vector',
+                                        value: 'Vector',
+                                    },
+                                    {
+                                        txt: 'Raster',
+                                        value: 'Raster',
+                                    },
+                                ]}
+                                onChange={(v) => handleChangeSelect(v, 'style')}
+                            />
                             <Input
                                 title="Đường dẫn tệp hoặc ảnh"
                                 value={dataForm?.path?.path}
@@ -380,21 +395,7 @@ function Index() {
                                 type="number"
                                 onChange={handleChange}
                             />
-                            <Select
-                                title="Kiểu lớp"
-                                value={dataForm?.style?.txt}
-                                data={[
-                                    {
-                                        txt: 'Vector',
-                                        value: 'Vector',
-                                    },
-                                    {
-                                        txt: 'Raster',
-                                        value: 'Raster',
-                                    },
-                                ]}
-                                onChange={(v) => handleChangeSelect(v, 'style')}
-                            />
+
                             {/*---------- Vector ----------*/}
                             {dataForm?.style?.value === 'Vector' && (
                                 <Fragment>

@@ -32,7 +32,8 @@ function Index() {
     }, [pageCurrent, pageSize, router]);
 
     const detailData = {
-        'ID khu vực': 'id',
+        ID: 'id',
+        'ID khu vực': 'idArea',
         'Tên khu vực': 'nameArea',
         'ID ngôn ngữ': 'languageId',
         'Tên ngôn ngữ': 'language.nameLanguage',
@@ -57,7 +58,7 @@ function Index() {
                     {
                         title: 'ID khu vực',
                         template: (data: any) => {
-                            return data.id;
+                            return data.idArea;
                         },
                     },
                     {
