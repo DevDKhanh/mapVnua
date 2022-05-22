@@ -72,7 +72,7 @@ function MainSelect(props: any) {
                 onClick={() => props.onSetmethod(1)}
             >
                 <Image />
-                Chọn ảnh có sẵn
+                Chọn tệp có sẵn
             </div>
             <label className={style.btnSelect} onClick={() => {}}>
                 <input
@@ -88,7 +88,7 @@ function MainSelect(props: any) {
                 <div className={style.icon}>
                     <DocumentUpload />
                 </div>
-                Tải ảnh mới
+                Tải tệp mới
             </label>
         </div>
     );
