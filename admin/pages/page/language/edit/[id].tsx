@@ -7,6 +7,7 @@ import languageAPI from '../../../../api/language';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
 import { useValidateAll } from '../../../../common/hooks/useValidate';
+import ButtonUpload from '../../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import { DashboardLayout } from '../../../../components/widgets/Layout';
@@ -129,13 +130,13 @@ function Index() {
                                 name="nameLanguage"
                                 onChange={handleChange}
                             />
-                            <Input
-                                title="Icon"
-                                value={dataForm?.icon?.path}
+                            <ButtonUpload
+                                title="Cập nhật icon"
                                 name="icon"
-                                type="file"
+                                value={dataForm?.icon}
                                 onChange={handleChangeFile}
                             />
+                            <br />
                             <button className="btn-create">Cập nhật</button>
                         </form>
                     </div>

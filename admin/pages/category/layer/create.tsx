@@ -10,6 +10,7 @@ import languageAPI from '../../../api/language';
 import layerAPI from '../../../api/layer';
 import uploadAPI from '../../../api/upload';
 import { useValidateAll } from '../../../common/hooks/useValidate';
+import ButtonUpload from '../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
@@ -181,6 +182,9 @@ function Index() {
     };
 
     const handleChangeSelect = (v: any, name: string) => {
+        if (name === 'style') {
+            setDataForm((prev: any) => ({ ...prev, path: '' }));
+        }
         setDataForm((prev: any) => ({ ...prev, [name]: v }));
     };
 
@@ -287,12 +291,6 @@ function Index() {
                                     handleChangeSelect(v, 'classify')
                                 }
                             />
-                            {/* <Input
-                                title="ID lớp"
-                                value={dataForm?.id}
-                                name="id"
-                                onChange={handleChange}
-                            /> */}
                             <Input
                                 title="Tên lớp"
                                 value={dataForm?.nameLayer}
@@ -314,20 +312,20 @@ function Index() {
                                 ]}
                                 onChange={(v) => handleChangeSelect(v, 'style')}
                             />
-                            <Input
-                                title="Đường dẫn tệp hoặc ảnh"
-                                value={dataForm?.path?.path}
+                            <ButtonUpload
+                                title="Tải đường dẫn tệp hoặc ảnh"
                                 name="path"
-                                type="file"
+                                value={dataForm?.path}
                                 onChange={handleChangeFile}
                             />
-                            <Input
-                                title="Icon của lớp"
-                                value={dataForm?.icon?.path}
+                            <br />
+                            <ButtonUpload
+                                title="Tải lên icon của lớp"
                                 name="icon"
-                                type="file"
+                                value={dataForm?.icon}
                                 onChange={handleChangeFile}
                             />
+                            <br />
                             <Input
                                 title="Lớp xếp chồng"
                                 value={dataForm?.zIndex}

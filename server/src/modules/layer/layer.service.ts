@@ -236,6 +236,7 @@ export class LayerService {
 
   async getDetail(id: string) {
     const Layer = await this.layerRepository.findOne(id);
+    console.log(Layer);
 
     if (!Layer) {
       throw new HttpException(

@@ -8,6 +8,7 @@ import languageAPI from '../../../api/language';
 import settingAPI from '../../../api/setting';
 import uploadAPI from '../../../api/upload';
 import { useValidateAll } from '../../../common/hooks/useValidate';
+import ButtonUpload from '../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
@@ -123,7 +124,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
-                    router.push('/page/setting/"');
+                    router.push('/page/setting/');
                 } else {
                     toast.warn(res?.message);
                 }
@@ -178,13 +179,13 @@ function Index() {
                                 type="number"
                                 onChange={handleChange}
                             />
-                            <Input
-                                title="Icon"
-                                value={dataForm?.icon?.path}
+                            <ButtonUpload
+                                title="Tải lên icon"
                                 name="icon"
-                                type="file"
+                                value={dataForm?.icon}
                                 onChange={handleChangeFile}
                             />
+                            <br />
                             <button className="btn-create">Thêm mới</button>
                         </form>
                     </div>

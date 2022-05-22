@@ -24,7 +24,7 @@ export class LayerEntity {
   id: string;
 
   @ApiProperty({ example: 'tên Lớp' })
-  @PrimaryColumn({
+  @Column({
     type: 'varchar',
     name: 'tenLop',
     length: 100,
