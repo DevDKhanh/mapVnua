@@ -122,13 +122,13 @@ export const DashboardSidebar = (props: any) => {
                     }}
                 />
                 <Box sx={{ flexGrow: 1 }}>
-                    {items.map((item) => {
+                    {items.map((item, i) => {
                         /*---------- Kiểm tra nếu tài khoản có role lớn hơn 1 hiển thị nút truy cập trang bảo mật ----------*/
                         if (item.href === '/security') {
                             if (permission?.role >= 1) {
                                 return (
                                     <NavItem
-                                        key={item.title}
+                                        key={item.href}
                                         icon={item.icon}
                                         href={item.href}
                                         tabList={item.tabList}
@@ -141,7 +141,7 @@ export const DashboardSidebar = (props: any) => {
                         } else {
                             return (
                                 <NavItem
-                                    key={item.title}
+                                    key={item.href}
                                     icon={item.icon}
                                     href={item.href}
                                     tabList={item.tabList}

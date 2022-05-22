@@ -23,10 +23,12 @@ function ItemContainerLayer({ nameItem, classifyId }) {
                     area.id,
                     classifyId
                 );
-                setDataLayers(res);
+                setDataLayers(res.records);
             } catch (e) {}
         })();
     }, [classifyId, language, area]);
+
+    console.log(dataLayers);
 
     return (
         <li className={style.item}>

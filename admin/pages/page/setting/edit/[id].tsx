@@ -8,6 +8,7 @@ import languageAPI from '../../../../api/language';
 import settingAPI from '../../../../api/setting';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
+import ButtonUpload from '../../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import Select from '../../../../components/site/Select';
@@ -213,13 +214,13 @@ function Index() {
                                 type="number"
                                 onChange={handleChange}
                             />
-                            <Input
-                                title="Icon"
-                                value={dataForm?.icon?.path}
+                            <ButtonUpload
+                                title="Cập nhật icon"
                                 name="icon"
-                                type="file"
+                                value={dataForm?.icon}
                                 onChange={handleChangeFile}
                             />
+                            <br />
                             <button className="btn-create">Cập nhật</button>
                         </form>
                     </div>

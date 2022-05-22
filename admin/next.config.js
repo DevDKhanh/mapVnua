@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-}
+    images: {
+        domains: ['genk.mediacdn.vn', 'cdn.iconscout.com'],
+    },
+    reactStrictMode: true,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

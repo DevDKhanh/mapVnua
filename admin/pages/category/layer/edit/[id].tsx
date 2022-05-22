@@ -10,6 +10,7 @@ import languageAPI from '../../../../api/language';
 import layerAPI from '../../../../api/layer';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
+import ButtonUpload from '../../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import Select from '../../../../components/site/Select';
@@ -374,7 +375,7 @@ function Index() {
                                 ]}
                                 onChange={(v) => handleChangeSelect(v, 'style')}
                             />
-                            <Input
+                            {/* <Input
                                 title="Đường dẫn tệp hoặc ảnh"
                                 value={dataForm?.path?.path}
                                 name="path"
@@ -387,7 +388,21 @@ function Index() {
                                 name="icon"
                                 type="file"
                                 onChange={handleChangeFile}
+                            /> */}
+                            <ButtonUpload
+                                title="Cập nhật đường dẫn tệp hoặc ảnh"
+                                name="path"
+                                value={dataForm?.path}
+                                onChange={handleChangeFile}
                             />
+                            <br />
+                            <ButtonUpload
+                                title="Cập nhật icon của lớp"
+                                name="icon"
+                                value={dataForm?.icon}
+                                onChange={handleChangeFile}
+                            />
+                            <br />
                             <Input
                                 title="Lớp xếp chồng"
                                 value={dataForm?.zIndex}
