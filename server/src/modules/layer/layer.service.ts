@@ -116,31 +116,6 @@ export class LayerService {
     );
   }
 
-  async getData(getListDto: GetListDto) {
-    const result = await this.layerRepository
-      .createQueryBuilder('layer')
-      .where('layer.languageId = :languageId and layer.areaId = :areaId ', {
-        languageId: getListDto.langId,
-        areaId: getListDto.areaId,
-      })
-      .leftJoinAndSelect('layer.language', 'language')
-      .leftJoinAndSelect('layer.area', 'area')
-      // .where('layer.areaId = :areaId', {
-      //   areaId: getListDto.areaId,
-      // })
-      // .leftJoinAndSelect('layer.area', 'area')
-      .skip((+getListDto.page - 1) * getListDto.pageSize)
-      .take(+getListDto.pageSize)
-      .getManyAndCount();
-
-    return createPagination(
-      result[0],
-      result[1],
-      getListDto.page,
-      getListDto.pageSize,
-    );
-  }
-
   async update(id: string, updateLayerDto: UpdateLayerDto) {
     const checkLayerId = await this.layerRepository.findOne(id);
     const checkLanguage = await this.languageRepository.findOne(

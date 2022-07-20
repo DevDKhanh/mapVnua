@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 
 import SplashScreen from '../components/protected/splashScreen';
+import LoadingTopBar from '../components/site/LoadingTopBar';
 import { theme } from '../constants/theme';
 import store from '../redux/store';
 import 'leaflet/dist/leaflet.css';
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <SplashScreen>
+                    <LoadingTopBar />
                     <ToastContainer />
                     <Component {...pageProps} />
                 </SplashScreen>

@@ -43,13 +43,13 @@ export class LayerController {
     return this.layerService.create(createLayerDto);
   }
 
-  @Get('/data')
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Get data with area and language' })
-  @ApiOkResponse({ type: null, status: 201 })
-  async getData(@Query() getListDto: GetListDto) {
-    return this.layerService.getData(getListDto);
-  }
+  // @Get('/data')
+  // @HttpCode(200)
+  // @ApiOperation({ summary: 'Get data with area and language' })
+  // @ApiOkResponse({ type: null, status: 201 })
+  // async getData(@Query() getListDto: GetListDto) {
+  //   return this.layerService.getData(getListDto);
+  // }
 
   @Put('/:id')
   @UseGuards(PermisionEditGuard)
