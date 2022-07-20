@@ -12,8 +12,9 @@ function Map() {
     const { setting } = useSelector((state) => state.dataMap);
     const [settingMap] = setting;
 
-    const defaultCenter = ['10.355270', '106.107159'];
     const center = useMemo(() => {
+        const defaultCenter = ['10.355270', '106.107159'];
+
         if (!!settingMap) {
             return [settingMap?.lat, settingMap?.lng];
         } else {
