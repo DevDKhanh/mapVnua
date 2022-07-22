@@ -1,10 +1,12 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
   Param,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseGuards,
@@ -14,8 +16,13 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-
-import { PermisionUploadGuard } from '../auth/jwt.strategy';
+import { Pagination } from 'src/common/dto/index.dto';
+import {
+  PermisionUploadGuard,
+  PermisionDeleteGuard,
+} from '../auth/jwt.strategy';
+import { QueryDelete } from './dto/upload.dto';
+import { UploadService } from './upload.service';
 
 const optionsImage = {
   storage: diskStorage({
@@ -71,12 +78,27 @@ const optionsFile = {
 @ApiConsumes('Upload File')
 @Controller('upload')
 export class UploadController {
+  constructor(private readonly uploadService: UploadService) {}
+
+  @Get('/')
+  @ApiOperation({ summary: 'Get path files' })
+  async getPathFiles(@Query() getListDto: Pagination) {
+    return this.uploadService.getPathFiles(getListDto);
+  }
+
+  @Delete('/')
+  @ApiOperation({ summary: 'Delete file' })
+  @UseGuards(PermisionDeleteGuard)
+  async delete(@Query() queryDelete: QueryDelete) {
+    return this.uploadService.delete(queryDelete);
+  }
+
   @Post('/image')
   @UseGuards(PermisionUploadGuard)
   @ApiOperation({ summary: 'Upload image Api ' })
   @UseInterceptors(FileInterceptor('file', optionsImage))
-  async upload(@UploadedFile('file') file): Promise<{ filename: any }> {
-    return { filename: `/image/${file.filename}` };
+  async upload(@UploadedFile('file') file) {
+    return this.uploadService.savePath(`/image/${file.filename}`, 0);
   }
 
   @Post('/file')
@@ -84,7 +106,7 @@ export class UploadController {
   @ApiOperation({ summary: 'Upload file Api ' })
   @UseInterceptors(FileInterceptor('file', optionsFile))
   async uploadFile(@UploadedFile('file') file): Promise<{ filename: any }> {
-    return { filename: `/file/${file.filename}` };
+    return this.uploadService.savePath(`/file/${file.filename}`, 1);
   }
 
   @Get('/image/:name')

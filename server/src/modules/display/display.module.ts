@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DisplayController } from './display.controller';
 import { DisplayService } from './display.service';
 import { DisplayEntity } from './entities/display.entity';
-import { UploadController } from '../upload/upload.controller';
 import { LanguageEntity } from '../language/entities/language.entity';
 
 @Module({
@@ -17,6 +16,6 @@ import { LanguageEntity } from '../language/entities/language.entity';
     }),
   ],
   controllers: [DisplayController],
-  providers: [DisplayService, UploadController],
+  providers: [DisplayService],
 })
 export class DisplayModule {}

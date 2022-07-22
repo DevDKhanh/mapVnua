@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LanguageController } from './language.controller';
 import { LanguageService } from './language.service';
 import { LanguageEntity } from './entities/language.entity';
-import { UploadController } from '../upload/upload.controller';
 
 @Module({
   imports: [
@@ -16,6 +15,6 @@ import { UploadController } from '../upload/upload.controller';
     }),
   ],
   controllers: [LanguageController],
-  providers: [LanguageService, UploadController],
+  providers: [LanguageService],
 })
 export class LanguageModule {}

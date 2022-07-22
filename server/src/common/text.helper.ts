@@ -54,9 +54,11 @@ export function resultData(message: string, data: any) {
   };
 }
 
-export const deleteFile = async file => {
+export const deleteFile = async (file: string) => {
   try {
     const unlickSync = promisify(fs.unlink);
     await unlickSync(`./uploads/${file}`);
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 };

@@ -1,6 +1,21 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsOptional, IsString } from 'class-validator';
 
+export class Pagination {
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  page: number;
+
+  @ApiProperty({ example: 10 })
+  @IsInt()
+  pageSize: number;
+
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  @IsOptional()
+  type: number;
+}
+
 export class GetListDto {
   @ApiProperty({ example: 1 })
   @IsInt()
