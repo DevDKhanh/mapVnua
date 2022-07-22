@@ -13,6 +13,7 @@ import {
   deleteFile,
   resultData,
 } from '../../common/text.helper';
+import { UploadEntity } from '../upload/entities/upload.entity';
 
 @Injectable()
 export class LanguageService {
