@@ -7,11 +7,7 @@ import { CreateDisplayDto } from './dto/post.dto';
 import { UpdateDisplayDto } from './dto/put.dto';
 import { GetListDto } from '../../common/dto/index.dto';
 import { DisplayEntity } from './entities/Display.entity';
-import {
-  createPagination,
-  deleteFile,
-  resultData,
-} from '../../common/text.helper';
+import { createPagination, resultData } from '../../common/text.helper';
 import { LanguageEntity } from '../language/entities/language.entity';
 
 @Injectable()

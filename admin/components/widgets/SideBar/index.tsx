@@ -128,7 +128,7 @@ export const DashboardSidebar = (props: any) => {
                             if (permission?.role >= 1) {
                                 return (
                                     <NavItem
-                                        key={item.href}
+                                        key={i}
                                         icon={item.icon}
                                         href={item.href}
                                         tabList={item.tabList}
@@ -141,7 +141,7 @@ export const DashboardSidebar = (props: any) => {
                         } else {
                             return (
                                 <NavItem
-                                    key={item.href}
+                                    key={i}
                                     icon={item.icon}
                                     href={item.href}
                                     tabList={item.tabList}

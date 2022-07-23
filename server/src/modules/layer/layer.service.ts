@@ -34,24 +34,6 @@ export class LayerService {
     private readonly i18n: I18nRequestScopeService,
   ) {}
 
-  /********** Xóa file trong thư mục update **********/
-  private async removeFile(data: any, check?: any) {
-    const { path, icon } = data;
-
-    /*---------- Kiểm tra nếu ko update img hoặc file ----------*/
-    if (!!check) {
-      const iconCheck = check.icon;
-      const pathCheck = check.path;
-      iconCheck !== icon && (await deleteFile(icon));
-      pathCheck !== path && (await deleteFile(path));
-      return;
-    }
-
-    /*---------- Xóa file nếu không có điều kiện check ----------*/
-    path && (await deleteFile(path));
-    icon && (await deleteFile(icon));
-  }
-
   async create(createLayerDto: CreateLayerDto) {
     const checkLanguage = await this.languageRepository.findOne(
       createLayerDto.languageId,
@@ -67,7 +49,6 @@ export class LayerService {
     });
 
     if (checkLayerId) {
-      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_EXISTS', {
           args: { name: 'Tên lớp' },
@@ -78,7 +59,6 @@ export class LayerService {
 
     /********** Kiểm tra dữ liệu ngôn ngữ có tồn tại không **********/
     if (!checkLanguage) {
-      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id ngôn ngữ' },
@@ -88,7 +68,6 @@ export class LayerService {
     }
     /********** Kiểm tra dữ liệu phân loại có tồn tại không **********/
     if (!checkClassify) {
-      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id phân loại' },
@@ -98,7 +77,6 @@ export class LayerService {
     }
     /********** Kiểm tra dữ liệu khu vực có tồn tại không **********/
     if (!checkArea) {
-      await this.removeFile(createLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id khu vực' },
@@ -127,7 +105,6 @@ export class LayerService {
     );
 
     if (!checkLayerId) {
-      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id lớp' },
@@ -136,7 +113,6 @@ export class LayerService {
       );
     }
     if (!checkLanguage) {
-      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id ngôn ngữ' },
@@ -145,7 +121,6 @@ export class LayerService {
       );
     }
     if (!checkClassify) {
-      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id phân loại' },
@@ -154,7 +129,6 @@ export class LayerService {
       );
     }
     if (!checkArea) {
-      await this.removeFile(updateLayerDto);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Id lớp' },
@@ -163,7 +137,6 @@ export class LayerService {
       );
     }
 
-    await this.removeFile(checkLayerId, updateLayerDto);
     await this.layerRepository.update({ id }, { ...updateLayerDto });
 
     /********** Trả về thông tin chi tiết sau khi cập nhật của lớp**********/
@@ -245,7 +218,6 @@ export class LayerService {
         );
       }
 
-      await this.removeFile(layer);
       await this.layerRepository.delete(id);
       return resultData(await this.i18n.translate('site.SUCCESS_DELETE'), id);
     } catch (err) {

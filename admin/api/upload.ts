@@ -20,6 +20,17 @@ const uploadAPI = {
             cancelToken: tokenAxios,
         });
     },
+    getPaths: (
+        data: { page: number; pageSize: number; type: number },
+        tokenAxios?: any
+    ) => {
+        return axiosClient.get(
+            `${base}?page=${data.page}&pageSize=${data.pageSize}&type=${data.type}`,
+            {
+                cancelToken: tokenAxios,
+            }
+        );
+    },
 };
 
 export default uploadAPI;
