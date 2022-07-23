@@ -34,7 +34,6 @@ export class LanguageService {
     });
 
     if (checkId) {
-      await deleteFile(createLanguageDto.icon);
       throw new HttpException(
         await this.i18n.translate('site.IS_EXISTS', {
           args: { name: 'id' },
@@ -58,7 +57,6 @@ export class LanguageService {
     });
 
     if (!checkId) {
-      await deleteFile(updateLanguageDto.icon);
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'Ngôn ngữ' },
@@ -66,9 +64,6 @@ export class LanguageService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    /*---------- Kiểm tra nếu ảnh upload ko trùng thì xóa ----------*/
-    checkId.icon !== updateLanguageDto.icon && (await deleteFile(checkId.icon));
 
     /*---------- Cập nhật trả kết quả cho client ----------*/
     await this.languageRepository.update({ id }, { ...updateLanguageDto });
@@ -120,7 +115,6 @@ export class LanguageService {
         );
       }
 
-      await deleteFile(language.icon);
       await this.languageRepository.delete(id);
       return resultData(await this.i18n.translate('site.SUCCESS_DELETE'), id);
     } catch (err) {

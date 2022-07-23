@@ -1,16 +1,19 @@
 import { DocumentUpload, Image } from 'iconsax-react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import ImageN from 'next/image';
 import { RiArrowGoBackLine, RiCloseFill } from 'react-icons/ri';
 import Popup from '../Popup';
 import style from './ButtonUpload.module.scss';
 import clsx from 'clsx';
+import uploadAPI from '../../../api/upload';
+import { API_URL } from '../../../constants/config';
 
 interface props {
     title: string;
     name: string;
     value: any;
     onChange: (event: any) => void;
+    onSetFile: (name: string, file: string) => void;
 }
 
 function ButtonUpload(props: props) {
@@ -50,7 +53,11 @@ function ButtonUpload(props: props) {
                             />
                         )}
                         {method === 1 && (
-                            <MainSelectImage onSetmethod={setMethod} />
+                            <MainSelectImage
+                                onSetmethod={setMethod}
+                                onClose={handleClose}
+                                {...props}
+                            />
                         )}
                     </div>
                     <div className={style.btnClose} onClick={handleClose}>
@@ -95,6 +102,29 @@ function MainSelect(props: any) {
 }
 
 function MainSelectImage(props: any) {
+    const [dataFiles, setDataFiles] = useState<Array<any>>([]);
+    const [page, setPage] = useState<number>(1);
+    const [type, setType] = useState<number>(0);
+
+    const handleSelect = (path: string) => {
+        props.onSetFile(props.name, path);
+        props.onClose();
+    };
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const [res]: any = await uploadAPI.getPaths({
+                    page,
+                    pageSize: 16,
+                    type,
+                });
+
+                setDataFiles(res.records);
+            } catch (err) {}
+        })();
+    }, [page, type]);
+
     return (
         <div className={style.selectImage}>
             <div className={style.header}>
@@ -106,72 +136,20 @@ function MainSelectImage(props: any) {
                 </div>
                 <h3>Ảnh trong thư viện</h3>
             </div>
-
             <div className={style.listImage}>
-                <h4>Chức năng sắp ra mắt</h4>
-                {/* <div className={style.item}>
-                    <ImageN
-                        src={
-                            'https://genk.mediacdn.vn/139269124445442048/2021/3/13/ava-1615607562651629147713.jpeg'
-                        }
-                        layout="fill"
-                        alt="anh"
-                    />
-                </div>
-                <div className={style.item}>
-                    <ImageN
-                        src={
-                            'https://genk.mediacdn.vn/139269124445442048/2021/3/13/ava-1615607562651629147713.jpeg'
-                        }
-                        layout="fill"
-                        alt="anh"
-                    />
-                </div>
-                <div className={style.item}>
-                    <ImageN
-                        src={
-                            'https://genk.mediacdn.vn/139269124445442048/2021/3/13/ava-1615607562651629147713.jpeg'
-                        }
-                        layout="fill"
-                        alt="anh"
-                    />
-                </div>
-                <div className={style.item}>
-                    <ImageN
-                        src={
-                            'https://genk.mediacdn.vn/139269124445442048/2021/3/13/ava-1615607562651629147713.jpeg'
-                        }
-                        layout="fill"
-                        alt="anh"
-                    />
-                </div>
-                <div className={style.item}>
-                    <ImageN
-                        src={
-                            'https://genk.mediacdn.vn/139269124445442048/2021/3/13/ava-1615607562651629147713.jpeg'
-                        }
-                        layout="fill"
-                        alt="anh"
-                    />
-                </div>
-                <div className={style.item}>
-                    <ImageN
-                        src={
-                            'https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png'
-                        }
-                        layout="fill"
-                        alt="anh"
-                    />
-                </div>
-                <div className={style.item}>
-                    <ImageN
-                        src={
-                            'https://genk.mediacdn.vn/zoom/223_140/139269124445442048/2022/5/22/avatar1653188711222-1653188711803343302696.jpg'
-                        }
-                        layout="fill"
-                        alt="anh"
-                    />
-                </div> */}
+                {dataFiles.map((file, i) => (
+                    <div
+                        key={i}
+                        className={style.item}
+                        onClick={() => handleSelect(file.path)}
+                    >
+                        <ImageN
+                            src={` ${API_URL}/upload${file.path}`}
+                            layout="fill"
+                            alt="anh"
+                        />
+                    </div>
+                ))}
             </div>
         </div>
     );
