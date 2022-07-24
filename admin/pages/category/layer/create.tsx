@@ -9,6 +9,7 @@ import classifyAPI from '../../../api/classify';
 import languageAPI from '../../../api/language';
 import layerAPI from '../../../api/layer';
 import uploadAPI from '../../../api/upload';
+import handleGetFile from '../../../common/hooks/getFile';
 import { useValidateAll } from '../../../common/hooks/useValidate';
 import ButtonUpload from '../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../components/protected/requiredPermision';
@@ -181,6 +182,10 @@ function Index() {
         setDataForm((prev: any) => ({ ...prev, [name]: e.target.files[0] }));
     };
 
+    const handleSetFile = (name: string, file: string) => {
+        setDataForm((prev: any) => ({ ...prev, [name]: file }));
+    };
+
     const handleChangeSelect = (v: any, name: string) => {
         if (name === 'style') {
             setDataForm((prev: any) => ({ ...prev, path: '' }));
@@ -208,34 +213,24 @@ function Index() {
 
         (async () => {
             /*---------- Create file form updaload icon ----------*/
-
-            const file: any = new FormData();
-            file.append('file', dataForm.icon);
-            const [URL_icon]: any = await uploadAPI.upload(
-                'image',
-                file,
-                token
-            );
+            const fileIcon = await handleGetFile(dataForm.icon, token);
 
             /*---------- Upload file or raster ----------*/
-            const filePath: any = new FormData();
-            filePath.append('file', dataForm.path);
-            const [URL_path]: any = await uploadAPI.upload(
-                dataForm?.style?.value === 'Raster' ? 'image' : 'file',
-                filePath,
-                token
+            const filePath = await handleGetFile(
+                dataForm.path,
+                token,
+                dataForm?.style?.value === 'Raster' ? 'image' : 'file'
             );
 
             try {
                 const formSubmit: typeFormSubmit = {
-                    // id: dataForm.id,
                     nameLayer: dataForm.nameLayer,
                     languageId: dataForm.language.value,
                     classifyId: dataForm.classify.value,
                     areaId: dataForm.area.value,
                     style: dataForm.style.value,
-                    path: `${URL_path.filename}`,
-                    icon: `${URL_icon.filename}`,
+                    path: filePath,
+                    icon: fileIcon,
                     borderColor: dataForm.borderColor,
                     widthBorder: Number(dataForm.widthBorder),
                     opacityBorder: Number(dataForm.opacityBorder),
@@ -317,6 +312,8 @@ function Index() {
                                 name="path"
                                 value={dataForm?.path}
                                 onChange={handleChangeFile}
+                                onSetFile={handleSetFile}
+                                isFile={dataForm?.style?.value !== 'Raster'}
                             />
                             <br />
                             <ButtonUpload
@@ -324,6 +321,7 @@ function Index() {
                                 name="icon"
                                 value={dataForm?.icon}
                                 onChange={handleChangeFile}
+                                onSetFile={handleSetFile}
                             />
                             <br />
                             <Input

@@ -8,6 +8,7 @@ import languageAPI from '../../../../api/language';
 import settingAPI from '../../../../api/setting';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
+import handleGetFile from '../../../../common/hooks/getFile';
 import ButtonUpload from '../../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
@@ -109,6 +110,10 @@ function Index() {
         setDataForm((prev: any) => ({ ...prev, [name]: e.target.files[0] }));
     };
 
+    const handleSetFile = (name: string, file: string) => {
+        setDataForm((prev: any) => ({ ...prev, [name]: file }));
+    };
+
     const handleChangeSelect = (v: any, name: string) => {
         setDataForm((prev: any) => ({ ...prev, [name]: v }));
     };
@@ -122,41 +127,22 @@ function Index() {
 
         (async () => {
             try {
+                const fileName = await handleGetFile(dataForm.icon, token);
                 const formSubmit: typeFormSubmit = {
                     languageId: dataForm.language.value,
                     title: dataForm.title,
-                    icon: dataForm.icon,
+                    icon: fileName,
                     lat: Number(dataForm.lat),
                     lng: Number(dataForm.lng),
                     zoom: Number(dataForm.zoom),
                 };
-
-                /*---------- Create file form updaload icon ----------*/
-                if (typeof dataForm.icon !== 'string') {
-                    try {
-                        const file: any = new FormData();
-                        file.append('file', dataForm.icon);
-
-                        /*---------- upload icon and get link icon ----------*/
-                        const [URL]: any = await uploadAPI.upload(
-                            'image',
-                            file,
-                            token
-                        );
-                        if (URL.filename) {
-                            formSubmit.icon = URL.filename;
-                        }
-                        toast.warn(URL?.message);
-                    } catch (err: any) {
-                        toast.warn(err?.message);
-                    }
-                }
 
                 const [res, status]: any = await settingAPI.update(
                     id,
                     formSubmit,
                     token
                 );
+
                 if (res && status === 200) {
                     toast.success(res?.message);
                     router.push('/page/setting/');
@@ -219,6 +205,7 @@ function Index() {
                                 name="icon"
                                 value={dataForm?.icon}
                                 onChange={handleChangeFile}
+                                onSetFile={handleSetFile}
                             />
                             <br />
                             <button className="btn-create">Cập nhật</button>

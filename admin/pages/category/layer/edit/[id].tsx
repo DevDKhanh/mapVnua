@@ -10,6 +10,7 @@ import languageAPI from '../../../../api/language';
 import layerAPI from '../../../../api/layer';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
+import handleGetFile from '../../../../common/hooks/getFile';
 import ButtonUpload from '../../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
@@ -228,6 +229,10 @@ function Index() {
         setDataForm((prev: any) => ({ ...prev, [name]: e.target.files[0] }));
     };
 
+    const handleSetFile = (name: string, file: string) => {
+        setDataForm((prev: any) => ({ ...prev, [name]: file }));
+    };
+
     const handleChangeSelect = (v: any, name: string) => {
         setDataForm((prev: any) => ({ ...prev, [name]: v }));
     };
@@ -247,6 +252,16 @@ function Index() {
         e.preventDefault();
 
         (async () => {
+            /*---------- Create file form updaload icon ----------*/
+            const fileIcon = await handleGetFile(dataForm.icon, token);
+
+            /*---------- Upload file or raster ----------*/
+            const filePath = await handleGetFile(
+                dataForm.path,
+                token,
+                dataForm?.style?.value === 'Raster' ? 'image' : 'file'
+            );
+
             const formSubmit: typeFormSubmit = {
                 nameLayer: dataForm.nameLayer,
                 languageId: dataForm.language.value,
@@ -257,8 +272,8 @@ function Index() {
                 widthBorder: Number(dataForm.widthBorder),
                 opacityBorder: Number(dataForm.opacityBorder),
                 backgroundColor: dataForm.backgroundColor,
-                icon: dataForm.icon,
-                path: dataForm.path,
+                icon: fileIcon,
+                path: filePath,
                 opacityBackground: Number(dataForm.opacityBackground),
                 latNE: Number(dataForm.latNE),
                 lngNE: Number(dataForm.lngNE),
@@ -267,46 +282,6 @@ function Index() {
                 zIndex: Number(dataForm.zIndex),
                 active: dataForm.active.value,
             };
-            /*---------- Create file form updaload icon ----------*/
-
-            if (typeof dataForm.icon !== 'string') {
-                try {
-                    const file: any = new FormData();
-                    file.append('file', dataForm.icon);
-                    const [URL_icon]: any = await uploadAPI.upload(
-                        'image',
-                        file,
-                        token
-                    );
-                    if (URL_icon) {
-                        formSubmit.icon = URL_icon.filename;
-                    }
-
-                    toast.warn(URL_icon?.message);
-                } catch (err: any) {
-                    toast.warn(err?.message);
-                }
-            }
-
-            if (typeof dataForm.path !== 'string') {
-                /*---------- Upload file or raster ----------*/
-                try {
-                    const filePath: any = new FormData();
-                    filePath.append('file', dataForm.path);
-                    const [URL_path]: any = await uploadAPI.upload(
-                        dataForm?.style?.value === 'Raster' ? 'image' : 'file',
-                        filePath,
-                        token
-                    );
-                    if (URL_path) {
-                        formSubmit.path = URL_path.filename;
-                    }
-
-                    toast.warn(URL_path?.message);
-                } catch (err: any) {
-                    toast.warn(err?.message);
-                }
-            }
 
             try {
                 const [res, status]: any = await layerAPI.update(
@@ -394,6 +369,8 @@ function Index() {
                                 name="path"
                                 value={dataForm?.path}
                                 onChange={handleChangeFile}
+                                onSetFile={handleSetFile}
+                                isFile={dataForm?.style?.value !== 'Raster'}
                             />
                             <br />
                             <ButtonUpload
@@ -401,6 +378,7 @@ function Index() {
                                 name="icon"
                                 value={dataForm?.icon}
                                 onChange={handleChangeFile}
+                                onSetFile={handleSetFile}
                             />
                             <br />
                             <Input
