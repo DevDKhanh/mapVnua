@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import languageAPI from '../../../../api/language';
 import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
+import handleGetFile from '../../../../common/hooks/getFile';
 import { useValidateAll } from '../../../../common/hooks/useValidate';
 import ButtonUpload from '../../../../components/controls/ButtonUpload';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
@@ -70,42 +71,27 @@ function Index() {
         setDataForm((prev: any) => ({ ...prev, [name]: e.target.files[0] }));
     };
 
+    const handleSetFile = (name: string, file: string) => {
+        setDataForm((prev: any) => ({ ...prev, [name]: file }));
+    };
+
     const handleSubmit = (e: any) => {
         e.preventDefault();
 
         (async () => {
             try {
                 /*---------- create submit form ----------*/
+                const fileName = await handleGetFile(dataForm.icon, token);
                 const formSubmit: typeFormSubmit = {
                     ...dataForm,
                 };
 
-                /*---------- Create file form updaload icon ----------*/
-                if (typeof dataForm.icon !== 'string') {
-                    try {
-                        const file: any = new FormData();
-                        file.append('file', dataForm.icon);
-
-                        /*---------- upload icon and get link icon ----------*/
-                        const [URL]: any = await uploadAPI.upload(
-                            'image',
-                            file,
-                            token
-                        );
-                        if (URL.filename) {
-                            formSubmit.icon = URL.filename;
-                        }
-                        toast.warn(URL?.message);
-                    } catch (err: any) {
-                        toast.warn(err?.message);
-                    }
-                }
-
                 const [res, status]: any = await languageAPI.update(
                     id,
-                    formSubmit,
+                    { ...formSubmit, icon: fileName },
                     token
                 );
+
                 if (res && status === 200) {
                     toast.success(res?.message);
                     router.push('/page/language/');
@@ -135,6 +121,7 @@ function Index() {
                                 name="icon"
                                 value={dataForm?.icon}
                                 onChange={handleChangeFile}
+                                onSetFile={handleSetFile}
                             />
                             <br />
                             <button className="btn-create">Cập nhật</button>

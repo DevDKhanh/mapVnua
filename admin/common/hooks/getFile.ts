@@ -1,7 +1,11 @@
 import { toast } from 'react-toastify';
 import uploadAPI from '../../api/upload';
 
-const handleGetFile = async (data: any, token: string) => {
+const handleGetFile = async (
+    data: any,
+    token: string,
+    type: 'image' | 'file' = 'image'
+) => {
     try {
         if (typeof data === 'string') {
             return data;
@@ -10,7 +14,7 @@ const handleGetFile = async (data: any, token: string) => {
             file.append('file', data);
 
             /*---------- upload icon and get link icon ----------*/
-            const [URL]: any = await uploadAPI.upload('image', file, token);
+            const [URL]: any = await uploadAPI.upload(type, file, token);
             return URL.filename;
         }
     } catch (err: any) {

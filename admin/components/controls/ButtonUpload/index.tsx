@@ -1,4 +1,4 @@
-import { DocumentUpload, Image } from 'iconsax-react';
+import { DocumentText1, DocumentUpload, Image } from 'iconsax-react';
 import { Fragment, useEffect, useState } from 'react';
 import ImageN from 'next/image';
 import { RiArrowGoBackLine, RiCloseFill } from 'react-icons/ri';
@@ -7,8 +7,10 @@ import style from './ButtonUpload.module.scss';
 import clsx from 'clsx';
 import uploadAPI from '../../../api/upload';
 import { API_URL } from '../../../constants/config';
+import PaginationCustom from '../../site/PaginationCustom';
 
 interface props {
+    isFile?: boolean;
     title: string;
     name: string;
     value: any;
@@ -102,9 +104,11 @@ function MainSelect(props: any) {
 }
 
 function MainSelectImage(props: any) {
+    const pageSize: number = 8;
     const [dataFiles, setDataFiles] = useState<Array<any>>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [totalItem, setTotalItem] = useState<number>(0);
     const [page, setPage] = useState<number>(1);
-    const [type, setType] = useState<number>(0);
 
     const handleSelect = (path: string) => {
         props.onSetFile(props.name, path);
@@ -116,14 +120,17 @@ function MainSelectImage(props: any) {
             try {
                 const [res]: any = await uploadAPI.getPaths({
                     page,
-                    pageSize: 16,
-                    type,
+                    pageSize,
+                    type: props.isFile ? 1 : 0,
                 });
-
+                setLoading(false);
                 setDataFiles(res.records);
-            } catch (err) {}
+                setTotalItem(res.total);
+            } catch (err) {
+                setLoading(false);
+            }
         })();
-    }, [page, type]);
+    }, [page, props.isFile]);
 
     return (
         <div className={style.selectImage}>
@@ -134,23 +141,55 @@ function MainSelectImage(props: any) {
                 >
                     <RiArrowGoBackLine />
                 </div>
-                <h3>Ảnh trong thư viện</h3>
+                <h3 className={style.title}>
+                    {props.isFile ? 'Tệp trong thư viện' : 'Ảnh trong thư viện'}
+                </h3>
             </div>
-            <div className={style.listImage}>
-                {dataFiles.map((file, i) => (
-                    <div
-                        key={i}
-                        className={style.item}
-                        onClick={() => handleSelect(file.path)}
-                    >
-                        <ImageN
-                            src={` ${API_URL}/upload${file.path}`}
-                            layout="fill"
-                            alt="anh"
-                        />
-                    </div>
-                ))}
-            </div>
+            {!loading && totalItem > 0 ? (
+                <Fragment>
+                    {props.isFile ? (
+                        <div className={style.listFile}>
+                            {dataFiles.map((file) => (
+                                <div
+                                    className={clsx(style.itemFile, {
+                                        [style.active]: false,
+                                    })}
+                                    key={file.id}
+                                    onClick={() => handleSelect(file.path)}
+                                >
+                                    <DocumentText1 size="32" />
+                                    <p>{file.path.split('/')[2]}</p>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className={style.listImage}>
+                            {dataFiles.map((file) => (
+                                <div
+                                    key={file.id}
+                                    className={style.item}
+                                    onClick={() => handleSelect(file.path)}
+                                >
+                                    <ImageN
+                                        src={` ${API_URL}/upload${file.path}`}
+                                        layout="fill"
+                                        alt="anh"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    <br />
+                    <PaginationCustom
+                        pageSize={pageSize}
+                        page={page}
+                        totalItem={totalItem}
+                        onSetPage={setPage}
+                    />
+                </Fragment>
+            ) : (
+                <p className={style.note}>Chưa có dữ liệu tệp cho mục này</p>
+            )}
         </div>
     );
 }

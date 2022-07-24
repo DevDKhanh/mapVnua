@@ -1,0 +1,41 @@
+.main {
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: max-content;
+    .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #0077ff;
+        outline: none;
+        border: none;
+        font-size: 30px;
+        border-radius: 5px;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+        &:active {
+            transform: scale(0.9);
+        }
+    }
+
+    .btn.lock {
+        opacity: 0.4;
+        &:active {
+            transform: scale(1);
+        }
+    }
+
+    .display {
+        color: #0055ff;
+        border: 1px solid #0037ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 15px;
+        border-radius: 5px;
+        margin: 0 10px;
+    }
+}
