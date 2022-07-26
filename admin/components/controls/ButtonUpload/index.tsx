@@ -47,20 +47,11 @@ function ButtonUpload(props: props) {
             <Popup open={show} onClose={handleClose}>
                 <div className={style.main}>
                     <div className={style.content}>
-                        {method === 0 && (
-                            <MainSelect
-                                onSetmethod={setMethod}
-                                onClose={handleClose}
-                                {...props}
-                            />
-                        )}
-                        {method === 1 && (
-                            <MainSelectImage
-                                onSetmethod={setMethod}
-                                onClose={handleClose}
-                                {...props}
-                            />
-                        )}
+                        <MainSelectImage
+                            onSetmethod={setMethod}
+                            onClose={handleClose}
+                            {...props}
+                        />
                     </div>
                     <div className={style.btnClose} onClick={handleClose}>
                         <RiCloseFill />
@@ -72,36 +63,6 @@ function ButtonUpload(props: props) {
 }
 
 export default ButtonUpload;
-
-function MainSelect(props: any) {
-    return (
-        <div className={style.select}>
-            <div
-                className={style.btnSelect}
-                onClick={() => props.onSetmethod(1)}
-            >
-                <Image />
-                Chọn tệp có sẵn
-            </div>
-            <label className={style.btnSelect} onClick={() => {}}>
-                <input
-                    type="file"
-                    hidden
-                    name={props.name}
-                    onChange={(e: any) => {
-                        props.onChange(e);
-                        props.onClose();
-                    }}
-                    value={props.value?.path}
-                />
-                <div className={style.icon}>
-                    <DocumentUpload />
-                </div>
-                Tải tệp mới
-            </label>
-        </div>
-    );
-}
 
 function MainSelectImage(props: any) {
     const pageSize: number = 8;
@@ -135,11 +96,20 @@ function MainSelectImage(props: any) {
     return (
         <div className={style.selectImage}>
             <div className={style.header}>
-                <div
-                    className={style.btnBack}
-                    onClick={() => props.onSetmethod(0)}
-                >
-                    <RiArrowGoBackLine />
+                <div className={style.headerBtn}>
+                    <label className={style.btnSelect} onClick={() => {}}>
+                        <input
+                            type="file"
+                            hidden
+                            name={props.name}
+                            onChange={(e: any) => {
+                                props.onChange(e);
+                                props.onClose();
+                            }}
+                            value={props.value?.path}
+                        />
+                        Tải tệp mới
+                    </label>
                 </div>
                 <h3 className={style.title}>
                     {props.isFile ? 'Tệp trong thư viện' : 'Ảnh trong thư viện'}
