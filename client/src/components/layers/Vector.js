@@ -47,18 +47,50 @@ function Vector({ path, data }) {
         });
     };
 
+    const handleStyle = (info, layer) => {
+        const { properties } = info;
+
+        return {
+            color: getColor(properties.XMon_S1_1, 0),
+            opacity: data.opacityBorder,
+            weight: data.widthBorder,
+            fillOpacity: data.opacityBackground,
+            fillColor: getColor(properties.XMon_S1_1, 1),
+        };
+    };
+
+    const getColor = (d, t) => {
+        if (!!d) {
+            return d > 100
+                ? '#c18c7b'
+                : d > 50
+                ? '#d09d80'
+                : d > 30
+                ? '#dfb482'
+                : d > 20
+                ? '#f2ce83'
+                : d > 10
+                ? '#f3d98f'
+                : d > 7
+                ? '#f2d49b'
+                : d > 5
+                ? '#f2efa2'
+                : d > 2
+                ? '#c8d489'
+                : d > 1
+                ? '#99b570'
+                : '#709858';
+        }
+
+        return t ? data.backgroundColor : data.borderColor;
+    };
+
     return (
         <>
             {file && (
                 <GeoJSON
                     data={file}
-                    style={{
-                        color: data.borderColor,
-                        opacity: data.opacityBorder,
-                        weight: data.widthBorder,
-                        fillOpacity: data.opacityBackground,
-                        fillColor: data.backgroundColor,
-                    }}
+                    style={handleStyle}
                     pointToLayer={handleCustomMarker}
                     onEachFeature={handleEachInfo}
                 />
