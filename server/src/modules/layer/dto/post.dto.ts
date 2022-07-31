@@ -33,6 +33,10 @@ export class CreateLayerDto {
   @IsString()
   icon: string;
 
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @IsString()
+  keyColor: string;
+
   @ApiProperty({ example: '#00000' })
   @IsString()
   borderColor: string;

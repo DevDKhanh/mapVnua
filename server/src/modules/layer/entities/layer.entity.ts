@@ -72,6 +72,10 @@ export class LayerEntity {
   @Column({ type: 'varchar', length: 200, nullable: false })
   icon: string;
 
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @Column({ type: 'varchar', name: 'truongMauNen', length: 50 })
+  keyColor: string;
+
   @ApiProperty({ example: '#00000' })
   @Column({ type: 'varchar', name: 'mauVien', length: 10 })
   borderColor: string;

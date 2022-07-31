@@ -6,8 +6,9 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "serverDev": "npm run dev --prefix server",
+        "admin": "yarn dev --prefix admin",
         "client": "npm run start --prefix client",
-        "dev": "concurrently \"npm run serverDev\" \"npm run client\""
+        "dev": "concurrently \"npm run serverDev\" \"npm run admin\" \"npm run client\""
     },
     "author": "",
     "description": "",
