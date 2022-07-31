@@ -51,11 +51,11 @@ function Vector({ path, data }) {
         const { properties } = info;
 
         return {
-            color: getColor(properties.XMon_S1_1, 0),
+            color: getColor(properties[`${data.keyColor}`], 0),
             opacity: data.opacityBorder,
             weight: data.widthBorder,
             fillOpacity: data.opacityBackground,
-            fillColor: getColor(properties.XMon_S1_1, 1),
+            fillColor: getColor(properties[`${data.keyColor}`], 1),
         };
     };
 

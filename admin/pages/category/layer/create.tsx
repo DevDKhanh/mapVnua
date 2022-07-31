@@ -38,6 +38,7 @@ interface typeForm {
     style: any;
     path: any;
     icon: any;
+    keyColor: string;
     borderColor: string;
     widthBorder: string;
     opacityBorder: string;
@@ -61,6 +62,7 @@ interface typeFormSubmit {
     style: string;
     path: string;
     icon: string;
+    keyColor: string;
     borderColor: string;
     widthBorder: number;
     opacityBorder: number;
@@ -98,6 +100,7 @@ function Index() {
             txt: 'Raster',
             value: 'Raster',
         },
+        keyColor: '',
         path: '',
         icon: '',
         borderColor: '#ccc',
@@ -231,6 +234,7 @@ function Index() {
                     style: dataForm.style.value,
                     path: filePath,
                     icon: fileIcon,
+                    keyColor: dataForm.keyColor,
                     borderColor: dataForm.borderColor,
                     widthBorder: Number(dataForm.widthBorder),
                     opacityBorder: Number(dataForm.opacityBorder),
@@ -336,6 +340,13 @@ function Index() {
                             {dataForm?.style?.value === 'Vector' && (
                                 <Fragment>
                                     <PreviewVector data={dataForm} />
+                                    <Input
+                                        title="Key color"
+                                        value={dataForm?.keyColor}
+                                        name="keyColor"
+                                        type="text"
+                                        onChange={handleChange}
+                                    />
                                     <Input
                                         title="Màu viền"
                                         isColorPicker
