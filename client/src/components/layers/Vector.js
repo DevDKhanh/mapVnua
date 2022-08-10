@@ -24,6 +24,8 @@ function Vector({ path, data }) {
         }
     }, [path]);
 
+    console.log(data);
+
     const getInfo = (data) => {
         const info = [];
         for (let i in data) {
@@ -47,42 +49,51 @@ function Vector({ path, data }) {
         });
     };
 
+    const setColor = (d, t, l) => {
+        if (!!d) {
+            for (let i of l) {
+                if (d >= i.from && d <= i.to) {
+                    return i.color;
+                }
+            }
+        }
+
+        return t ? data.backgroundColor : data.borderColor;
+    };
+
     const handleStyle = (info, layer) => {
         const { properties } = info;
 
         return {
-            color: getColor(properties[`${data.keyColor}`], 0),
+            color: setColor(
+                properties[`${data.keyColor}`],
+                0,
+                getColor(data.dataColor)
+            ),
             opacity: data.opacityBorder,
             weight: data.widthBorder,
             fillOpacity: data.opacityBackground,
-            fillColor: getColor(properties[`${data.keyColor}`], 1),
+            fillColor: setColor(
+                properties[`${data.keyColor}`],
+                1,
+                getColor(data.dataColor)
+            ),
         };
     };
 
-    const getColor = (d, t) => {
-        if (!!d) {
-            return d > 100
-                ? '#c18c7b'
-                : d > 50
-                ? '#d09d80'
-                : d > 30
-                ? '#dfb482'
-                : d > 20
-                ? '#f2ce83'
-                : d > 10
-                ? '#f3d98f'
-                : d > 7
-                ? '#f2d49b'
-                : d > 5
-                ? '#f2efa2'
-                : d > 2
-                ? '#c8d489'
-                : d > 1
-                ? '#99b570'
-                : '#709858';
+    const getColor = (c) => {
+        const arr = [];
+        const e = c.split(':');
+        for (let i of e) {
+            const a = i.split('|');
+            const o = {
+                color: a[0],
+                from: Number(a[1].split('_')[0]),
+                to: Number(a[1].split('_')[1]),
+            };
+            arr.push(o);
         }
-
-        return t ? data.backgroundColor : data.borderColor;
+        return arr;
     };
 
     return (

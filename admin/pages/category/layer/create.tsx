@@ -12,10 +12,12 @@ import uploadAPI from '../../../api/upload';
 import handleGetFile from '../../../common/hooks/getFile';
 import { useValidateAll } from '../../../common/hooks/useValidate';
 import ButtonUpload from '../../../components/controls/ButtonUpload';
+import SelectColorLayer from '../../../components/controls/SelectColorLayer';
 import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
 import Select from '../../../components/site/Select';
 import { DashboardLayout } from '../../../components/widgets/Layout';
+import { DATA_COLOR } from '../../../constants/config';
 import { RootState } from '../../../redux/reducers';
 
 const GetCoordinatesRaster = dynamic(
@@ -49,6 +51,7 @@ interface typeForm {
     latSW: string;
     lngSW: string;
     zIndex: string;
+    dataColor: string;
     active: any;
 }
 
@@ -91,7 +94,6 @@ function Index() {
             txt: 'Có',
             value: 1,
         },
-        // id: '',
         nameLayer: '',
         language: null,
         classify: null,
@@ -100,9 +102,10 @@ function Index() {
             txt: 'Raster',
             value: 'Raster',
         },
-        keyColor: '',
+        keyColor: 'key',
         path: '',
         icon: '',
+        dataColor: DATA_COLOR,
         borderColor: '#ccc',
         widthBorder: '1',
         opacityBorder: '1',
@@ -227,6 +230,7 @@ function Index() {
 
             try {
                 const formSubmit: typeFormSubmit = {
+                    ...dataForm,
                     nameLayer: dataForm.nameLayer,
                     languageId: dataForm.language.value,
                     classifyId: dataForm.classify.value,
@@ -339,7 +343,7 @@ function Index() {
                             {/*---------- Vector ----------*/}
                             {dataForm?.style?.value === 'Vector' && (
                                 <Fragment>
-                                    <PreviewVector data={dataForm} />
+                                    <SelectColorLayer onChange={handleChange} />
                                     <Input
                                         title="Key color"
                                         value={dataForm?.keyColor}
@@ -347,6 +351,7 @@ function Index() {
                                         type="text"
                                         onChange={handleChange}
                                     />
+                                    <PreviewVector data={dataForm} />
                                     <Input
                                         title="Màu viền"
                                         isColorPicker

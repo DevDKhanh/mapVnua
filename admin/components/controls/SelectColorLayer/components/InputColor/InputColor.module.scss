@@ -1,0 +1,32 @@
+.conainter {
+    & + .conainter {
+        margin-top: 24px;
+    }
+
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 20px;
+    grid-template-rows: 1fr;
+    gap: 24px;
+
+    &:hover {
+        .btnDel {
+            opacity: 1;
+        }
+    }
+}
+
+.input {
+    padding: 2px 8px;
+    width: 100%;
+}
+
+.btnDel {
+    opacity: 0;
+    cursor: pointer;
+    color: #bf1b1b;
+    transition: 0.3s;
+
+    &:active {
+        transform: scale(0.9);
+    }
+}

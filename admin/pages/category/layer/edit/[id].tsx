@@ -12,10 +12,12 @@ import siteAPI from '../../../../api/site';
 import uploadAPI from '../../../../api/upload';
 import handleGetFile from '../../../../common/hooks/getFile';
 import ButtonUpload from '../../../../components/controls/ButtonUpload';
+import SelectColorLayer from '../../../../components/controls/SelectColorLayer';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
 import Select from '../../../../components/site/Select';
 import { DashboardLayout } from '../../../../components/widgets/Layout';
+import { DATA_COLOR } from '../../../../constants/config';
 import { RootState } from '../../../../redux/reducers';
 
 const GetCoordinatesRaster = dynamic(
@@ -38,6 +40,7 @@ interface typeForm {
     path: any;
     icon: any;
     keyColor: string;
+    dataColor: string;
     borderColor: string;
     widthBorder: string;
     opacityBorder: string;
@@ -61,6 +64,7 @@ interface typeFormSubmit {
     path?: string;
     icon?: string;
     keyColor: string;
+    dataColor: string;
     borderColor: string;
     widthBorder: number;
     opacityBorder: number;
@@ -97,7 +101,8 @@ function Index() {
             txt: 'Vector',
             value: 'Vector',
         },
-        keyColor: '',
+        keyColor: 'key',
+        dataColor: DATA_COLOR,
         path: '',
         icon: '',
         borderColor: '#ccc',
@@ -266,6 +271,7 @@ function Index() {
             );
 
             const formSubmit: typeFormSubmit = {
+                ...dataForm,
                 nameLayer: dataForm.nameLayer,
                 languageId: dataForm.language.value,
                 classifyId: dataForm.classify.value,
@@ -397,6 +403,10 @@ function Index() {
                             {dataForm?.style?.value === 'Vector' && (
                                 <Fragment>
                                     <PreviewVector data={dataForm} />
+                                    <SelectColorLayer
+                                        onChange={handleChange}
+                                        dataColor={dataForm.dataColor}
+                                    />
                                     <Input
                                         title="Key color"
                                         value={dataForm?.keyColor}
