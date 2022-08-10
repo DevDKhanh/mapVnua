@@ -37,6 +37,13 @@ export class CreateLayerDto {
   @IsString()
   keyColor: string;
 
+  @ApiProperty({
+    example:
+      '#36fa00|0_10:#26c3f7|10_20:#4854f9|20_30:#d36cf9|30_40:#f96ccc|40_100:#fcb6b6|100_700',
+  })
+  @IsString()
+  dataColor: string;
+
   @ApiProperty({ example: '#00000' })
   @IsString()
   borderColor: string;
