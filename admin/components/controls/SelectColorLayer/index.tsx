@@ -1,6 +1,13 @@
 import clsx from 'clsx';
 import { Add } from 'iconsax-react';
-import { Fragment, memo, useCallback, useMemo, useState } from 'react';
+import {
+    Fragment,
+    memo,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import Draggable from 'react-draggable';
 import { RiCloseFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
@@ -15,7 +22,11 @@ import styles from './SelectColorLayer.module.scss';
 
 function SelectColorLayer({ onChange, dataColor }: any) {
     const [open, setOpen] = useState<boolean>(false);
-    const [color, setColor] = useState<string>(dataColor || DATA_COLOR);
+    const [color, setColor] = useState<string>(DATA_COLOR);
+
+    useEffect(() => {
+        setColor(dataColor);
+    }, [dataColor]);
 
     const convertColor: Array<{ color: string; from: number; to: number }> =
         useMemo(() => getColor(color), [color]);
