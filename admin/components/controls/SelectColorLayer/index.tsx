@@ -11,22 +11,63 @@ import {
 import Draggable from 'react-draggable';
 import { RiCloseFill } from 'react-icons/ri';
 import { toast } from 'react-toastify';
+import uploadAPI from '../../../api/upload';
 import {
     convertColorToString,
     getColor,
 } from '../../../common/func/convertColor';
 import { copy } from '../../../common/func/copy';
+import { arrayMove } from '../../../common/func/helper';
 import { DATA_COLOR } from '../../../constants/config';
 import InputColor from './components/InputColor';
 import styles from './SelectColorLayer.module.scss';
 
-function SelectColorLayer({ onChange, dataColor }: any) {
+function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
     const [open, setOpen] = useState<boolean>(false);
     const [color, setColor] = useState<string>(DATA_COLOR);
+    const [fileData, setFileData] = useState<any>(null);
 
     useEffect(() => {
         setColor(dataColor);
     }, [dataColor]);
+
+    useEffect(() => {
+        function onReaderLoad(event: any) {
+            var obj = JSON.parse(event.target.result);
+            setFileData(obj);
+        }
+        if (!!file && typeof file !== 'string') {
+            if (file?.type === 'application/json') {
+                var reader = new FileReader();
+                reader.onload = onReaderLoad;
+                reader.readAsText(file);
+            } else {
+                toast.warn('Sai định dạng đường dẫn');
+            }
+        } else if (typeof file === 'string') {
+            (async () => {
+                try {
+                    const [res, status]: any = await uploadAPI.getFile(file);
+                    if (res && status === 200) {
+                        setFileData(res);
+                    }
+                } catch (err) {}
+            })();
+        }
+    }, [file]);
+
+    const properties: Array<{ key: string; value: string }> = useMemo(() => {
+        const arr = [];
+        if (fileData?.features[0]?.properties) {
+            for (let i in fileData?.features[0]?.properties) {
+                arr.push({
+                    key: i,
+                    value: fileData?.features[0]?.properties[i],
+                });
+            }
+        }
+        return arr;
+    }, [fileData]);
 
     const convertColor: Array<{ color: string; from: number; to: number }> =
         useMemo(() => getColor(color), [color]);
@@ -73,6 +114,26 @@ function SelectColorLayer({ onChange, dataColor }: any) {
         [color]
     );
 
+    const handleDown = useCallback(
+        (i: number) => {
+            const arrColor = getColor(color);
+            if (i < arrColor.length - 1) {
+                setColor(convertColorToString(arrayMove(arrColor, i, i + 1)));
+            }
+        },
+        [color]
+    );
+
+    const handleUp = useCallback(
+        (i: number) => {
+            const arrColor = getColor(color);
+            if (i > 0) {
+                setColor(convertColorToString(arrayMove(arrColor, i, i - 1)));
+            }
+        },
+        [color]
+    );
+
     const handleSubmit = () => {
         const e = {
             target: {
@@ -81,6 +142,16 @@ function SelectColorLayer({ onChange, dataColor }: any) {
             },
         };
         onChange(e);
+    };
+
+    const handleChangeKey = (e: any) => {
+        const data = {
+            target: {
+                name: 'keyColor',
+                value: e.target.value,
+            },
+        };
+        onChange(data);
     };
 
     return (
@@ -99,6 +170,16 @@ function SelectColorLayer({ onChange, dataColor }: any) {
                             <h4 className={styles.title}>Tùy chỉnh dải màu</h4>
                             <p onClick={() => copy(color)}> chép dữ liệu</p>
                         </div>
+                        <div className={styles.select}>
+                            <select onChange={handleChangeKey} value={keyColor}>
+                                <option value="">Lựa chọn key color</option>
+                                {properties.map((v, i) => (
+                                    <option key={i} value={v.key}>
+                                        {v.key}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                         <div
                             className={styles.btnClose}
                             onClick={() => setOpen(false)}
@@ -115,6 +196,8 @@ function SelectColorLayer({ onChange, dataColor }: any) {
                                     index={i}
                                     onChange={handleChangeValue}
                                     onDelete={handleDelete}
+                                    onDown={handleDown}
+                                    onUp={handleUp}
                                 />
                             ))}
                             <div

@@ -1,4 +1,4 @@
-import { Trash } from 'iconsax-react';
+import { ArrowDown2, ArrowUp2, Trash } from 'iconsax-react';
 import styles from './InputColor.module.scss';
 
 interface InputColor {
@@ -8,6 +8,8 @@ interface InputColor {
     index: number;
     onChange: (e: any, i: number) => void;
     onDelete: (i: number) => void;
+    onDown: (i: number) => void;
+    onUp: (i: number) => void;
 }
 
 function InputColor({
@@ -17,6 +19,8 @@ function InputColor({
     index,
     onChange,
     onDelete,
+    onDown,
+    onUp,
 }: InputColor) {
     return (
         <div className={styles.conainter}>
@@ -26,6 +30,14 @@ function InputColor({
                 name="color"
                 onChange={(e) => onChange(e, index)}
             />
+            <div className={styles.gourpBtnPosition}>
+                <div className={styles.btn} onClick={() => onUp(index)}>
+                    <ArrowUp2 size="32" color="#FF8A65" variant="Bold" />
+                </div>
+                <div className={styles.btn} onClick={() => onDown(index)}>
+                    <ArrowDown2 size="32" color="#FF8A65" variant="Bold" />
+                </div>
+            </div>
             <input
                 type="number"
                 className={styles.input}

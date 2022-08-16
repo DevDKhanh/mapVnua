@@ -4,13 +4,33 @@
     }
 
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 20px;
+    grid-template-columns: 0.5fr 0.5fr 1fr 1fr 20px;
     grid-template-rows: 1fr;
+    align-items: center;
     gap: 24px;
 
     &:hover {
         .btnDel {
             opacity: 1;
+        }
+    }
+}
+
+.gourpBtnPosition {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn {
+        user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:active {
+            transform: scale(0.7);
         }
     }
 }

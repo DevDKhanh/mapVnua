@@ -343,13 +343,11 @@ function Index() {
                             {/*---------- Vector ----------*/}
                             {dataForm?.style?.value === 'Vector' && (
                                 <Fragment>
-                                    <SelectColorLayer onChange={handleChange} />
-                                    <Input
-                                        title="Key color"
-                                        value={dataForm?.keyColor}
-                                        name="keyColor"
-                                        type="text"
+                                    <SelectColorLayer
                                         onChange={handleChange}
+                                        dataColor={dataForm.dataColor}
+                                        file={dataForm.path}
+                                        keyColor={dataForm.keyColor}
                                     />
                                     <PreviewVector data={dataForm} />
                                     <Input

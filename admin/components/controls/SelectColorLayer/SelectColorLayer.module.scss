@@ -49,7 +49,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 44px;
-    padding-bottom: 32px;
+    padding-bottom: 12px;
 
     p {
         cursor: pointer;
@@ -57,6 +57,11 @@
             text-decoration: underline;
         }
     }
+}
+
+.select {
+    padding: 0 44px;
+    padding-bottom: 24px;
 }
 
 .main {
