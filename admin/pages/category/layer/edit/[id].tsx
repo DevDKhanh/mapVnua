@@ -406,13 +406,8 @@ function Index() {
                                     <SelectColorLayer
                                         onChange={handleChange}
                                         dataColor={dataForm.dataColor}
-                                    />
-                                    <Input
-                                        title="Key color"
-                                        value={dataForm?.keyColor}
-                                        name="keyColor"
-                                        type="text"
-                                        onChange={handleChange}
+                                        file={dataForm.path}
+                                        keyColor={dataForm.keyColor}
                                     />
                                     <Input
                                         title="Màu viền"
