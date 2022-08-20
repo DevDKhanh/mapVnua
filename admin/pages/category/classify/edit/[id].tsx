@@ -31,7 +31,7 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const router = useRouter();
-    const { id } = router.query;
+    const { id, addLanguage } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [dataForm, setDataForm] = useState<typeForm>({
@@ -111,28 +111,50 @@ function Index() {
             no: Number(dataForm.no),
         };
 
-        (async () => {
-            try {
-                const [res, status]: any = await classifyAPI.update(
-                    id,
-                    formSubmit,
-                    token
-                );
-                if (res && status === 200) {
-                    toast.success(res?.message);
-                    router.push('/category/classify/');
-                } else {
-                    toast.warn(res?.message);
+        if (!addLanguage) {
+            (async () => {
+                try {
+                    const [res, status]: any = await classifyAPI.update(
+                        id,
+                        formSubmit,
+                        token
+                    );
+                    if (res && status === 200) {
+                        toast.success(res?.message);
+                        router.push('/category/classify/');
+                    } else {
+                        toast.warn(res?.message);
+                    }
+                } catch (err: any) {
+                    toast.error(err?.message || 'Cập nhật thất bại');
                 }
-            } catch (err: any) {
-                toast.error(err?.message || 'Thêm mới thất bại');
-            }
-        })();
+            })();
+        } else {
+            (async () => {
+                try {
+                    const [res, status]: any = await classifyAPI.post(
+                        formSubmit,
+                        token
+                    );
+                    if (res && status === 200) {
+                        toast.success(res?.message);
+                    } else {
+                        toast.warn(res?.message);
+                    }
+                } catch (err: any) {
+                    toast.error(err?.message || 'Thêm mới thất bại');
+                }
+            })();
+        }
     };
 
     return (
         <DashboardLayout
-            title="Chỉnh sửa phân loại"
+            title={
+                !!addLanguage
+                    ? 'Thêm ngôn ngữ mới cho phân loại'
+                    : 'Chỉnh sửa phân loại'
+            }
             hrefBack="/category/classify/"
         >
             <RequiredPermision isEdit>
@@ -178,7 +200,9 @@ function Index() {
                                     handleChangeSelect(v, 'active')
                                 }
                             />
-                            <button className="btn-create">Cập nhật</button>
+                            <button className="btn-create">
+                                {!!addLanguage ? 'Thêm mới ' : 'Cập nhật'}
+                            </button>
                         </form>
                     </div>
                 </div>

@@ -1,9 +1,11 @@
+/* eslint-disable import/no-anonymous-default-export */
 import {
     DATA_ADD,
     DATA_ADD_LAYER,
     DATA_REMOVE_LAYER,
     UPDATE_LANGUAGE,
     UPDATE_AREA,
+    UPDATE_LAYER,
 } from '../action/dataMap';
 
 const initialState = {
@@ -28,6 +30,11 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 layers: [...state.layers, payload],
+            };
+        case UPDATE_LAYER:
+            return {
+                ...state,
+                layers: [payload],
             };
         case DATA_REMOVE_LAYER:
             return {

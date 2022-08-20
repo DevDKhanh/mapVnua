@@ -101,6 +101,7 @@ function Index() {
                         template: (data: any) => {
                             return (
                                 <ActionData
+                                    addLang
                                     id={data.id}
                                     url="layer"
                                     detailData={detailData}

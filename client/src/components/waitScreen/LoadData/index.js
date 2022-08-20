@@ -39,7 +39,8 @@ function LoadData({ children }) {
                 }, 1500);
             } catch (err) {}
         })();
-    }, [language]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [language, page]);
 
     return <>{loading ? <Loading /> : children}</>;
 }

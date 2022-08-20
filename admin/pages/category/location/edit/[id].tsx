@@ -43,7 +43,7 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const router = useRouter();
-    const { id } = router.query;
+    const { id, addLanguage } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
 
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -133,28 +133,50 @@ function Index() {
             zoom: Number(dataForm.zoom),
         };
 
-        (async () => {
-            try {
-                const [res, status]: any = await areaAPI.update(
-                    id,
-                    formSubmit,
-                    token
-                );
-                if (res && status === 200) {
-                    toast.success(res?.message);
-                    router.push('/category/location/');
-                } else {
-                    toast.warn(res?.message);
+        if (!addLanguage) {
+            (async () => {
+                try {
+                    const [res, status]: any = await areaAPI.update(
+                        id,
+                        formSubmit,
+                        token
+                    );
+                    if (res && status === 200) {
+                        toast.success(res?.message);
+                        router.push('/category/location/');
+                    } else {
+                        toast.warn(res?.message);
+                    }
+                } catch (err: any) {
+                    toast.error(err?.message || 'Cập nhật thất bại');
                 }
-            } catch (err: any) {
-                toast.error(err?.message || 'Thêm mới thất bại');
-            }
-        })();
+            })();
+        } else {
+            (async () => {
+                try {
+                    const [res, status]: any = await areaAPI.post(
+                        formSubmit,
+                        token
+                    );
+                    if (res && status === 200) {
+                        toast.success(res?.message);
+                    } else {
+                        toast.warn(res?.message);
+                    }
+                } catch (err: any) {
+                    toast.error(err?.message || 'Thêm mới thất bại');
+                }
+            })();
+        }
     };
 
     return (
         <DashboardLayout
-            title="Chỉnh sửa khu vực"
+            title={
+                !!addLanguage
+                    ? 'Thêm ngôn ngữ mới cho khu vực'
+                    : 'Chỉnh sửa khu vực'
+            }
             hrefBack="/category/location/"
         >
             <RequiredPermision isEdit>
@@ -223,7 +245,9 @@ function Index() {
                                     handleChangeSelect(v, 'active')
                                 }
                             />
-                            <button className="btn-create">Cập nhật</button>
+                            <button className="btn-create">
+                                {!!addLanguage ? 'Thêm mới ' : 'Cập nhật'}
+                            </button>
                         </form>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import styles from './InputColor.module.scss';
 
 interface InputColor {
     color: string;
+    note: string;
     from: number;
     to: number;
     index: number;
@@ -14,6 +15,7 @@ interface InputColor {
 
 function InputColor({
     color,
+    note,
     from,
     to,
     index,
@@ -52,6 +54,14 @@ function InputColor({
                 placeholder="Đến"
                 name="to"
                 value={to || 0}
+                onChange={(e) => onChange(e, index)}
+            />
+            <input
+                type="text"
+                className={styles.input}
+                placeholder="Chú thích"
+                name="note"
+                value={note}
                 onChange={(e) => onChange(e, index)}
             />
             <div className={styles.btnDel} onClick={() => onDelete(index)}>

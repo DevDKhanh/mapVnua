@@ -33,7 +33,6 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const validator = useValidateAll;
-    const router = useRouter();
 
     const { token } = useSelector((state: RootState) => state.auth);
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -83,7 +82,6 @@ function Index() {
         }
 
         const formSubmit: typeFormSubmit = {
-            // id: dataForm.id,
             nameClassify: dataForm.nameClassify,
             languageId: dataForm.language.value,
             active: Number(dataForm.active.value),

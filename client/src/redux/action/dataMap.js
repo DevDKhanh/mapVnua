@@ -2,12 +2,17 @@
 export const DATA_ADD = 'data/add';
 export const DATA_ADD_LAYER = 'layer/add';
 export const DATA_REMOVE_LAYER = 'layer/remove';
+export const UPDATE_LAYER = 'layer/update';
 export const UPDATE_LANGUAGE = 'language/update';
 export const UPDATE_AREA = 'area/update';
 
 /*---------- Actions ----------*/
 export const dataMapAdd = (layers = [], classifys = [], setting = []) => {
     return { type: DATA_ADD, payload: { layers, classifys, setting } };
+};
+
+export const updateLayer = (layers) => {
+    return { type: UPDATE_LAYER, payload: layers };
 };
 
 export const addLayer = (layer) => {

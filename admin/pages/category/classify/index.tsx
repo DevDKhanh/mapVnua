@@ -80,6 +80,7 @@ function Index() {
                         template: (data: any) => {
                             return (
                                 <ActionData
+                                    addLang
                                     id={data.id}
                                     url="classify"
                                     detailData={detailData}

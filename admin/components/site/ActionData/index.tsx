@@ -1,4 +1,4 @@
-import { Eye, Edit2, ClipboardClose } from 'iconsax-react';
+import { Eye, Edit2, ClipboardClose, LanguageSquare } from 'iconsax-react';
 import { useRouter } from 'next/router';
 import { Fragment, memo, useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -40,7 +40,7 @@ function Index(props: any) {
                 setShowPopupDel(false);
             }
         })();
-    }, [token, router]);
+    }, [props.url, props.id, token, router]);
 
     return (
         <Fragment>
@@ -69,6 +69,15 @@ function Index(props: any) {
                     >
                         <ClipboardClose variant="Bold" />
                     </div>
+                )}
+                {permission?.permissionCreate && !!props.addLang && (
+                    <Link
+                        href={`${router.pathname}/edit/${props.id}?addLanguage=true`}
+                    >
+                        <a className={style.item} title="Thêm ngôn ngữ">
+                            <LanguageSquare variant="Bold" />
+                        </a>
+                    </Link>
                 )}
             </div>
             {/*---------- Delete ----------*/}
