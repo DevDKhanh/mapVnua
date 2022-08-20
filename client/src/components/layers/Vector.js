@@ -24,8 +24,6 @@ function Vector({ path, data }) {
         }
     }, [path]);
 
-    console.log(data);
-
     const getInfo = (data) => {
         const info = [];
         for (let i in data) {

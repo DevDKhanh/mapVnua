@@ -4,7 +4,7 @@
     }
 
     display: grid;
-    grid-template-columns: 0.5fr 0.5fr 1fr 1fr 20px;
+    grid-template-columns: 20px 0.5fr 0.5fr 0.5fr 3fr 20px;
     grid-template-rows: 1fr;
     align-items: center;
     gap: 24px;
@@ -36,7 +36,7 @@
 }
 
 .input {
-    padding: 2px 8px;
+    padding: 4px 8px;
     width: 100%;
 }
 

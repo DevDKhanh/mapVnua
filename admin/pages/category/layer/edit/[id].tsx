@@ -81,7 +81,7 @@ interface typeFormSubmit {
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const router = useRouter();
-    const { id } = router.query;
+    const { id, addLanguage } = router.query;
     const { token } = useSelector((state: RootState) => state.auth);
 
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -259,60 +259,115 @@ function Index() {
     const handleSubmit = (e: any) => {
         e.preventDefault();
 
-        (async () => {
-            /*---------- Create file form updaload icon ----------*/
-            const fileIcon = await handleGetFile(dataForm.icon, token);
+        if (!addLanguage) {
+            (async () => {
+                /*---------- Create file form updaload icon ----------*/
+                const fileIcon = await handleGetFile(dataForm.icon, token);
 
-            /*---------- Upload file or raster ----------*/
-            const filePath = await handleGetFile(
-                dataForm.path,
-                token,
-                dataForm?.style?.value === 'Raster' ? 'image' : 'file'
-            );
-
-            const formSubmit: typeFormSubmit = {
-                ...dataForm,
-                nameLayer: dataForm.nameLayer,
-                languageId: dataForm.language.value,
-                classifyId: dataForm.classify.value,
-                areaId: dataForm.area.value,
-                style: dataForm.style.value,
-                borderColor: dataForm.borderColor,
-                keyColor: dataForm.keyColor,
-                widthBorder: Number(dataForm.widthBorder),
-                opacityBorder: Number(dataForm.opacityBorder),
-                backgroundColor: dataForm.backgroundColor,
-                icon: fileIcon,
-                path: filePath,
-                opacityBackground: Number(dataForm.opacityBackground),
-                latNE: Number(dataForm.latNE),
-                lngNE: Number(dataForm.lngNE),
-                latSW: Number(dataForm.latSW),
-                lngSW: Number(dataForm.lngSW),
-                zIndex: Number(dataForm.zIndex),
-                active: dataForm.active.value,
-            };
-
-            try {
-                const [res, status]: any = await layerAPI.update(
-                    id,
-                    formSubmit,
-                    token
+                /*---------- Upload file or raster ----------*/
+                const filePath = await handleGetFile(
+                    dataForm.path,
+                    token,
+                    dataForm?.style?.value === 'Raster' ? 'image' : 'file'
                 );
-                if (res && status === 200) {
-                    toast.success(res?.message);
-                    router.push('/category/layer/');
-                } else {
-                    toast.warn(res?.message);
+
+                const formSubmit: typeFormSubmit = {
+                    ...dataForm,
+                    nameLayer: dataForm.nameLayer,
+                    languageId: dataForm.language.value,
+                    classifyId: dataForm.classify.value,
+                    areaId: dataForm.area.value,
+                    style: dataForm.style.value,
+                    borderColor: dataForm.borderColor,
+                    keyColor: dataForm.keyColor,
+                    widthBorder: Number(dataForm.widthBorder),
+                    opacityBorder: Number(dataForm.opacityBorder),
+                    backgroundColor: dataForm.backgroundColor,
+                    icon: fileIcon,
+                    path: filePath,
+                    opacityBackground: Number(dataForm.opacityBackground),
+                    latNE: Number(dataForm.latNE),
+                    lngNE: Number(dataForm.lngNE),
+                    latSW: Number(dataForm.latSW),
+                    lngSW: Number(dataForm.lngSW),
+                    zIndex: Number(dataForm.zIndex),
+                    active: dataForm.active.value,
+                };
+
+                try {
+                    const [res, status]: any = await layerAPI.update(
+                        id,
+                        formSubmit,
+                        token
+                    );
+                    if (res && status === 200) {
+                        toast.success(res?.message);
+                        router.push('/category/layer/');
+                    } else {
+                        toast.warn(res?.message);
+                    }
+                } catch (err: any) {
+                    toast.error(err?.message || 'Cập nhật thất bại');
                 }
-            } catch (err: any) {
-                toast.error(err?.message || 'Thêm mới thất bại');
-            }
-        })();
+            })();
+        } else {
+            (async () => {
+                /*---------- Create file form updaload icon ----------*/
+                const fileIcon = await handleGetFile(dataForm.icon, token);
+
+                /*---------- Upload file or raster ----------*/
+                const filePath = await handleGetFile(
+                    dataForm.path,
+                    token,
+                    dataForm?.style?.value === 'Raster' ? 'image' : 'file'
+                );
+
+                try {
+                    const formSubmit: typeFormSubmit = {
+                        ...dataForm,
+                        nameLayer: dataForm.nameLayer,
+                        languageId: dataForm.language.value,
+                        classifyId: dataForm.classify.value,
+                        areaId: dataForm.area.value,
+                        style: dataForm.style.value,
+                        path: filePath,
+                        icon: fileIcon,
+                        keyColor: dataForm.keyColor,
+                        borderColor: dataForm.borderColor,
+                        widthBorder: Number(dataForm.widthBorder),
+                        opacityBorder: Number(dataForm.opacityBorder),
+                        backgroundColor: dataForm.backgroundColor,
+                        opacityBackground: Number(dataForm.opacityBackground),
+                        latNE: Number(dataForm.latNE),
+                        lngNE: Number(dataForm.lngNE),
+                        latSW: Number(dataForm.latSW),
+                        lngSW: Number(dataForm.lngSW),
+                        zIndex: Number(dataForm.zIndex),
+                        active: dataForm.active.value,
+                    };
+                    const [res, status]: any = await layerAPI.post(
+                        formSubmit,
+                        token
+                    );
+                    if (res && status === 200) {
+                        toast.success(res?.message);
+                    } else {
+                        toast.warn(res?.message);
+                    }
+                } catch (err: any) {
+                    toast.error(err?.message || 'Thêm mới thất bại');
+                }
+            })();
+        }
     };
 
     return (
-        <DashboardLayout title="Chỉnh sửa lớp" hrefBack="/category/layer/">
+        <DashboardLayout
+            title={
+                !!addLanguage ? 'Thêm ngôn ngữ mới cho lớp' : 'Chỉnh sửa lớp'
+            }
+            hrefBack="/category/layer/"
+        >
             <RequiredPermision isEdit>
                 <div>
                     <div className="form">
@@ -505,7 +560,9 @@ function Index() {
                                     handleChangeSelect(v, 'active')
                                 }
                             />
-                            <button className="btn-create">Cập nhật</button>
+                            <button className="btn-create">
+                                {!!addLanguage ? 'Thêm mới ' : 'Cập nhật'}
+                            </button>
                         </form>
                     </div>
                 </div>

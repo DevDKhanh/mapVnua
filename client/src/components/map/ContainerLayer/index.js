@@ -1,11 +1,20 @@
-import { memo, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { memo, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Vector from '../../layers/Vector';
 import Raster from '../../layers/Raster';
+import { updateLayer } from '../../../redux/action/dataMap';
 
 function ContainerLayer() {
-    const { layers, classifys } = useSelector((state) => state.dataMap);
+    const dispatch = useDispatch();
+    const { layers, language, classify } = useSelector(
+        (state) => state.dataMap
+    );
+
+    useEffect(() => {
+        dispatch(updateLayer([]));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [language, classify]);
 
     const render = useMemo(() => {
         return layers.map((item) => {

@@ -69,15 +69,19 @@ function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
         return arr;
     }, [fileData]);
 
-    const convertColor: Array<{ color: string; from: number; to: number }> =
-        useMemo(() => getColor(color), [color]);
+    const convertColor: Array<{
+        color: string;
+        from: number;
+        to: number;
+        note: string;
+    }> = useMemo(() => getColor(color), [color]);
 
     const handleAddColor = () => {
         setColor((prev) => {
             const arrColor = getColor(prev);
             const length = arrColor.length;
             const lastItem = arrColor[length - 1];
-            return `${prev}:${lastItem.color}|${lastItem.from}_${lastItem.to}`;
+            return `${prev}:${lastItem.color}|${lastItem.from}_${lastItem.to}| `;
         });
     };
 
@@ -92,9 +96,9 @@ function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
                         [name]: value,
                     };
 
-                    return `${o.color}|${o.from}_${o.to}`;
+                    return `${o.color}|${o.from}_${o.to}|${o.note}`;
                 }
-                return `${v.color}|${v.from}_${v.to}`;
+                return `${v.color}|${v.from}_${v.to}|${v.note}`;
             });
             setColor(newValue.join(':'));
         },
@@ -179,6 +183,10 @@ function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
                                     </option>
                                 ))}
                             </select>
+                            <input
+                                className={styles.input}
+                                placeholder="Tiêu đề chú thích"
+                            />
                         </div>
                         <div
                             className={styles.btnClose}
@@ -190,6 +198,7 @@ function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
                             {convertColor.map((v, i) => (
                                 <InputColor
                                     key={i}
+                                    note={v.note}
                                     color={v.color}
                                     from={v.from}
                                     to={v.to}

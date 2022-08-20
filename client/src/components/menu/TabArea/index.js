@@ -9,11 +9,10 @@ function TabArea() {
     const dispatch = useDispatch();
     const { area, language } = useSelector((state) => state.dataMap);
 
-    const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        if (language) {
+        if (!!language) {
             (async () => {
                 try {
                     const [res] = await areaAPI.getList(
@@ -22,8 +21,11 @@ function TabArea() {
                         100,
                         language.id
                     );
-                    dispatch(updateArea(res.records[0]));
-                    setData(res.records);
+
+                    if (!!res.records[0]) {
+                        dispatch(updateArea(res.records[0]));
+                        setData(res.records);
+                    }
                 } catch (e) {}
             })();
         }
