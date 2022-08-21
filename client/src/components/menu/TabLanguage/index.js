@@ -33,47 +33,51 @@ function TabLanguage() {
     }, []);
 
     return (
-        <div className={style.container}>
-            <div
-                className={clsx(style.language, style.main)}
-                onClick={() => setShow(!show)}
-            >
-                <div className={style.icon}>
-                    <img
-                        src={`${API}/upload${language.icon}`}
-                        alt={language.nameLanguage}
-                    />
-                </div>
-                <p>{language.nameLanguage}</p>
-                <div className={style.icon}>
-                    <RiArrowDownSFill />
-                </div>
-            </div>
-            {show && (
-                <div className={style.list}>
-                    {data.map((item, i) => (
-                        <div
-                            key={i}
-                            className={clsx(style.language, {
-                                [style.active]: language.id === item.id,
-                            })}
-                            onClick={() => {
-                                dispatch(updateLanguage(item));
-                                setShow(!show);
-                            }}
-                        >
-                            <div className={style.icon}>
-                                <img
-                                    src={`${API}/upload${item.icon}`}
-                                    alt={language.nameLanguage}
-                                />
-                            </div>
-                            <p>{item.nameLanguage}</p>
+        <>
+            {data.length > 1 ? (
+                <div className={style.container}>
+                    <div
+                        className={clsx(style.language, style.main)}
+                        onClick={() => setShow(!show)}
+                    >
+                        <div className={style.icon}>
+                            <img
+                                src={`${API}/upload${language.icon}`}
+                                alt={language.nameLanguage}
+                            />
                         </div>
-                    ))}
+                        <p>{language.nameLanguage}</p>
+                        <div className={style.icon}>
+                            <RiArrowDownSFill />
+                        </div>
+                    </div>
+                    {show && (
+                        <div className={style.list}>
+                            {data.map((item, i) => (
+                                <div
+                                    key={i}
+                                    className={clsx(style.language, {
+                                        [style.active]: language.id === item.id,
+                                    })}
+                                    onClick={() => {
+                                        dispatch(updateLanguage(item));
+                                        setShow(!show);
+                                    }}
+                                >
+                                    <div className={style.icon}>
+                                        <img
+                                            src={`${API}/upload${item.icon}`}
+                                            alt={language.nameLanguage}
+                                        />
+                                    </div>
+                                    <p>{item.nameLanguage}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
-            )}
-        </div>
+            ) : null}
+        </>
     );
 }
 
