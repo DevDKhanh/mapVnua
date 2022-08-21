@@ -76,6 +76,15 @@ export class LayerEntity {
   @Column({ type: 'varchar', name: 'truongMauNen', length: 50 })
   keyColor: string;
 
+  @ApiProperty({ example: 'Tiêu đề chú thích' })
+  @Column({
+    type: 'nvarchar',
+    name: 'tieuDeChuThich',
+    length: 200,
+    default: '',
+  })
+  titleNote: string;
+
   @ApiProperty({
     example:
       '#36fa00|0_10:#26c3f7|10_20:#4854f9|20_30:#d36cf9|30_40:#f96ccc|40_100:#fcb6b6|100_700',
@@ -161,6 +170,24 @@ export class LayerEntity {
     default: 1,
   })
   active: number;
+
+  @ApiProperty({ example: 1 })
+  @Column({
+    type: 'tinyint',
+    name: 'hienThiChuThich',
+    nullable: false,
+    default: 1,
+  })
+  activeNote: number;
+
+  @ApiProperty({ example: 1 })
+  @Column({
+    type: 'tinyint',
+    name: 'hienThiTooltip',
+    nullable: false,
+    default: 1,
+  })
+  activeTooltip: number;
 
   @ApiProperty({ example: 10 })
   @Column({ type: 'int', default: 0 })

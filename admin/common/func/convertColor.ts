@@ -1,8 +1,8 @@
 interface Item {
-    color: string;
-    from: number;
-    to: number;
-    note: string;
+    color: any;
+    from: any;
+    to: any;
+    note: any;
 }
 
 export const getColor = (c: string): Array<Item> => {
@@ -11,10 +11,10 @@ export const getColor = (c: string): Array<Item> => {
     for (let i of e) {
         const a = i.split('|');
         const o: Item = {
-            color: a[0],
-            from: Number(a[1].split('_')[0]),
-            to: Number(a[1].split('_')[1]),
-            note: a[2],
+            color: a[0] || '',
+            from: Number(a[1].split('_')[0]) || '',
+            to: Number(a[1].split('_')[1]) || '',
+            note: a[2] || '',
         };
         arr.push(o);
     }

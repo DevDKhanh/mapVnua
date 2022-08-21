@@ -22,7 +22,13 @@ import { DATA_COLOR } from '../../../constants/config';
 import InputColor from './components/InputColor';
 import styles from './SelectColorLayer.module.scss';
 
-function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
+function SelectColorLayer({
+    onChange,
+    dataColor,
+    file,
+    keyColor,
+    titleNote,
+}: any) {
     const [open, setOpen] = useState<boolean>(false);
     const [color, setColor] = useState<string>(DATA_COLOR);
     const [fileData, setFileData] = useState<any>(null);
@@ -148,14 +154,8 @@ function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
         onChange(e);
     };
 
-    const handleChangeKey = (e: any) => {
-        const data = {
-            target: {
-                name: 'keyColor',
-                value: e.target.value,
-            },
-        };
-        onChange(data);
+    const handleChange = (e: any) => {
+        onChange(e);
     };
 
     return (
@@ -175,7 +175,11 @@ function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
                             <p onClick={() => copy(color)}> chép dữ liệu</p>
                         </div>
                         <div className={styles.select}>
-                            <select onChange={handleChangeKey} value={keyColor}>
+                            <select
+                                name="keyColor"
+                                onChange={handleChange}
+                                value={keyColor}
+                            >
                                 <option value="">Lựa chọn key color</option>
                                 {properties.map((v, i) => (
                                     <option key={i} value={v.key}>
@@ -184,6 +188,9 @@ function SelectColorLayer({ onChange, dataColor, file, keyColor }: any) {
                                 ))}
                             </select>
                             <input
+                                name="titleNote"
+                                value={titleNote}
+                                onChange={handleChange}
                                 className={styles.input}
                                 placeholder="Tiêu đề chú thích"
                             />

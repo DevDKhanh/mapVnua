@@ -32,6 +32,11 @@ export class UpdateLayerDto {
   @IsOptional()
   keyColor: string;
 
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @IsString()
+  @IsOptional()
+  titleNote: string;
+
   @ApiProperty({
     example:
       '#36fa00|0_10:#26c3f7|10_20:#4854f9|20_30:#d36cf9|30_40:#f96ccc|40_100:#fcb6b6|100_700',
@@ -99,6 +104,16 @@ export class UpdateLayerDto {
   @IsNumber()
   @IsOptional()
   active: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  @IsOptional()
+  activeNote: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  @IsOptional()
+  activeTooltip: number;
 
   @ApiProperty({ example: 10 })
   @IsNumber()
