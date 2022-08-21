@@ -1,6 +1,6 @@
 export const convertDataColor = (c) => {
     const arr = [];
-    const e = c.split(':');
+    const e = c.split('@');
     for (let i of e) {
         const a = i.split('|');
         const o = {

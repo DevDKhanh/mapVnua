@@ -7,7 +7,7 @@ interface Item {
 
 export const getColor = (c: string): Array<Item> => {
     const arr: Array<Item> = [];
-    const e = c.split(':');
+    const e = c.split('@');
     for (let i of e) {
         const a = i.split('|');
         const o: Item = {
@@ -25,5 +25,5 @@ export const convertColorToString = (arr: Array<Item>): string => {
     const newValue = arr.map((v) => {
         return `${v.color}|${v.from}_${v.to}|${v.note}`;
     });
-    return newValue.join(':');
+    return newValue.join('@');
 };
