@@ -15,9 +15,7 @@ function ItemNote({ data, index }) {
                                 className={style.color}
                                 style={{ backgroundColor: v.color }}
                             ></div>
-                            <p>
-                                {v.from} - {v.to}: {v.note}
-                            </p>
+                            <p>{v.note}</p>
                         </div>
                     ))}
                 </div>
