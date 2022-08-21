@@ -34,7 +34,7 @@ export default (state = initialState, { type, payload }) => {
         case UPDATE_LAYER:
             return {
                 ...state,
-                layers: [payload],
+                layers: payload,
             };
         case DATA_REMOVE_LAYER:
             return {

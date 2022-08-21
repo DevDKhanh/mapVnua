@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 export class CreateLayerDto {
   // @ApiProperty({ example: 'id Lớp' })
@@ -36,6 +36,11 @@ export class CreateLayerDto {
   @ApiProperty({ example: 'XOI_MON_S1' })
   @IsString()
   keyColor: string;
+
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @IsOptional()
+  @IsString()
+  titleNote: string;
 
   @ApiProperty({
     example:
@@ -83,6 +88,14 @@ export class CreateLayerDto {
   @ApiProperty({ example: 1 })
   @IsNumber()
   active: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  activeNote: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  activeTooltip: number;
 
   @ApiProperty({ example: 10 })
   @IsNumber()

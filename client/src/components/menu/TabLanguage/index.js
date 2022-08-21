@@ -3,12 +3,14 @@ import { useState, useEffect, memo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RiArrowDownSFill } from 'react-icons/ri';
 
+import { useCancelToken } from '../../../common/hooks/useCancelToken';
 import { updateLanguage } from '../../../redux/action/dataMap';
 import languageAPI from '../../../api/language';
 import { API } from '../../../constant/config';
 import style from './TabLanguage.module.scss';
 function TabLanguage() {
     const dispatch = useDispatch();
+    const { newCancelToken } = useCancelToken();
 
     const { language } = useSelector((state) => state.dataMap);
 
@@ -18,12 +20,17 @@ function TabLanguage() {
     useEffect(() => {
         (async () => {
             try {
-                const [res] = await languageAPI.getList(null, 1, 100);
+                const [res] = await languageAPI.getList(
+                    newCancelToken(),
+                    1,
+                    100
+                );
                 dispatch(updateLanguage(res.records[0]));
                 setData(res.records);
             } catch (e) {}
         })();
-    }, [dispatch]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className={style.container}>

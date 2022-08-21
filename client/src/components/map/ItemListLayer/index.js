@@ -4,10 +4,12 @@ import clsx from 'clsx';
 
 import ItemLayer from '../ItemLayer';
 import style from './ItemContainerLayer.module.scss';
+import { useCancelToken } from '../../../common/hooks/useCancelToken';
 import layerAPI from '../../../api/layer';
 
 function ItemContainerLayer({ nameItem, classifyId }) {
     const { language, area } = useSelector((state) => state.dataMap);
+    const { newCancelToken } = useCancelToken();
 
     const [toggle, setToggle] = useState(false);
     const [dataLayers, setDataLayers] = useState([]);
@@ -16,9 +18,9 @@ function ItemContainerLayer({ nameItem, classifyId }) {
         (async () => {
             try {
                 const [res] = await layerAPI.getList(
-                    null,
+                    newCancelToken(),
                     1,
-                    1000,
+                    100,
                     language.id,
                     area.id,
                     classifyId
@@ -26,7 +28,8 @@ function ItemContainerLayer({ nameItem, classifyId }) {
                 setDataLayers(res);
             } catch (e) {}
         })();
-    }, [classifyId, language, area]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [area.id, classifyId, language.id]);
 
     return (
         <li className={style.item}>

@@ -8,7 +8,6 @@ import areaAPI from '../../../api/area';
 import classifyAPI from '../../../api/classify';
 import languageAPI from '../../../api/language';
 import layerAPI from '../../../api/layer';
-import uploadAPI from '../../../api/upload';
 import handleGetFile from '../../../common/hooks/getFile';
 import { useValidateAll } from '../../../common/hooks/useValidate';
 import ButtonUpload from '../../../components/controls/ButtonUpload';
@@ -40,6 +39,7 @@ interface typeForm {
     style: any;
     path: any;
     icon: any;
+    titleNote?: string;
     keyColor: string;
     borderColor: string;
     widthBorder: string;
@@ -53,6 +53,8 @@ interface typeForm {
     zIndex: string;
     dataColor: string;
     active: any;
+    activeNote: any;
+    activeTooltip: any;
 }
 
 /*---------- type form submit ----------*/
@@ -65,6 +67,7 @@ interface typeFormSubmit {
     style: string;
     path: string;
     icon: string;
+    titleNote?: string;
     keyColor: string;
     borderColor: string;
     widthBorder: number;
@@ -77,12 +80,13 @@ interface typeFormSubmit {
     lngSW: number;
     zIndex: number;
     active: number;
+    activeNote: number;
+    activeTooltip: number;
 }
 
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
     const validator = useValidateAll;
-    const router = useRouter();
     const { token } = useSelector((state: RootState) => state.auth);
 
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
@@ -91,6 +95,14 @@ function Index() {
 
     const [dataForm, setDataForm] = useState<typeForm>({
         active: {
+            txt: 'Có',
+            value: 1,
+        },
+        activeNote: {
+            txt: 'Có',
+            value: 1,
+        },
+        activeTooltip: {
             txt: 'Có',
             value: 1,
         },
@@ -250,6 +262,8 @@ function Index() {
                     lngSW: Number(dataForm.lngSW),
                     zIndex: Number(dataForm.zIndex),
                     active: dataForm.active.value,
+                    activeNote: dataForm.activeNote.value,
+                    activeTooltip: dataForm.activeTooltip.value,
                 };
                 const [res, status]: any = await layerAPI.post(
                     formSubmit,
@@ -345,6 +359,7 @@ function Index() {
                                 <Fragment>
                                     <SelectColorLayer
                                         onChange={handleChange}
+                                        titleNote={dataForm.titleNote}
                                         dataColor={dataForm.dataColor}
                                         file={dataForm.path}
                                         keyColor={dataForm.keyColor}
@@ -432,6 +447,40 @@ function Index() {
                             )}
 
                             {/*---------- Default ----------*/}
+                            <Select
+                                title="Hiển thị chú thích"
+                                value={dataForm?.activeNote?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'activeNote')
+                                }
+                            />
+                            <Select
+                                title="Hiển thị tooltip"
+                                value={dataForm?.activeTooltip?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'activeTooltip')
+                                }
+                            />
                             <Select
                                 title="Hiển thị"
                                 value={dataForm?.active?.txt}

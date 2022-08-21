@@ -9,7 +9,6 @@ import classifyAPI from '../../../../api/classify';
 import languageAPI from '../../../../api/language';
 import layerAPI from '../../../../api/layer';
 import siteAPI from '../../../../api/site';
-import uploadAPI from '../../../../api/upload';
 import handleGetFile from '../../../../common/hooks/getFile';
 import ButtonUpload from '../../../../components/controls/ButtonUpload';
 import SelectColorLayer from '../../../../components/controls/SelectColorLayer';
@@ -46,12 +45,15 @@ interface typeForm {
     opacityBorder: string;
     backgroundColor: string;
     opacityBackground: string;
+    titleNote?: string;
     latNE: string;
     lngNE: string;
     latSW: string;
     lngSW: string;
     zIndex: string;
     active: any;
+    activeNote: any;
+    activeTooltip: any;
 }
 
 /*---------- type form submit ----------*/
@@ -68,6 +70,7 @@ interface typeFormSubmit {
     borderColor: string;
     widthBorder: number;
     opacityBorder: number;
+    titleNote?: string;
     backgroundColor: string;
     opacityBackground: number;
     latNE: number;
@@ -76,6 +79,8 @@ interface typeFormSubmit {
     lngSW: number;
     zIndex: number;
     active: number;
+    activeNote: number;
+    activeTooltip: number;
 }
 
 /*===========> MAIN COMPONENT <==========*/
@@ -90,6 +95,14 @@ function Index() {
 
     const [dataForm, setDataForm] = useState<typeForm>({
         active: {
+            txt: 'Có',
+            value: 1,
+        },
+        activeNote: {
+            txt: 'Có',
+            value: 1,
+        },
+        activeTooltip: {
             txt: 'Có',
             value: 1,
         },
@@ -199,6 +212,14 @@ function Index() {
                                 txt: data.active ? 'Có' : 'Không',
                                 value: data.active,
                             },
+                            activeNote: {
+                                txt: data.activeNote ? 'Có' : 'Không',
+                                value: data.activeNote,
+                            },
+                            activeTooltip: {
+                                txt: data.activeTooltip ? 'Có' : 'Không',
+                                value: data.activeTooltip,
+                            },
                             nameLayer: data.nameLayer,
                             language: {
                                 value: data.language.id,
@@ -292,6 +313,8 @@ function Index() {
                     lngSW: Number(dataForm.lngSW),
                     zIndex: Number(dataForm.zIndex),
                     active: dataForm.active.value,
+                    activeNote: dataForm.activeNote.value,
+                    activeTooltip: dataForm.activeTooltip.value,
                 };
 
                 try {
@@ -344,6 +367,8 @@ function Index() {
                         lngSW: Number(dataForm.lngSW),
                         zIndex: Number(dataForm.zIndex),
                         active: dataForm.active.value,
+                        activeNote: dataForm.activeNote.value,
+                        activeTooltip: dataForm.activeTooltip.value,
                     };
                     const [res, status]: any = await layerAPI.post(
                         formSubmit,
@@ -460,6 +485,7 @@ function Index() {
                                     <PreviewVector data={dataForm} />
                                     <SelectColorLayer
                                         onChange={handleChange}
+                                        titleNote={dataForm.titleNote}
                                         dataColor={dataForm.dataColor}
                                         file={dataForm.path}
                                         keyColor={dataForm.keyColor}
@@ -543,6 +569,40 @@ function Index() {
                             )}
 
                             {/*---------- Default ----------*/}
+                            <Select
+                                title="Hiển thị chú thích"
+                                value={dataForm?.activeNote?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'activeNote')
+                                }
+                            />
+                            <Select
+                                title="Hiển thị tooltip"
+                                value={dataForm?.activeTooltip?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'activeTooltip')
+                                }
+                            />
                             <Select
                                 title="Hiển thị"
                                 value={dataForm?.active?.txt}

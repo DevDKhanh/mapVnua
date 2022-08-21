@@ -6,6 +6,7 @@ import Menu from '../../components/menu/Menu';
 import FullScreen from '../../components/map/FullScreen';
 import ButtonDisplayLayer from '../../components/map/ButtonDisplayLayer';
 import ContainerLayer from '../../components/map/ContainerLayer';
+import NoteTable from '../../components/map/NoteTable';
 import './styles.scss';
 
 function Map() {
@@ -36,6 +37,7 @@ function Map() {
                 <Menu />
                 <FullScreen />
                 <ContainerLayer />
+                <NoteTable />/
             </MapContainer>
             <ButtonDisplayLayer />
         </div>
