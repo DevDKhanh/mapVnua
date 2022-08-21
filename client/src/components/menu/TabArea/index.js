@@ -36,20 +36,24 @@ function TabArea() {
     };
 
     return (
-        <div>
-            <select className={style.select} onChange={handleChange}>
-                {data.map((item, i) => (
-                    <option
-                        key={i}
-                        value={item.id}
-                        checked={item.id === area.id}
-                        onClick={handleChange}
-                    >
-                        {item.nameArea}
-                    </option>
-                ))}
-            </select>
-        </div>
+        <>
+            {data.length > 1 ? (
+                <div>
+                    <select className={style.select} onChange={handleChange}>
+                        {data.map((item, i) => (
+                            <option
+                                key={i}
+                                value={item.id}
+                                checked={item.id === area.id}
+                                onClick={handleChange}
+                            >
+                                {item.nameArea}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            ) : null}
+        </>
     );
 }
 
