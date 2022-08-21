@@ -87,7 +87,7 @@ function SelectColorLayer({
             const arrColor = getColor(prev);
             const length = arrColor.length;
             const lastItem = arrColor[length - 1];
-            return `${prev}:${lastItem.color}|${lastItem.from}_${lastItem.to}| `;
+            return `${prev}@${lastItem.color}|${lastItem.from}_${lastItem.to}|${lastItem.note}`;
         });
     };
 
@@ -106,7 +106,7 @@ function SelectColorLayer({
                 }
                 return `${v.color}|${v.from}_${v.to}|${v.note}`;
             });
-            setColor(newValue.join(':'));
+            setColor(newValue.join('@'));
         },
         [color]
     );
