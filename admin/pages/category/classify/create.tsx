@@ -1,3 +1,4 @@
+import { route } from 'next/dist/server/router';
 import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -32,6 +33,7 @@ interface typeFormSubmit {
 
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
+    const router = useRouter();
     const validator = useValidateAll;
 
     const { token } = useSelector((state: RootState) => state.auth);
@@ -96,6 +98,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+                    router.push('/category/classify');
                 } else {
                     toast.warn(res?.message);
                 }

@@ -108,6 +108,9 @@ export class ClassifyService {
         .where('classify.languageId = :languageId', {
           languageId: getListDto.langId,
         })
+        .andWhere('classify.active = :active', {
+          active: 1,
+        })
         .leftJoinAndSelect('classify.language', 'language')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)

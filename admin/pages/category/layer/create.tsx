@@ -86,6 +86,7 @@ interface typeFormSubmit {
 
 /*===========> MAIN COMPONENT <==========*/
 function Index() {
+    const router = useRouter();
     const validator = useValidateAll;
     const { token } = useSelector((state: RootState) => state.auth);
 
@@ -271,6 +272,7 @@ function Index() {
                 );
                 if (res && status === 200) {
                     toast.success(res?.message);
+                    router.push('/category/layer');
                 } else {
                     toast.warn(res?.message);
                 }
