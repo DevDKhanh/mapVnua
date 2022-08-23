@@ -141,6 +141,7 @@ function Index() {
                         formSubmit,
                         token
                     );
+
                     if (res && status === 200) {
                         toast.success(res?.message);
                         router.push('/category/location/');

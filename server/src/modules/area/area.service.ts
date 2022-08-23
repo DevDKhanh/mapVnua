@@ -68,38 +68,11 @@ export class AreaService {
         id,
       },
     });
-    const checkArea = await this.areaRepository.findOne({
-      where: {
-        languageId: updateAreaDto.languageId,
-        idArea: updateAreaDto.idArea,
-      },
-    });
-    const checkLanguage = await this.languageRepository.findOne(
-      updateAreaDto.languageId,
-    );
 
     if (!checkId) {
       throw new HttpException(
         await this.i18n.translate('site.IS_NOT_EXISTS', {
           args: { name: 'khu vực' },
-        }),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (checkArea) {
-      throw new HttpException(
-        await this.i18n.translate('site.IS_EXISTS', {
-          args: { name: 'Khu vực sử dụng ngôn ngữ và id tương ứng' },
-        }),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (!checkLanguage) {
-      throw new HttpException(
-        await this.i18n.translate('site.IS_NOT_EXISTS', {
-          args: { name: 'Id ngôn ngữ' },
         }),
         HttpStatus.BAD_REQUEST,
       );

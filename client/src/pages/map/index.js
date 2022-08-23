@@ -33,7 +33,7 @@ function Map() {
                 zoomControl={false}
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <ZoomControl position="bottomright" />
+                <ZoomControl position="topleft" />
                 <Menu />
                 <FullScreen />
                 <ContainerLayer />
