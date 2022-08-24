@@ -491,29 +491,6 @@ function Index() {
                                         keyColor={dataForm.keyColor}
                                     />
                                     <Input
-                                        title="Màu viền"
-                                        isColorPicker
-                                        value={dataForm?.borderColor}
-                                        name="borderColor"
-                                        type="text"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
-                                        title="Màu nền"
-                                        isColorPicker
-                                        value={dataForm?.backgroundColor}
-                                        name="backgroundColor"
-                                        type="text"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
-                                        title="Độ trong suốt viền"
-                                        value={dataForm?.opacityBorder}
-                                        name="opacityBorder"
-                                        type="number"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
                                         title="Độ rộng viền"
                                         value={dataForm?.widthBorder}
                                         name="widthBorder"
@@ -525,6 +502,30 @@ function Index() {
                                         value={dataForm?.opacityBackground}
                                         name="opacityBackground"
                                         type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Màu viền"
+                                        isColorPicker
+                                        value={dataForm?.borderColor}
+                                        name="borderColor"
+                                        type="text"
+                                        onChange={handleChange}
+                                    />
+
+                                    <Input
+                                        title="Độ trong suốt viền"
+                                        value={dataForm?.opacityBorder}
+                                        name="opacityBorder"
+                                        type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Màu nền"
+                                        isColorPicker
+                                        value={dataForm?.backgroundColor}
+                                        name="backgroundColor"
+                                        type="text"
                                         onChange={handleChange}
                                     />
                                 </Fragment>
@@ -587,7 +588,7 @@ function Index() {
                                 }
                             />
                             <Select
-                                title="Hiển thị tooltip"
+                                title="Hiển thị popup"
                                 value={dataForm?.activeTooltip?.txt}
                                 data={[
                                     {

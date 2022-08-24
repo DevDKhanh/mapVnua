@@ -32,7 +32,8 @@ function TabArea() {
     }, [language, dispatch]);
 
     const handleChange = (e) => {
-        dispatch(updateArea({ id: e.target.value }));
+        const areaData = data.filter((v, i) => v.id === e.target.value)[0];
+        dispatch(updateArea(areaData));
     };
 
     return (
@@ -45,7 +46,6 @@ function TabArea() {
                                 key={i}
                                 value={item.id}
                                 checked={item.id === area.id}
-                                onClick={handleChange}
                             >
                                 {item.nameArea}
                             </option>
