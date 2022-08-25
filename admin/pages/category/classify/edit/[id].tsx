@@ -17,6 +17,7 @@ interface typeForm {
     nameClassify: string;
     language: any;
     active: any;
+    show: any;
     no: string;
 }
 
@@ -25,6 +26,7 @@ interface typeFormSubmit {
     nameClassify: string;
     languageId: string;
     active: number;
+    show: number;
     no: number;
 }
 
@@ -38,6 +40,10 @@ function Index() {
         nameClassify: '',
         language: null,
         active: {
+            txt: 'Có',
+            value: 1,
+        },
+        show: {
             txt: 'Có',
             value: 1,
         },
@@ -84,6 +90,10 @@ function Index() {
                                 txt: data.active ? 'Có' : 'Không',
                                 value: data.active,
                             },
+                            show: {
+                                txt: data.show ? 'Có' : 'Không',
+                                value: data.show,
+                            },
                             no: data.no,
                         });
                     }
@@ -108,6 +118,7 @@ function Index() {
             nameClassify: dataForm.nameClassify,
             languageId: dataForm.language.value,
             active: Number(dataForm.active.value),
+            show: Number(dataForm.show.value),
             no: Number(dataForm.no),
         };
 
@@ -182,7 +193,21 @@ function Index() {
                                 name="nameClassify"
                                 onChange={handleChange}
                             />
-
+                            <Select
+                                title="Cụp xòe phân loại"
+                                value={dataForm?.show?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) => handleChangeSelect(v, 'show')}
+                            />
                             <Select
                                 title="Hiển thị"
                                 value={dataForm?.active?.txt}

@@ -20,5 +20,10 @@ export class UpdateClassifyDto {
   @ApiProperty({ example: 1 })
   @IsNumber()
   @IsOptional()
+  show: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  @IsOptional()
   no: number;
 }

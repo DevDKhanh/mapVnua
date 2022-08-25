@@ -58,6 +58,15 @@ export class ClassifyEntity {
   active: number;
 
   @ApiProperty({ example: 1 })
+  @Column({
+    type: 'tinyint',
+    name: 'cupXoe',
+    nullable: false,
+    default: 1,
+  })
+  show: number;
+
+  @ApiProperty({ example: 1 })
   @Column({ type: 'int', name: 'stt', nullable: false })
   no: number;
 
