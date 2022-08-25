@@ -91,6 +91,24 @@ function Index() {
                         },
                     },
                     {
+                        title: 'Tích chọn',
+                        template: (data: any) => {
+                            return data.checked ? 'Có' : 'Không';
+                        },
+                    },
+                    {
+                        title: 'Hiển thị popup',
+                        template: (data: any) => {
+                            return data.activeTooltip ? 'Có' : 'Không';
+                        },
+                    },
+                    {
+                        title: 'Hiển thị chú thích',
+                        template: (data: any) => {
+                            return data.activeNote ? 'Có' : 'Không';
+                        },
+                    },
+                    {
                         title: 'Hiển thị',
                         template: (data: any) => {
                             return data.active ? 'Có' : 'Không';
