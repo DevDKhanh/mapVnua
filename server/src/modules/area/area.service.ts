@@ -94,6 +94,9 @@ export class AreaService {
         .where('area.languageId = :languageId', {
           languageId: getListDto.langId,
         })
+        .andWhere('area.active = :active', {
+          active: 1,
+        })
         .leftJoinAndSelect('area.language', 'language')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)

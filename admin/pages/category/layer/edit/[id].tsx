@@ -294,6 +294,7 @@ function Index() {
 
                 const formSubmit: typeFormSubmit = {
                     ...dataForm,
+                    titleNote: dataForm?.titleNote || dataForm.nameLayer,
                     nameLayer: dataForm.nameLayer,
                     languageId: dataForm.language.value,
                     classifyId: dataForm.classify.value,

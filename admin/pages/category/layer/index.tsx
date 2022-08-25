@@ -60,12 +60,12 @@ function Index() {
                             return i + 1;
                         },
                     },
-                    {
-                        title: 'ID lớp',
-                        template: (data: any) => {
-                            return data.id;
-                        },
-                    },
+                    // {
+                    //     title: 'ID lớp',
+                    //     template: (data: any) => {
+                    //         return data.id;
+                    //     },
+                    // },
                     {
                         title: 'Tên lớp',
                         template: (data: any) => {

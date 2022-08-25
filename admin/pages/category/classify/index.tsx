@@ -51,12 +51,12 @@ function Index() {
                             return i + 1;
                         },
                     },
-                    {
-                        title: 'ID phân loại',
-                        template: (data: any) => {
-                            return data.id;
-                        },
-                    },
+                    // {
+                    //     title: 'ID phân loại',
+                    //     template: (data: any) => {
+                    //         return data.id;
+                    //     },
+                    // },
                     {
                         title: 'Tên phân loại',
                         template: (data: any) => {

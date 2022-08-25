@@ -12,6 +12,14 @@ function NoteTable() {
             layers
                 .filter((v) => v.activeNote === 1)
                 .map((v) => {
+                    if (v.keyColor === 'key') {
+                        return {
+                            data: [],
+                            icon: v.icon,
+                            titleNote: v.titleNote,
+                        };
+                    }
+
                     return {
                         data: convertDataColor(v.dataColor),
                         titleNote: v.titleNote,

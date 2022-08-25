@@ -180,7 +180,7 @@ function SelectColorLayer({
                                 onChange={handleChange}
                                 value={keyColor}
                             >
-                                <option value="">Lựa chọn key color</option>
+                                <option value="key">Lựa chọn key color</option>
                                 {properties.map((v, i) => (
                                     <option key={i} value={v.key}>
                                         {v.key}
