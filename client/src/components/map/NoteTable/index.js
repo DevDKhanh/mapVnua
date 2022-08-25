@@ -16,7 +16,7 @@ function NoteTable() {
                         return {
                             data: [],
                             icon: v.icon,
-                            titleNote: v.titleNote,
+                            titleNote: v.nameLayer,
                         };
                     }
 
