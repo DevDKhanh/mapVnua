@@ -174,6 +174,15 @@ export class LayerEntity {
   @ApiProperty({ example: 1 })
   @Column({
     type: 'tinyint',
+    name: 'tichChon',
+    nullable: false,
+    default: 0,
+  })
+  checked: number;
+
+  @ApiProperty({ example: 1 })
+  @Column({
+    type: 'tinyint',
     name: 'hienThiChuThich',
     nullable: false,
     default: 1,

@@ -51,6 +51,7 @@ interface typeForm {
     latSW: string;
     lngSW: string;
     zIndex: string;
+    checked: any;
     active: any;
     activeNote: any;
     activeTooltip: any;
@@ -78,6 +79,7 @@ interface typeFormSubmit {
     latSW: number;
     lngSW: number;
     zIndex: number;
+    checked: number;
     active: number;
     activeNote: number;
     activeTooltip: number;
@@ -94,6 +96,10 @@ function Index() {
     const [listArea, setListArea] = useState<Array<any>>([]);
 
     const [dataForm, setDataForm] = useState<typeForm>({
+        checked: {
+            txt: 'Không',
+            value: 0,
+        },
         active: {
             txt: 'Có',
             value: 1,
@@ -208,6 +214,10 @@ function Index() {
                         const { data } = res;
                         setDataForm({
                             ...data,
+                            checked: {
+                                txt: data.checked ? 'Có' : 'Không',
+                                value: data.checked,
+                            },
                             active: {
                                 txt: data.active ? 'Có' : 'Không',
                                 value: data.active,
@@ -313,6 +323,7 @@ function Index() {
                     latSW: Number(dataForm.latSW),
                     lngSW: Number(dataForm.lngSW),
                     zIndex: Number(dataForm.zIndex),
+                    checked: dataForm.checked.value,
                     active: dataForm.active.value,
                     activeNote: dataForm.activeNote.value,
                     activeTooltip: dataForm.activeTooltip.value,
@@ -571,6 +582,23 @@ function Index() {
                             )}
 
                             {/*---------- Default ----------*/}
+                            <Select
+                                title="Tích chọn"
+                                value={dataForm?.checked?.txt}
+                                data={[
+                                    {
+                                        txt: 'Có',
+                                        value: 1,
+                                    },
+                                    {
+                                        txt: 'Không',
+                                        value: 0,
+                                    },
+                                ]}
+                                onChange={(v) =>
+                                    handleChangeSelect(v, 'checked')
+                                }
+                            />
                             <Select
                                 title="Hiển thị chú thích"
                                 value={dataForm?.activeNote?.txt}
