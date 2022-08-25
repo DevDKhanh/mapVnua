@@ -105,6 +105,11 @@ export class UpdateLayerDto {
   @IsOptional()
   active: number;
 
+  @ApiProperty({ example: 0 })
+  @IsNumber()
+  @IsOptional()
+  checked: number;
+
   @ApiProperty({ example: 1 })
   @IsNumber()
   @IsOptional()
