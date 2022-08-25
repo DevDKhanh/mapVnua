@@ -177,6 +177,7 @@ export class LayerService {
         areaId: getListDto.areaId,
         languageId: getListDto.langId,
         classifyId: getListDto.classifyId,
+        active: 1,
       },
     });
     return result;

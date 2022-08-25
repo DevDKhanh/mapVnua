@@ -15,6 +15,7 @@ function ListLayer({ active = true, title = 'Các lớp bản đồ' }) {
                     <ItemListLayer
                         key={item.id}
                         nameItem={item.nameClassify}
+                        defaultActive={item.show}
                         classifyId={item.id}
                     />
                 ))}

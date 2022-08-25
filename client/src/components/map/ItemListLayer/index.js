@@ -7,11 +7,11 @@ import style from './ItemContainerLayer.module.scss';
 import { useCancelToken } from '../../../common/hooks/useCancelToken';
 import layerAPI from '../../../api/layer';
 
-function ItemContainerLayer({ nameItem, classifyId }) {
+function ItemContainerLayer({ nameItem, classifyId, defaultActive }) {
     const { language, area } = useSelector((state) => state.dataMap);
     const { newCancelToken } = useCancelToken();
 
-    const [toggle, setToggle] = useState(false);
+    const [toggle, setToggle] = useState(defaultActive);
     const [dataLayers, setDataLayers] = useState([]);
 
     useEffect(() => {

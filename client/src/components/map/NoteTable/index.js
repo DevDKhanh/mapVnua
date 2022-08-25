@@ -10,7 +10,7 @@ function NoteTable() {
     const dataNote = useMemo(
         () =>
             layers
-                .filter((v) => v.activeNote === 1 && v.titleNote !== '')
+                .filter((v) => v.activeNote === 1)
                 .map((v) => {
                     return {
                         data: convertDataColor(v.dataColor),
@@ -21,11 +21,16 @@ function NoteTable() {
     );
 
     return (
-        <div className={style.container}>
-            {dataNote.map((v, i) => (
-                <ItemNote key={i} data={v} index={i} />
-            ))}
-        </div>
+        <>
+            {dataNote.length > 0 ? (
+                <div className={style.container}>
+                    <h4 className={style.title}>Chú thích</h4>
+                    {dataNote.map((v, i) => (
+                        <ItemNote key={i} data={v} index={i} />
+                    ))}
+                </div>
+            ) : null}
+        </>
     );
 }
 

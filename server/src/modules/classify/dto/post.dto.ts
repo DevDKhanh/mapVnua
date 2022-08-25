@@ -19,5 +19,9 @@ export class CreateClassifyDto {
 
   @ApiProperty({ example: 1 })
   @IsNumber()
+  show: number;
+
+  @ApiProperty({ example: 1 })
+  @IsNumber()
   no: number;
 }
