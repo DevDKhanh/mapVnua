@@ -8,12 +8,14 @@ import {
     Popup,
 } from 'react-leaflet';
 import { useSelector } from 'react-redux';
+import Favicon from 'react-favicon';
 
 import Menu from '../../components/menu/Menu';
 import FullScreen from '../../components/map/FullScreen';
 import ButtonDisplayLayer from '../../components/map/ButtonDisplayLayer';
 import ContainerLayer from '../../components/map/ContainerLayer';
 import NoteTable from '../../components/map/NoteTable';
+import { API } from '../../constant/config';
 import './styles.scss';
 
 function Map() {
@@ -39,8 +41,15 @@ function Map() {
         return area?.zoom || settingMap?.zoom;
     }, [area?.zoom, settingMap?.zoom]);
 
+    useEffect(() => {
+        document.title = settingMap.title;
+    }, [settingMap.title]);
+
     return (
         <div className="container">
+            {settingMap?.icon && (
+                <Favicon url={API + '/upload' + settingMap.icon}></Favicon>
+            )}
             <MapContainer
                 className="map_container"
                 center={center}
