@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, memo } from 'react';
 
-import { updateArea } from '../../../redux/action/dataMap';
+import { updateArea, updateLayer } from '../../../redux/action/dataMap';
 import areaAPI from '../../../api/area';
 import style from './TabArea.module.scss';
 
@@ -34,6 +34,7 @@ function TabArea() {
     const handleChange = (e) => {
         const areaData = data.filter((v, i) => v.id === e.target.value)[0];
         dispatch(updateArea(areaData));
+        dispatch(updateLayer([]));
     };
 
     return (
