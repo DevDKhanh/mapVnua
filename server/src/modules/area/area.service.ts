@@ -100,6 +100,7 @@ export class AreaService {
         .leftJoinAndSelect('area.language', 'language')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)
+        .orderBy('area.idArea', 'ASC')
         .getManyAndCount();
 
       return createPagination(
@@ -114,6 +115,7 @@ export class AreaService {
         .leftJoinAndSelect('area.language', 'language')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)
+        .orderBy('area.idArea', 'ASC')
         .getManyAndCount();
 
       return createPagination(
