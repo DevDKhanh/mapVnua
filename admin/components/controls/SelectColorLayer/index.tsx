@@ -44,31 +44,35 @@ function SelectColorLayer({
     }, [dataColor]);
 
     useEffect(() => {
-        console.time();
         if (fileData?.features && typeColor !== '0' && keyColor !== 'key') {
-            const arr: Array<any> = [];
-            for (let v of fileData?.features) {
-                if (!arr.includes(v.properties[typeColor])) {
-                    arr.push(v.properties[keyColor]);
+            new Promise((resolve, reject) => {
+                const arr: Array<any> = [];
+                for (let v of fileData?.features) {
+                    if (!arr.includes(v.properties[typeColor])) {
+                        arr.push(v.properties[keyColor]);
+                    }
                 }
-            }
-            setValueKey(arr);
-            console.timeEnd();
+                resolve(arr);
+            }).then((data: any) => {
+                setValueKey(data);
+            });
         }
     }, [fileData?.features, keyColor, typeColor]);
 
     useEffect(() => {
         if (valueKey.length > 0) {
-            const colorString = convertColorToString2(
-                valueKey.map((v: any, i: number) => {
-                    return {
-                        color: stringToColour(`${v}`),
-                        value: v,
-                        note: v,
-                    };
-                })
-            );
-            setColor(colorString);
+            new Promise((resolve, reject) => {
+                const colorString = convertColorToString2(
+                    valueKey.map((v: any, i: number) => {
+                        return {
+                            color: stringToColour(`${v}`),
+                            value: v,
+                            note: v,
+                        };
+                    })
+                );
+                resolve(colorString);
+            }).then((data: any) => setColor(data));
         }
     }, [valueKey]);
 
@@ -226,6 +230,8 @@ function SelectColorLayer({
     const handleChange = (e: any) => {
         onChange(e);
     };
+
+    console.log(color);
 
     return (
         <Fragment>
