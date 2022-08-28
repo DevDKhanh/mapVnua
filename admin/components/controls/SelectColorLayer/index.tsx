@@ -44,16 +44,18 @@ function SelectColorLayer({
     }, [dataColor]);
 
     useEffect(() => {
-        if (fileData?.features && keyColor !== 'key') {
+        console.time();
+        if (fileData?.features && typeColor !== '0' && keyColor !== 'key') {
             const arr: Array<any> = [];
-            fileData?.features.forEach((v: any, i: number) => {
-                if (!arr.includes(v.properties[keyColor])) {
+            for (let v of fileData?.features) {
+                if (!arr.includes(v.properties[typeColor])) {
                     arr.push(v.properties[keyColor]);
                 }
-            });
+            }
             setValueKey(arr);
+            console.timeEnd();
         }
-    }, [fileData?.features, keyColor]);
+    }, [fileData?.features, keyColor, typeColor]);
 
     useEffect(() => {
         if (valueKey.length > 0) {

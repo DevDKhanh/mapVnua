@@ -382,22 +382,6 @@ function Index() {
                                     />
                                     <PreviewVector data={dataForm} />
                                     <Input
-                                        title="Độ rộng viền"
-                                        value={dataForm?.widthBorder}
-                                        name="widthBorder"
-                                        type="number"
-                                        step={0.1}
-                                        onChange={handleChange}
-                                    />
-                                    <Input
-                                        title="Độ trong nền viền"
-                                        value={dataForm?.opacityBackground}
-                                        name="opacityBackground"
-                                        type="number"
-                                        step={0.1}
-                                        onChange={handleChange}
-                                    />
-                                    <Input
                                         title="Màu viền"
                                         isColorPicker
                                         value={dataForm?.borderColor}
@@ -414,11 +398,27 @@ function Index() {
                                         onChange={handleChange}
                                     />
                                     <Input
+                                        title="Độ rộng viền"
+                                        value={dataForm?.widthBorder}
+                                        name="widthBorder"
+                                        type="number"
+                                        step={0.1}
+                                        onChange={handleChange}
+                                    />
+                                    <Input
                                         title="Màu nền"
                                         isColorPicker
                                         value={dataForm?.backgroundColor}
                                         name="backgroundColor"
                                         type="text"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Độ trong suốt nền"
+                                        value={dataForm?.opacityBackground}
+                                        name="opacityBackground"
+                                        type="number"
+                                        step={0.1}
                                         onChange={handleChange}
                                     />
                                 </Fragment>

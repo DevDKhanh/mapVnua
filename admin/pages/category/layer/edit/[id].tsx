@@ -510,20 +510,6 @@ function Index() {
                                         typeColor={dataForm.typeColor}
                                     />
                                     <Input
-                                        title="Độ rộng viền"
-                                        value={dataForm?.widthBorder}
-                                        name="widthBorder"
-                                        type="number"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
-                                        title="Độ trong nền viền"
-                                        value={dataForm?.opacityBackground}
-                                        name="opacityBackground"
-                                        type="number"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
                                         title="Màu viền"
                                         isColorPicker
                                         value={dataForm?.borderColor}
@@ -531,12 +517,20 @@ function Index() {
                                         type="text"
                                         onChange={handleChange}
                                     />
-
                                     <Input
                                         title="Độ trong suốt viền"
                                         value={dataForm?.opacityBorder}
                                         name="opacityBorder"
+                                        step={0.1}
                                         type="number"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Độ rộng viền"
+                                        value={dataForm?.widthBorder}
+                                        name="widthBorder"
+                                        type="number"
+                                        step={0.1}
                                         onChange={handleChange}
                                     />
                                     <Input
@@ -545,6 +539,14 @@ function Index() {
                                         value={dataForm?.backgroundColor}
                                         name="backgroundColor"
                                         type="text"
+                                        onChange={handleChange}
+                                    />
+                                    <Input
+                                        title="Độ trong suốt nền"
+                                        value={dataForm?.opacityBackground}
+                                        name="opacityBackground"
+                                        type="number"
+                                        step={0.1}
                                         onChange={handleChange}
                                     />
                                 </Fragment>
