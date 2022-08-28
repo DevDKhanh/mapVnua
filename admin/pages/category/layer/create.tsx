@@ -41,6 +41,7 @@ interface typeForm {
     icon: any;
     titleNote?: string;
     keyColor: string;
+    typeColor: string;
     borderColor: string;
     widthBorder: string;
     opacityBorder: string;
@@ -70,6 +71,7 @@ interface typeFormSubmit {
     icon: string;
     titleNote?: string;
     keyColor: string;
+    typeColor: number;
     borderColor: string;
     widthBorder: number;
     opacityBorder: number;
@@ -122,6 +124,7 @@ function Index() {
             value: 'Raster',
         },
         keyColor: 'key',
+        typeColor: '0',
         path: '',
         icon: '',
         dataColor: DATA_COLOR,
@@ -250,6 +253,7 @@ function Index() {
             try {
                 const formSubmit: typeFormSubmit = {
                     ...dataForm,
+                    typeColor: +dataForm.typeColor,
                     titleNote: dataForm?.titleNote || dataForm.nameLayer,
                     nameLayer: dataForm.nameLayer,
                     languageId: dataForm.language.value,
@@ -274,6 +278,7 @@ function Index() {
                     activeNote: dataForm.activeNote.value,
                     activeTooltip: dataForm.activeTooltip.value,
                 };
+
                 const [res, status]: any = await layerAPI.post(
                     formSubmit,
                     token
@@ -373,6 +378,7 @@ function Index() {
                                         dataColor={dataForm.dataColor}
                                         file={dataForm.path}
                                         keyColor={dataForm.keyColor}
+                                        typeColor={dataForm.typeColor}
                                     />
                                     <PreviewVector data={dataForm} />
                                     <Input

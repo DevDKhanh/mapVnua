@@ -28,7 +28,7 @@ export class LayerEntity {
     type: 'varchar',
     name: 'tenLop',
     length: 100,
-    unique: true,
+    unique: false,
     nullable: false,
   })
   nameLayer: string;
@@ -75,6 +75,15 @@ export class LayerEntity {
   @ApiProperty({ example: 'XOI_MON_S1' })
   @Column({ type: 'varchar', name: 'truongMauNen', length: 50 })
   keyColor: string;
+
+  @ApiProperty({ example: '0' })
+  @Column({
+    type: 'tinyint',
+    name: 'kieuNhapMau',
+    nullable: false,
+    default: 0,
+  })
+  typeColor: number;
 
   @ApiProperty({ example: 'Tiêu đề chú thích' })
   @Column({

@@ -14,12 +14,16 @@ import { toast } from 'react-toastify';
 import uploadAPI from '../../../api/upload';
 import {
     convertColorToString,
+    convertColorToString2,
     getColor,
+    getColor2,
+    stringToColour,
 } from '../../../common/func/convertColor';
 import { copy } from '../../../common/func/copy';
 import { arrayMove } from '../../../common/func/helper';
 import { DATA_COLOR } from '../../../constants/config';
 import InputColor from './components/InputColor';
+import InputColor2 from './components/InputColor2';
 import styles from './SelectColorLayer.module.scss';
 
 function SelectColorLayer({
@@ -27,15 +31,44 @@ function SelectColorLayer({
     dataColor,
     file,
     keyColor,
+    typeColor,
     titleNote,
 }: any) {
     const [open, setOpen] = useState<boolean>(false);
     const [color, setColor] = useState<string>(DATA_COLOR);
+    const [valueKey, setValueKey] = useState<Array<string>>([]);
     const [fileData, setFileData] = useState<any>(null);
 
     useEffect(() => {
         setColor(dataColor);
     }, [dataColor]);
+
+    useEffect(() => {
+        if (fileData?.features && keyColor !== 'key') {
+            const arr: Array<any> = [];
+            fileData?.features.forEach((v: any, i: number) => {
+                if (!arr.includes(v.properties[keyColor])) {
+                    arr.push(v.properties[keyColor]);
+                }
+            });
+            setValueKey(arr);
+        }
+    }, [fileData?.features, keyColor]);
+
+    useEffect(() => {
+        if (valueKey.length > 0) {
+            const colorString = convertColorToString2(
+                valueKey.map((v: any, i: number) => {
+                    return {
+                        color: stringToColour(`${v}`),
+                        value: v,
+                        note: v,
+                    };
+                })
+            );
+            setColor(colorString);
+        }
+    }, [valueKey]);
 
     useEffect(() => {
         function onReaderLoad(event: any) {
@@ -75,73 +108,107 @@ function SelectColorLayer({
         return arr;
     }, [fileData]);
 
-    const convertColor: Array<{
-        color: string;
-        from: number;
-        to: number;
-        note: string;
-    }> = useMemo(() => getColor(color), [color]);
+    const convertColor: Array<any> = useMemo(
+        () => (typeColor == '0' ? getColor(color) : getColor2(color)),
+        [color, typeColor]
+    );
 
     const handleAddColor = () => {
         setColor((prev) => {
-            const arrColor = getColor(prev);
+            const arrColor =
+                typeColor == '0' ? getColor(prev) : getColor2(prev);
             const length = arrColor.length;
-            const lastItem = arrColor[length - 1];
-            return `${prev}@${lastItem.color}|${lastItem.from}_${lastItem.to}|${lastItem.note}`;
+            const lastItem: any = arrColor[length - 1];
+
+            if (typeColor == '0') {
+                return `${prev}@${lastItem.color}|${lastItem.from}_${lastItem.to}|${lastItem.note}`;
+            } else {
+                return `${prev}@${lastItem.color}|${lastItem.value}|${lastItem.note}`;
+            }
         });
     };
 
     const handleChangeValue = useCallback(
         (e: any, i: number) => {
             const { value, name } = e.target;
-            const arrColor = getColor(color);
-            const newValue = arrColor.map((v, index) => {
+            const arrColor =
+                typeColor == '0' ? getColor(color) : getColor2(color);
+            const newValue = arrColor.map((v: any, index) => {
                 if (index === i) {
-                    const o = {
+                    const o: any = {
                         ...v,
                         [name]: value,
                     };
 
-                    return `${o.color}|${o.from}_${o.to}|${o.note}`;
+                    return typeColor == '0'
+                        ? `${o.color}|${o.from}_${o.to}|${o.note}`
+                        : `${o.color}|${o.value}|${o.note}`;
                 }
-                return `${v.color}|${v.from}_${v.to}|${v.note}`;
+                return typeColor == '0'
+                    ? `${v.color}|${v.from}_${v.to}|${v.note}`
+                    : `${v.color}|${v.value}|${v.note}`;
             });
             setColor(newValue.join('@'));
         },
-        [color]
+        [color, typeColor]
     );
 
     const handleDelete = useCallback(
         (i: number) => {
-            const arrColor = getColor(color);
+            const arrColor: any =
+                typeColor == '0' ? getColor(color) : getColor2(color);
             if (arrColor.length > 1) {
-                const newValue = arrColor.filter((v, index) => index !== i);
-                setColor(convertColorToString(newValue));
+                const newValue: any = arrColor.filter(
+                    (v: any, index: any) => index !== i
+                );
+                setColor(
+                    typeColor == '0'
+                        ? convertColorToString(newValue)
+                        : convertColorToString2(newValue)
+                );
             } else {
                 toast.warn('Vui lòng giữ lại tối thiểu 1 dải màu');
             }
         },
-        [color]
+        [color, typeColor]
     );
 
     const handleDown = useCallback(
         (i: number) => {
-            const arrColor = getColor(color);
+            const arrColor: any =
+                typeColor == '0' ? getColor(color) : getColor2(color);
             if (i < arrColor.length - 1) {
-                setColor(convertColorToString(arrayMove(arrColor, i, i + 1)));
+                if (typeColor == '0') {
+                    setColor(
+                        convertColorToString(arrayMove(arrColor, i, i + 1))
+                    );
+                } else {
+                    setColor(
+                        convertColorToString2(arrayMove(arrColor, i, i + 1))
+                    );
+                }
             }
         },
-        [color]
+        [color, typeColor]
     );
 
     const handleUp = useCallback(
         (i: number) => {
-            const arrColor = getColor(color);
+            const arrColor: any =
+                typeColor == '0' ? getColor(color) : getColor2(color);
             if (i > 0) {
-                setColor(convertColorToString(arrayMove(arrColor, i, i - 1)));
+                if (typeColor == '0') {
+                    setColor(
+                        convertColorToString(arrayMove(arrColor, i, i - 1))
+                    );
+                } else {
+                    setColor(
+                        convertColorToString2(arrayMove(arrColor, i, i - 1))
+                    );
+                }
             }
         },
-        [color]
+        [color, typeColor]
     );
 
     const handleSubmit = () => {
@@ -187,6 +254,16 @@ function SelectColorLayer({
                                     </option>
                                 ))}
                             </select>
+                            <select
+                                name="typeColor"
+                                onChange={handleChange}
+                                value={typeColor}
+                            >
+                                <option value="0">Nhập khoảng giá trị</option>
+                                <option value="1">
+                                    Nhập theo trường giá trị
+                                </option>
+                            </select>
                             <input
                                 name="titleNote"
                                 value={titleNote}
@@ -202,20 +279,38 @@ function SelectColorLayer({
                             <RiCloseFill />
                         </div>
                         <div className={styles.main}>
-                            {convertColor.map((v, i) => (
-                                <InputColor
-                                    key={i}
-                                    note={v.note}
-                                    color={v.color}
-                                    from={v.from}
-                                    to={v.to}
-                                    index={i}
-                                    onChange={handleChangeValue}
-                                    onDelete={handleDelete}
-                                    onDown={handleDown}
-                                    onUp={handleUp}
-                                />
-                            ))}
+                            {convertColor.map((v, i) => {
+                                if (typeColor == '0') {
+                                    return (
+                                        <InputColor
+                                            key={i}
+                                            note={v.note}
+                                            color={v.color}
+                                            from={v.from}
+                                            to={v.to}
+                                            index={i}
+                                            onChange={handleChangeValue}
+                                            onDelete={handleDelete}
+                                            onDown={handleDown}
+                                            onUp={handleUp}
+                                        />
+                                    );
+                                } else {
+                                    return (
+                                        <InputColor2
+                                            key={i}
+                                            note={v.note}
+                                            color={v.color}
+                                            value={v.value}
+                                            index={i}
+                                            onChange={handleChangeValue}
+                                            onDelete={handleDelete}
+                                            onDown={handleDown}
+                                            onUp={handleUp}
+                                        />
+                                    );
+                                }
+                            })}
                             <div
                                 className={clsx(styles.btn, styles.btnAdd)}
                                 onClick={handleAddColor}

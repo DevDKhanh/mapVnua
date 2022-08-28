@@ -22,15 +22,18 @@ async function bootstrap() {
     methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS',
   });
   const PORT = config.get<number>('PORT');
-  const configDocs = new DocumentBuilder()
-    .setTitle('Api map  ')
-    .setDescription('Vnua team')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .addTag('Backend')
-    .build();
-  const document = SwaggerModule.createDocument(app, configDocs);
-  SwaggerModule.setup('swagger', app, document);
+  const PRODUCT: string = config.get<string>('NODE_ENV');
+  if (PRODUCT !== 'production') {
+    const configDocs = new DocumentBuilder()
+      .setTitle('Api map  ')
+      .setDescription('Vnua team')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .addTag('Backend')
+      .build();
+    const document = SwaggerModule.createDocument(app, configDocs);
+    SwaggerModule.setup('swagger', app, document);
+  }
   await app.listen(PORT);
   console.log('App Running On Port : ' + PORT);
 }

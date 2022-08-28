@@ -38,6 +38,7 @@ interface typeForm {
     style: any;
     path: any;
     icon: any;
+    typeColor: string;
     keyColor: string;
     dataColor: string;
     borderColor: string;
@@ -70,6 +71,7 @@ interface typeFormSubmit {
     dataColor: string;
     borderColor: string;
     widthBorder: number;
+    typeColor: number;
     opacityBorder: number;
     titleNote?: string;
     backgroundColor: string;
@@ -120,6 +122,7 @@ function Index() {
             txt: 'Vector',
             value: 'Vector',
         },
+        typeColor: '0',
         keyColor: 'key',
         dataColor: DATA_COLOR,
         path: '',
@@ -214,6 +217,7 @@ function Index() {
                         const { data } = res;
                         setDataForm({
                             ...data,
+                            typeColor: `${data.typeColor}`,
                             checked: {
                                 txt: data.checked ? 'Có' : 'Không',
                                 value: data.checked,
@@ -304,6 +308,7 @@ function Index() {
 
                 const formSubmit: typeFormSubmit = {
                     ...dataForm,
+                    typeColor: +dataForm.typeColor,
                     titleNote: dataForm?.titleNote || dataForm.nameLayer,
                     nameLayer: dataForm.nameLayer,
                     languageId: dataForm.language.value,
@@ -360,6 +365,7 @@ function Index() {
                 try {
                     const formSubmit: typeFormSubmit = {
                         ...dataForm,
+                        typeColor: +dataForm.typeColor,
                         nameLayer: dataForm.nameLayer,
                         languageId: dataForm.language.value,
                         classifyId: dataForm.classify.value,
@@ -501,6 +507,7 @@ function Index() {
                                         dataColor={dataForm.dataColor}
                                         file={dataForm.path}
                                         keyColor={dataForm.keyColor}
+                                        typeColor={dataForm.typeColor}
                                     />
                                     <Input
                                         title="Độ rộng viền"

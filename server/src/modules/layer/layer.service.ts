@@ -42,20 +42,6 @@ export class LayerService {
     const checkClassify = await this.classRepository.findOne(
       createLayerDto.classifyId,
     );
-    const checkLayerId = await this.layerRepository.findOne({
-      where: {
-        nameLayer: createLayerDto.nameLayer,
-      },
-    });
-
-    if (checkLayerId) {
-      throw new HttpException(
-        await this.i18n.translate('site.IS_EXISTS', {
-          args: { name: 'Tên lớp' },
-        }),
-        HttpStatus.BAD_REQUEST,
-      );
-    }
 
     /********** Kiểm tra dữ liệu ngôn ngữ có tồn tại không **********/
     if (!checkLanguage) {
@@ -160,6 +146,7 @@ export class LayerService {
       .leftJoinAndSelect('layer.area', 'area')
       .leftJoinAndSelect('layer.classify', 'classify')
       .skip((+getListDto.page - 1) * getListDto.pageSize)
+      .orderBy('layer.createdAt', 'DESC')
       .take(+getListDto.pageSize)
       .getManyAndCount();
 

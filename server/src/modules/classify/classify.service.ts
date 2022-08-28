@@ -131,7 +131,7 @@ export class ClassifyService {
         .leftJoinAndSelect('classify.layers', 'layers')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)
-        .orderBy('classify.no', 'ASC')
+        .orderBy('classify.createdAt', 'DESC')
         .getManyAndCount();
 
       return createPagination(

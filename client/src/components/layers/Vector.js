@@ -3,7 +3,10 @@ import { GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 
 import { API } from '../../constant/config';
-import { convertDataColor } from '../../common/func/colorConvert';
+import {
+    convertDataColor,
+    convertDataColor2,
+} from '../../common/func/colorConvert';
 import uploadAPI from '../../api/upload';
 
 function Vector({ path, data }) {
@@ -27,8 +30,11 @@ function Vector({ path, data }) {
     }, [path]);
 
     const dataColor = useMemo(
-        () => convertDataColor(data.dataColor),
-        [data.dataColor]
+        () =>
+            data.typeColor === '0'
+                ? convertDataColor(data.dataColor)
+                : convertDataColor2(data.dataColor),
+        [data.dataColor, data.typeColor]
     );
 
     const getInfo = (data) => {
@@ -59,7 +65,11 @@ function Vector({ path, data }) {
     const setColor = (d, t, l) => {
         if (!!d) {
             for (let i of l) {
-                if (d >= i.from && d <= i.to) {
+                if (data.typeColor === 0 && d >= i.from && d <= i.to) {
+                    return i.color;
+                }
+
+                if (data.typeColor === 1 && d == i.value) {
                     return i.color;
                 }
             }

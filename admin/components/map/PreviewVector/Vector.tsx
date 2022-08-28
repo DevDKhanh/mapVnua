@@ -2,11 +2,12 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { GeoJSON } from 'react-leaflet';
 import L from 'leaflet';
 import iconImg from '../../../assets/image/location.svg';
-import { getColor } from '../../../common/func/convertColor';
+import { getColor, getColor2 } from '../../../common/func/convertColor';
 
 interface dataType {
     icon: any;
     keyColor: string;
+    typeColor: string;
     borderColor: string;
     widthBorder: string;
     opacityBorder: string;
@@ -21,7 +22,11 @@ function Vector({ fileData, data }: { fileData: any; data: dataType }) {
     const setColor = (d: any, t: any, l: any) => {
         if (!!d) {
             for (let i of l) {
-                if (d >= i.from && d <= i.to) {
+                if (data.typeColor == '0' && d >= i.from && d <= i.to) {
+                    return i.color;
+                }
+
+                if (data.typeColor == '1' && d == i.value) {
                     return i.color;
                 }
             }
@@ -77,7 +82,9 @@ function Vector({ fileData, data }: { fileData: any; data: dataType }) {
             color: setColor(
                 properties[`${data.keyColor}`],
                 0,
-                getColor(data.dataColor)
+                data.typeColor == '0'
+                    ? getColor(data.dataColor)
+                    : getColor2(data.dataColor)
             ),
             opacity: +data.opacityBorder,
             weight: +data.widthBorder,
@@ -85,7 +92,9 @@ function Vector({ fileData, data }: { fileData: any; data: dataType }) {
             fillColor: setColor(
                 properties[`${data.keyColor}`],
                 1,
-                getColor(data.dataColor)
+                data.typeColor == '0'
+                    ? getColor(data.dataColor)
+                    : getColor2(data.dataColor)
             ),
         };
     };

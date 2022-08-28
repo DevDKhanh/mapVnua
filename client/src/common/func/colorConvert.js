@@ -13,3 +13,18 @@ export const convertDataColor = (c) => {
     }
     return arr;
 };
+
+export const convertDataColor2 = (c) => {
+    const arr = [];
+    const e = c.split('@');
+    for (let i of e) {
+        const a = i.split('|');
+        const o = {
+            color: a[0],
+            value: a[1],
+            note: a[2],
+        };
+        arr.push(o);
+    }
+    return arr;
+};

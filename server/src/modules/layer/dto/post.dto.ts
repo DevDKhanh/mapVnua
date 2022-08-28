@@ -89,6 +89,10 @@ export class CreateLayerDto {
   @IsNumber()
   active: number;
 
+  @ApiProperty({ example: 1 })
+  @IsNumber()
+  typeColor: number;
+
   @ApiProperty({ example: 0 })
   @IsNumber()
   checked: number;
