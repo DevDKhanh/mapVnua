@@ -1,29 +1,30 @@
 .item {
-	user-select: none;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 5px 15px;
-	background-color: #fff;
-	&:hover {
-		cursor: pointer;
-		background-color: rgb(252, 252, 252);
-	}
-	&:active {
-		background-color: rgb(255, 255, 255);
-	}
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 2px;
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    &:hover {
+        cursor: pointer;
+        background-color: rgb(252, 252, 252);
+    }
+    &:active {
+        background-color: rgb(255, 255, 255);
+    }
 
-	.text {
-		display: flex;
-		align-items: center;
-	}
+    .text {
+        display: flex;
+        align-items: center;
+    }
 
-	.icon {
-		display: inline-block;
-		width: 30px;
-		margin-right: 8px;
-		img {
-			width: 100%;
-		}
-	}
+    .icon {
+        display: inline-block;
+        width: 30px;
+        margin-right: 8px;
+        img {
+            width: 100%;
+        }
+    }
 }

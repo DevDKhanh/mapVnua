@@ -51,3 +51,7 @@ picture {
     left: 100px;
     z-index: 1000;
 }
+
+.leaflet-popup-content p {
+    margin: 5px 0 !important;
+}
