@@ -22,6 +22,7 @@ import {
 import { copy } from '../../../common/func/copy';
 import { arrayMove } from '../../../common/func/helper';
 import { DATA_COLOR } from '../../../constants/config';
+import LoadingScreen from '../LoadingScreen';
 import InputColor from './components/InputColor';
 import InputColor2 from './components/InputColor2';
 import styles from './SelectColorLayer.module.scss';
@@ -34,6 +35,7 @@ function SelectColorLayer({
     typeColor,
     titleNote,
 }: any) {
+    const [loading, setLoading] = useState<boolean>(false);
     const [open, setOpen] = useState<boolean>(false);
     const [color, setColor] = useState<string>(DATA_COLOR);
     const [valueKey, setValueKey] = useState<Array<string>>([]);
@@ -45,22 +47,27 @@ function SelectColorLayer({
 
     useEffect(() => {
         if (fileData?.features && typeColor !== '0' && keyColor !== 'key') {
+            setLoading(true);
             new Promise((resolve, reject) => {
                 const arr: Array<any> = [];
                 for (let v of fileData?.features) {
-                    if (!arr.includes(v.properties[typeColor])) {
+                    if (!arr.includes(v.properties[keyColor])) {
                         arr.push(v.properties[keyColor]);
                     }
                 }
                 resolve(arr);
-            }).then((data: any) => {
-                setValueKey(data);
-            });
+            })
+                .then((data: any) => {
+                    setLoading(false);
+                    setValueKey(data);
+                })
+                .catch((err) => setLoading(false));
         }
     }, [fileData?.features, keyColor, typeColor]);
 
     useEffect(() => {
         if (valueKey.length > 0) {
+            setLoading(true);
             new Promise((resolve, reject) => {
                 const colorString = convertColorToString2(
                     valueKey.map((v: any, i: number) => {
@@ -72,7 +79,12 @@ function SelectColorLayer({
                     })
                 );
                 resolve(colorString);
-            }).then((data: any) => setColor(data));
+            })
+                .then((data: any) => {
+                    setLoading(false);
+                    setColor(data);
+                })
+                .catch((err) => setLoading(false));
         }
     }, [valueKey]);
 
@@ -231,10 +243,9 @@ function SelectColorLayer({
         onChange(e);
     };
 
-    console.log(color);
-
     return (
         <Fragment>
+            <LoadingScreen isLoading={loading} />
             <div
                 className={styles.btn}
                 onClick={() => setOpen(!open)}
