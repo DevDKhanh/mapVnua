@@ -31,7 +31,7 @@ function Vector({ path, data }) {
 
     const dataColor = useMemo(
         () =>
-            data.typeColor === '0'
+            data.typeColor === 0
                 ? convertDataColor(data.dataColor)
                 : convertDataColor2(data.dataColor),
         [data.dataColor, data.typeColor]
