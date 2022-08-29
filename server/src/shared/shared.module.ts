@@ -18,7 +18,7 @@ import * as winston from 'winston';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: '.env.development',
       validate: envValidate,
     }),
     WinstonModule.forRoot({
