@@ -120,6 +120,7 @@ function Index() {
                             return (
                                 <ActionData
                                     addLang
+                                    clone
                                     id={data.id}
                                     url="layer"
                                     detailData={detailData}

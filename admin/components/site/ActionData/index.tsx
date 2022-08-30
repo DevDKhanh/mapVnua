@@ -1,4 +1,10 @@
-import { Eye, Edit2, ClipboardClose, LanguageSquare } from 'iconsax-react';
+import {
+    Eye,
+    Edit2,
+    ClipboardClose,
+    LanguageSquare,
+    Copy,
+} from 'iconsax-react';
 import { useRouter } from 'next/router';
 import { Fragment, memo, useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
@@ -76,6 +82,13 @@ function Index(props: any) {
                     >
                         <a className={style.item} title="Thêm ngôn ngữ">
                             <LanguageSquare variant="Bold" />
+                        </a>
+                    </Link>
+                )}
+                {permission?.permissionCreate && !!props.clone && (
+                    <Link href={`${router.pathname}/clone/${props.id}`}>
+                        <a className={style.item} title="Nhân bản dữ liệu">
+                            <Copy variant="Bold" />
                         </a>
                     </Link>
                 )}
