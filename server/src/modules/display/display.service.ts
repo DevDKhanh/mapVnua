@@ -80,6 +80,9 @@ export class DisplayService {
         .where('display.languageId = :languageId', {
           languageId: getListDto.langId,
         })
+        .andWhere('display.keyword like :keyword', {
+          keyword: `%${getListDto?.keyword?.trim()}%`,
+        })
         .leftJoinAndSelect('display.language', 'language')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)
@@ -94,6 +97,9 @@ export class DisplayService {
     } else {
       const result = await this.displayRepository
         .createQueryBuilder('display')
+        .andWhere('display.keyword like :keyword', {
+          keyword: `%${getListDto?.keyword?.trim()}%`,
+        })
         .leftJoinAndSelect('display.language', 'language')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)

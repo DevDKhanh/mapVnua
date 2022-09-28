@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { InjectRepository } from '@nestjs/typeorm';
 import { I18nRequestScopeService } from 'nestjs-i18n';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 import { CreateLanguageDto } from './dto/post.dto';
 import { UpdateLanguageDto } from './dto/put.dto';
@@ -73,6 +73,9 @@ export class LanguageService {
 
   async getList(getListDto: GetListDto) {
     let result = await this.languageRepository.findAndCount({
+      where: {
+        nameLanguage: Like(`%${getListDto?.keyword?.trim()}%`),
+      },
       skip: (+getListDto.page - 1) * getListDto.pageSize,
       take: +getListDto.pageSize,
       order: {

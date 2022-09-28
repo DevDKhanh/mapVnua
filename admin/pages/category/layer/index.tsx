@@ -2,7 +2,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { memo, useEffect, useState } from 'react';
 import layerAPI from '../../../api/layer';
+import useDebounce from '../../../common/hooks/useDebounce';
 import ButtonCreate from '../../../components/controls/ButtonCreate';
+import Search from '../../../components/controls/Search';
 import ActionData from '../../../components/site/ActionData';
 import Pagination from '../../../components/site/Pagination';
 import DataTable from '../../../components/site/Table';
@@ -15,6 +17,13 @@ function Index() {
     const [pageSize, setPageSize] = useState<number>(10);
     const [pageCurrent, setPageCurrent] = useState<number>(1);
     const [list, setList] = useState<any>([]);
+    const [keyword, setKeyword] = useState<string>('');
+
+    const debounceKeyword = useDebounce(keyword, 500);
+
+    useEffect(() => {
+        setPageCurrent(1);
+    }, [debounceKeyword]);
 
     useEffect(() => {
         (async () => {
@@ -22,6 +31,7 @@ function Index() {
                 const [res, status]: any = await layerAPI.get({
                     page: pageCurrent,
                     pageSize,
+                    keyword: debounceKeyword,
                 });
                 if (res && status === 200) {
                     setList(res.records);
@@ -29,7 +39,7 @@ function Index() {
                 }
             } catch (err) {}
         })();
-    }, [pageCurrent, pageSize, router]);
+    }, [debounceKeyword, pageCurrent, pageSize, router]);
 
     const detailData = {
         'Hình ảnh kí hiệu': 'icon',
@@ -50,7 +60,14 @@ function Index() {
 
     return (
         <DashboardLayout title="Quản lí các lớp">
-            <ButtonCreate href="/category/layer/create" />
+            <div className="group-header">
+                <ButtonCreate href="/category/layer/create" />
+                <Search
+                    placeholder="Tìm kiếm theo tên lớp"
+                    name="keyword"
+                    onChange={(e: any) => setKeyword(e.target.value)}
+                />
+            </div>
             <DataTable
                 data={list}
                 columns={[

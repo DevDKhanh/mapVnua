@@ -3,13 +3,18 @@ const base: string = '/classify';
 
 const classifyAPI = {
     get: (
-        data: { page: number; pageSize: number; langId?: string },
+        data: {
+            page: number;
+            pageSize: number;
+            langId?: string;
+            keyword: string;
+        },
         tokenAxios?: any
     ) => {
         return axiosClient.get(
             `${base}?page=${data.page}&pageSize=${data.pageSize}&langId=${
                 data.langId || ''
-            }`,
+            }&keyword=${data.keyword}`,
             {
                 cancelToken: tokenAxios,
             }

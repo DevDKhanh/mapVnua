@@ -142,6 +142,9 @@ export class LayerService {
   async getList(getListDto: GetListDto) {
     const result = await this.layerRepository
       .createQueryBuilder('layer')
+      .where('layer.nameLayer like :keyword ', {
+        keyword: `%${getListDto?.keyword?.trim()}%`,
+      })
       .leftJoinAndSelect('layer.language', 'language')
       .leftJoinAndSelect('layer.area', 'area')
       .leftJoinAndSelect('layer.classify', 'classify')

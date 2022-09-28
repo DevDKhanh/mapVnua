@@ -2,9 +2,12 @@ import axiosClient from '.';
 const base: string = '/layer';
 
 const layerAPI = {
-    get: (data: { page: number; pageSize: number }, tokenAxios?: any) => {
+    get: (
+        data: { page: number; pageSize: number; keyword: string },
+        tokenAxios?: any
+    ) => {
         return axiosClient.get(
-            `${base}?page=${data.page}&pageSize=${data.pageSize}`,
+            `${base}?page=${data.page}&pageSize=${data.pageSize}&keyword=${data.keyword}`,
             {
                 cancelToken: tokenAxios,
             }

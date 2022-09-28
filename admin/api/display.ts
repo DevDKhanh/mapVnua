@@ -4,7 +4,7 @@ const base: string = '/display';
 const displayAPI = {
     get: (data: { page: number; pageSize: number }, tokenAxios?: any) => {
         return axiosClient.get(
-            `${base}?page=${data.page}&pageSize=${data.pageSize}`,
+            `${base}?page=${data.page}&pageSize=${data.pageSize}&keyword`,
             {
                 cancelToken: tokenAxios,
             }

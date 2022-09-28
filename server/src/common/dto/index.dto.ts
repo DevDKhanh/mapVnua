@@ -30,6 +30,11 @@ export class GetListDto {
   @IsOptional()
   langId: string;
 
+  @ApiProperty({ example: ' ' })
+  @IsString()
+  @IsOptional()
+  keyword: string;
+
   @ApiProperty({ example: '88c2598d-5280-4ab4-bd82-214862cde7f9' })
   @IsString()
   @IsOptional()

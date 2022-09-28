@@ -126,7 +126,9 @@ export class ClassifyService {
     } else {
       const result = await this.classifyRepository
         .createQueryBuilder('classify')
-
+        .where('classify.nameClassify like :keyword', {
+          keyword: `%${getListDto?.keyword?.trim()}%`,
+        })
         .leftJoinAndSelect('classify.language', 'language')
         .leftJoinAndSelect('classify.layers', 'layers')
         .skip((+getListDto.page - 1) * getListDto.pageSize)

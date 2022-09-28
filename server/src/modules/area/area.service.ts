@@ -112,6 +112,9 @@ export class AreaService {
     } else {
       const result = await this.areaRepository
         .createQueryBuilder('area')
+        .where('area.nameArea like :keyword', {
+          keyword: `%${getListDto?.keyword?.trim()}%`,
+        })
         .leftJoinAndSelect('area.language', 'language')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .take(+getListDto.pageSize)

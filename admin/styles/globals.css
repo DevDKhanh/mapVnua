@@ -251,3 +251,9 @@ select > option {
     color: rgb(0, 0, 0);
     background-color: #ffffff;
 }
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
