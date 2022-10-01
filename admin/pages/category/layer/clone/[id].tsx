@@ -174,6 +174,7 @@ function Index() {
                     page: 1,
                     pageSize: 1000,
                     langId: dataForm.language?.value,
+                    keyword: '',
                 }),
             ]);
 
