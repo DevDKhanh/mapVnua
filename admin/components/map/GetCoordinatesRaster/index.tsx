@@ -1,12 +1,39 @@
-import { Fragment, useState } from 'react';
-import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import { Fragment, useEffect, useState } from 'react';
+import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
 
 import style from './GetCoordinates.module.scss';
 import MoveRaster from './MoveRaster';
 import { toast } from 'react-toastify';
+import uploadAPI from '../../../api/upload';
 
-const Map = ({ file, dataForm, onSetPosition }: any) => {
+const Map = ({ file, dataForm, onSetPosition, mapData }: any) => {
     const [showMap, setShowMap] = useState<boolean>(false);
+    const [fileData, setFileData] = useState<any>(null);
+
+    useEffect(() => {
+        function onReaderLoad(event: any) {
+            var obj = JSON.parse(event.target.result);
+            setFileData(obj);
+        }
+        if (mapData && typeof mapData !== 'string') {
+            if (mapData?.type === 'application/json') {
+                var reader = new FileReader();
+                reader.onload = onReaderLoad;
+                reader.readAsText(mapData);
+            } else {
+                toast.warn('Sai định dạng đường dẫn');
+            }
+        } else if (typeof mapData === 'string') {
+            (async () => {
+                try {
+                    const [res, status]: any = await uploadAPI.getFile(mapData);
+                    if (res && status === 200) {
+                        setFileData(res);
+                    }
+                } catch (err) {}
+            })();
+        }
+    }, [mapData]);
 
     const handleShowMap = () => {
         if (!file) {
@@ -58,6 +85,9 @@ const Map = ({ file, dataForm, onSetPosition }: any) => {
                                 position: 'absolute',
                             }}
                         >
+                            {fileData && (
+                                <GeoJSON key={fileData} data={fileData} />
+                            )}
                             <TileLayer
                                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

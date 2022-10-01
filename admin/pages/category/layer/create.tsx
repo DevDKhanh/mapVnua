@@ -54,6 +54,7 @@ interface typeForm {
     zIndex: string;
     dataColor: string;
     active: any;
+    mapData: any;
     checked: any;
     activeNote: any;
     activeTooltip: any;
@@ -138,6 +139,7 @@ function Index() {
         latSW: '14',
         lngSW: '107',
         zIndex: '10',
+        mapData: '',
     });
 
     /*---------- get list language insert select language ----------*/
@@ -296,6 +298,8 @@ function Index() {
         })();
     };
 
+    console.log(dataForm.mapData);
+
     return (
         <DashboardLayout title="Thêm lớp mới" hrefBack="/category/layer/">
             <RequiredPermision isCreate>
@@ -354,6 +358,19 @@ function Index() {
                                 isFile={dataForm?.style?.value !== 'Raster'}
                             />
                             <br />
+                            {dataForm?.style?.value === 'Raster' && (
+                                <Fragment>
+                                    <ButtonUpload
+                                        title="Nạp dữ liệu bản đồ tham chiếu"
+                                        name="mapData"
+                                        value={dataForm?.mapData}
+                                        onChange={handleChangeFile}
+                                        onSetFile={handleSetFile}
+                                        isFile={true}
+                                    />
+                                    <br />
+                                </Fragment>
+                            )}
                             <ButtonUpload
                                 title="Tải lên icon của lớp"
                                 name="icon"
@@ -430,6 +447,7 @@ function Index() {
                                     <GetCoordinatesRaster
                                         file={dataForm.path}
                                         dataForm={dataForm}
+                                        mapData={dataForm?.mapData}
                                         onSetPosition={handleSetPosition}
                                     />
                                     <Input

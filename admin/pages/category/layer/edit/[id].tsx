@@ -53,6 +53,7 @@ interface typeForm {
     lngSW: string;
     zIndex: string;
     checked: any;
+    mapData: any;
     active: any;
     activeNote: any;
     activeTooltip: any;
@@ -137,6 +138,7 @@ function Index() {
         latSW: '14',
         lngSW: '107',
         zIndex: '10',
+        mapData: '',
     });
 
     /*---------- get list language insert select language ----------*/
@@ -482,6 +484,19 @@ function Index() {
                                 isFile={dataForm?.style?.value !== 'Raster'}
                             />
                             <br />
+                            {dataForm?.style?.value === 'Raster' && (
+                                <Fragment>
+                                    <ButtonUpload
+                                        title="Nạp dữ liệu bản đồ tham chiếu"
+                                        name="mapData"
+                                        value={dataForm?.mapData}
+                                        onChange={handleChangeFile}
+                                        onSetFile={handleSetFile}
+                                        isFile={true}
+                                    />
+                                    <br />
+                                </Fragment>
+                            )}
                             <ButtonUpload
                                 title="Cập nhật icon của lớp"
                                 name="icon"
@@ -558,6 +573,7 @@ function Index() {
                                     <GetCoordinatesRaster
                                         file={dataForm.path}
                                         dataForm={dataForm}
+                                        mapData={dataForm?.mapData}
                                         onSetPosition={handleSetPosition}
                                     />
                                     <Input
