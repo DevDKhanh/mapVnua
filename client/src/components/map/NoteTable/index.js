@@ -22,7 +22,7 @@ function NoteTable() {
             sortLayers
                 .filter((v) => v.activeNote === 1)
                 .map((v) => {
-                    if (v.keyColor === 'key') {
+                    if (v.dataColor === '#ffffff|0_0') {
                         return {
                             data: [],
                             icon: v.icon,

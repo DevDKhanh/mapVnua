@@ -1,0 +1,52 @@
+.conainter {
+    & + .conainter {
+        margin-top: 24px;
+    }
+
+    display: grid;
+    grid-template-columns: 20px 0.5fr 3fr 20px;
+    grid-template-rows: 1fr;
+    align-items: center;
+    gap: 24px;
+
+    &:hover {
+        .btnDel {
+            opacity: 1;
+        }
+    }
+}
+
+.gourpBtnPosition {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .btn {
+        user-select: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:active {
+            transform: scale(0.7);
+        }
+    }
+}
+
+.input {
+    padding: 4px 8px;
+    width: 100%;
+}
+
+.btnDel {
+    opacity: 0;
+    cursor: pointer;
+    color: #bf1b1b;
+    transition: 0.3s;
+
+    &:active {
+        transform: scale(0.9);
+    }
+}

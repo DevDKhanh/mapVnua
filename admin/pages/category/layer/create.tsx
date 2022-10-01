@@ -11,6 +11,7 @@ import layerAPI from '../../../api/layer';
 import handleGetFile from '../../../common/hooks/getFile';
 import { useValidateAll } from '../../../common/hooks/useValidate';
 import ButtonUpload from '../../../components/controls/ButtonUpload';
+import NoteRaster from '../../../components/controls/NoteRaster';
 import SelectColorLayer from '../../../components/controls/SelectColorLayer';
 import RequiredPermision from '../../../components/protected/requiredPermision';
 import Input from '../../../components/site/Input';
@@ -139,7 +140,7 @@ function Index() {
         latSW: '14',
         lngSW: '107',
         zIndex: '10',
-        mapData: '',
+        mapData: '.',
     });
 
     /*---------- get list language insert select language ----------*/
@@ -444,6 +445,14 @@ function Index() {
                             {/*---------- Raster ----------*/}
                             {dataForm?.style?.value === 'Raster' && (
                                 <Fragment>
+                                    <NoteRaster
+                                        onChange={handleChange}
+                                        titleNote={dataForm.titleNote}
+                                        dataColor={dataForm.dataColor}
+                                        file={dataForm.path}
+                                        keyColor={dataForm.keyColor}
+                                        typeColor={dataForm.typeColor}
+                                    />
                                     <GetCoordinatesRaster
                                         file={dataForm.path}
                                         dataForm={dataForm}
