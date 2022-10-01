@@ -11,7 +11,7 @@ const layerAPI = {
         areaId = '',
         classifyId = ''
     ) => {
-        const url = `${routeName}/data?page=${page}&pageSize=${pageSize}&langId=${langId}&areaId=${areaId}&classifyId=${classifyId}`;
+        const url = `${routeName}/data?page=${page}&pageSize=${pageSize}&langId=${langId}&areaId=${areaId}&classifyId=${classifyId}&keyword`;
         return axiosClient.get(url, {
             cancelToken: tokenAxios,
         });

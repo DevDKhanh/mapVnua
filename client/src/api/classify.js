@@ -10,7 +10,7 @@ const classifyAPI = {
         langId = '',
         areaId = ''
     ) => {
-        const url = `${routeName}?page=${page}&pageSize=${pageSize}&langId=${langId}&areaId=${areaId}`;
+        const url = `${routeName}?page=${page}&pageSize=${pageSize}&langId=${langId}&areaId=${areaId}&keyword`;
         return axiosClient.get(url, {
             cancelToken: tokenAxios,
         });

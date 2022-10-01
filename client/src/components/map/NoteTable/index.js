@@ -7,9 +7,19 @@ import style from './NoteTable.module.scss';
 function NoteTable() {
     const { layers } = useSelector((state) => state.dataMap);
 
+    const sortLayers = useMemo(
+        () =>
+            layers.sort((a, b) => {
+                const timea = new Date(a.createdAt);
+                const timeb = new Date(b.createdAt);
+                return timea - timeb;
+            }),
+        [layers]
+    );
+
     const dataNote = useMemo(
         () =>
-            layers
+            sortLayers
                 .filter((v) => v.activeNote === 1)
                 .map((v) => {
                     if (v.keyColor === 'key') {
@@ -25,7 +35,7 @@ function NoteTable() {
                         titleNote: v.titleNote,
                     };
                 }),
-        [layers]
+        [sortLayers]
     );
 
     return (
