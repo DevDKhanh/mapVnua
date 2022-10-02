@@ -12,6 +12,7 @@ import PaginationCustom from '../../site/PaginationCustom';
 interface props {
     isFile?: boolean;
     title: string;
+    titleData: string;
     name: string;
     value: any;
     onChange: (event: any) => void;
@@ -41,7 +42,7 @@ function ButtonUpload(props: props) {
                     })}
                     onClick={handleOpen}
                 >
-                    {props.title}
+                    {props.value !== '' ? props.titleData : props.title}
                 </div>
             </div>
             <Popup open={show} onClose={handleClose}>

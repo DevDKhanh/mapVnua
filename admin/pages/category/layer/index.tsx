@@ -55,7 +55,7 @@ function Index() {
         'Tọa độ latNE': 'latNE',
         'Tọa độ lngNE': 'lngNE',
         'Hiển thị': 'active',
-        'Lớp xếp chồng': 'zIndex',
+        'Thứ tự xếp chồng': 'zIndex',
     };
 
     return (

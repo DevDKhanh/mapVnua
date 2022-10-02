@@ -3,7 +3,7 @@
     background-color: #ff7d03;
     max-width: max-content;
     padding: 8px 16px;
-    border-radius: 200px;
+    border-radius: 6px;
     color: #fff;
     font-weight: 600;
     cursor: pointer;
@@ -12,7 +12,7 @@
     text-align: center;
 
     &.active {
-        background-color: #03a3ff;
+        background-color: #0285ff;
     }
 
     &:hover {

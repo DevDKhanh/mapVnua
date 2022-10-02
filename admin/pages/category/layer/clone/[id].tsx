@@ -12,6 +12,7 @@ import siteAPI from '../../../../api/site';
 import handleGetFile from '../../../../common/hooks/getFile';
 import { useValidateAll } from '../../../../common/hooks/useValidate';
 import ButtonUpload from '../../../../components/controls/ButtonUpload';
+import NoteRaster from '../../../../components/controls/NoteRaster';
 import SelectColorLayer from '../../../../components/controls/SelectColorLayer';
 import RequiredPermision from '../../../../components/protected/requiredPermision';
 import Input from '../../../../components/site/Input';
@@ -56,6 +57,7 @@ interface typeForm {
     checked: any;
     active: any;
     activeNote: any;
+    mapData: any;
     activeTooltip: any;
 }
 
@@ -139,6 +141,7 @@ function Index() {
         latSW: '14',
         lngSW: '107',
         zIndex: '10',
+        mapData: '.',
     });
 
     /*---------- get list language insert select language ----------*/
@@ -421,7 +424,8 @@ function Index() {
                                 onChange={handleChangeFile}
                             /> */}
                             <ButtonUpload
-                                title="Cập nhật đường dẫn tệp hoặc ảnh"
+                                title="Chọn tệp bản đồ hoặc ảnh"
+                                titleData="Cập nhật tệp bản đồ hoặc ảnh"
                                 name="path"
                                 value={dataForm?.path}
                                 onChange={handleChangeFile}
@@ -430,7 +434,8 @@ function Index() {
                             />
                             <br />
                             <ButtonUpload
-                                title="Cập nhật icon của lớp"
+                                title="Chọn icon của lớp"
+                                titleData="Cập nhật icon của lớp"
                                 name="icon"
                                 value={dataForm?.icon}
                                 onChange={handleChangeFile}
@@ -438,7 +443,7 @@ function Index() {
                             />
                             <br />
                             <Input
-                                title="Lớp xếp chồng"
+                                title="Thứ tự xếp chồng"
                                 value={dataForm?.zIndex}
                                 name="zIndex"
                                 type="number"
@@ -502,9 +507,32 @@ function Index() {
                             {/*---------- Raster ----------*/}
                             {dataForm?.style?.value === 'Raster' && (
                                 <Fragment>
+                                    <NoteRaster
+                                        onChange={handleChange}
+                                        titleNote={dataForm.titleNote}
+                                        dataColor={dataForm.dataColor}
+                                        file={dataForm.path}
+                                        keyColor={dataForm.keyColor}
+                                        typeColor={dataForm.typeColor}
+                                    />
+                                    {dataForm?.style?.value === 'Raster' && (
+                                        <Fragment>
+                                            <ButtonUpload
+                                                title="Chọn bản đồ tham chiếu"
+                                                titleData="Chọn bản đồ tham chiếu"
+                                                name="mapData"
+                                                value={dataForm?.mapData}
+                                                onChange={handleChangeFile}
+                                                onSetFile={handleSetFile}
+                                                isFile={true}
+                                            />
+                                            <br />
+                                        </Fragment>
+                                    )}
                                     <GetCoordinatesRaster
                                         file={dataForm.path}
                                         dataForm={dataForm}
+                                        mapData={dataForm?.mapData}
                                         onSetPosition={handleSetPosition}
                                     />
                                     <Input

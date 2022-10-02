@@ -351,7 +351,8 @@ function Index() {
                                 onChange={(v) => handleChangeSelect(v, 'style')}
                             />
                             <ButtonUpload
-                                title="Tải đường dẫn tệp hoặc ảnh"
+                                title="Tải tệp bản đồ hoặc ảnh"
+                                titleData="Cập nhật tệp bản đồ hoặc ảnh"
                                 name="path"
                                 value={dataForm?.path}
                                 onChange={handleChangeFile}
@@ -359,21 +360,9 @@ function Index() {
                                 isFile={dataForm?.style?.value !== 'Raster'}
                             />
                             <br />
-                            {dataForm?.style?.value === 'Raster' && (
-                                <Fragment>
-                                    <ButtonUpload
-                                        title="Nạp dữ liệu bản đồ tham chiếu"
-                                        name="mapData"
-                                        value={dataForm?.mapData}
-                                        onChange={handleChangeFile}
-                                        onSetFile={handleSetFile}
-                                        isFile={true}
-                                    />
-                                    <br />
-                                </Fragment>
-                            )}
                             <ButtonUpload
                                 title="Tải lên icon của lớp"
+                                titleData="Cập nhật icon của lớp"
                                 name="icon"
                                 value={dataForm?.icon}
                                 onChange={handleChangeFile}
@@ -381,7 +370,7 @@ function Index() {
                             />
                             <br />
                             <Input
-                                title="Lớp xếp chồng"
+                                title="Thứ tự xếp chồng"
                                 value={dataForm?.zIndex}
                                 name="zIndex"
                                 type="number"
@@ -453,6 +442,20 @@ function Index() {
                                         keyColor={dataForm.keyColor}
                                         typeColor={dataForm.typeColor}
                                     />
+                                    {dataForm?.style?.value === 'Raster' && (
+                                        <Fragment>
+                                            <ButtonUpload
+                                                title="Chọn bản đồ bản đồ tham chiếu"
+                                                titleData="Chọn bản đồ bản đồ tham chiếu"
+                                                name="mapData"
+                                                value={dataForm?.mapData}
+                                                onChange={handleChangeFile}
+                                                onSetFile={handleSetFile}
+                                                isFile={true}
+                                            />
+                                            <br />
+                                        </Fragment>
+                                    )}
                                     <GetCoordinatesRaster
                                         file={dataForm.path}
                                         dataForm={dataForm}

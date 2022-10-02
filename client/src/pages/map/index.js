@@ -6,6 +6,7 @@ import {
     useMapEvents,
     Marker,
     Popup,
+    ScaleControl,
 } from 'react-leaflet';
 import { useSelector } from 'react-redux';
 import Favicon from 'react-favicon';
@@ -55,9 +56,11 @@ function Map() {
                 center={center}
                 zoom={zoom || 6}
                 zoomControl={false}
+                zoomSnap
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <ZoomControl position="topleft" />
+                <ScaleControl position="bottomright" />
                 <Menu />
                 <FullScreen />
                 <ContainerLayer />

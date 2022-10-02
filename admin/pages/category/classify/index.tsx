@@ -63,21 +63,15 @@ function Index() {
                 data={list}
                 columns={[
                     {
-                        title: 'STT',
-                        template: (data: any, i: number) => {
-                            return i + 1;
-                        },
-                    },
-                    // {
-                    //     title: 'ID phân loại',
-                    //     template: (data: any) => {
-                    //         return data.id;
-                    //     },
-                    // },
-                    {
                         title: 'Tên phân loại',
                         template: (data: any) => {
                             return data.nameClassify;
+                        },
+                    },
+                    {
+                        title: 'Thứ tự hiển thị',
+                        template: (data: any) => {
+                            return data.no;
                         },
                     },
                     {

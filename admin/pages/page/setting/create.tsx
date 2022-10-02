@@ -182,6 +182,7 @@ function Index() {
                             />
                             <ButtonUpload
                                 title="Tải lên icon"
+                                titleData="Cập nhật icon"
                                 name="icon"
                                 value={dataForm?.icon}
                                 onChange={handleChangeFile}
