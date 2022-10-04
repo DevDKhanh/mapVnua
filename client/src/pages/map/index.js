@@ -63,7 +63,7 @@ function Map() {
                 <ScaleControl position="bottomright" />
                 <Menu />
                 <FullScreen />
-                <ContainerLayer />
+                <ContainerLayer zoom={zoom} />
                 <NoteTable />
                 <LocationMarker center={center} zoom={zoom} />
             </MapContainer>

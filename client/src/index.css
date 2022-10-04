@@ -61,4 +61,9 @@ picture {
     border: 0;
     border-radius: 0px;
     box-shadow: 0 0px 0px;
+    font-size: 16px;
+}
+
+.countryLabel.hidden-label {
+    font-size: 0;
 }

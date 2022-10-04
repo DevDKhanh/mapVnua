@@ -5,7 +5,7 @@ import Vector from '../../layers/Vector';
 import Raster from '../../layers/Raster';
 import { updateLayer } from '../../../redux/action/dataMap';
 
-function ContainerLayer() {
+function ContainerLayer({ zoom }) {
     const dispatch = useDispatch();
     const { layers, language, classify } = useSelector(
         (state) => state.dataMap
@@ -19,7 +19,14 @@ function ContainerLayer() {
     const render = useMemo(() => {
         return layers.map((item) => {
             if (item.style === 'Vector') {
-                return <Vector key={item.id} path={item.path} data={item} />;
+                return (
+                    <Vector
+                        key={item.id}
+                        path={item.path}
+                        data={item}
+                        zoom={zoom}
+                    />
+                );
             }
             if (item.style === 'Raster') {
                 return <Raster key={item.id} data={item} />;
