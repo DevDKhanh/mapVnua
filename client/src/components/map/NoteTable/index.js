@@ -43,9 +43,11 @@ function NoteTable() {
             {dataNote.length > 0 ? (
                 <div className={style.container}>
                     <h4 className={style.title}>Chú thích</h4>
-                    {dataNote.map((v, i) => (
-                        <ItemNote key={i} data={v} index={i} />
-                    ))}
+                    <div className={style.main}>
+                        {dataNote.map((v, i) => (
+                            <ItemNote key={i} data={v} index={i} />
+                        ))}
+                    </div>
                 </div>
             ) : null}
         </>

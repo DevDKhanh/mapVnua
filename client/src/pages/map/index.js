@@ -64,9 +64,9 @@ function Map() {
                 <Menu />
                 <FullScreen />
                 <ContainerLayer zoom={zoom} />
-                <NoteTable />
                 <LocationMarker center={center} zoom={zoom} />
             </MapContainer>
+            <NoteTable />
             <ButtonDisplayLayer />
         </div>
     );
