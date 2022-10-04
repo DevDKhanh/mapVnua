@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react';
-import { GeoJSON, useMapEvents } from 'react-leaflet';
+import { GeoJSON, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 
 import { API } from '../../constant/config';
@@ -11,9 +11,19 @@ import uploadAPI from '../../api/upload';
 
 function Vector({ path, data }) {
     const [file, setFile] = useState();
+    const map = useMap();
 
     const mapEvents = useMapEvents({
         zoomend: () => {
+            mapEvents.eachLayer(function (layer) {
+                if (mapEvents.getZoom() < 10) {
+                    layer?._container?.classList?.add('hidden-label');
+                } else {
+                    layer?._container?.classList?.remove('hidden-label');
+                }
+            });
+        },
+        viewreset: () => {
             mapEvents.eachLayer(function (layer) {
                 if (mapEvents.getZoom() < 10) {
                     layer?._container?.classList?.add('hidden-label');
@@ -70,7 +80,9 @@ function Vector({ path, data }) {
                 layer.bindTooltip(`${properties[data?.labelMap]}`, {
                     permanent: true,
                     direction: 'center',
-                    className: `countryLabel `,
+                    className: `countryLabel ${
+                        map.getZoom() < 10 ? 'hidden-label' : ''
+                    }`,
                 });
         }
     };
