@@ -132,6 +132,12 @@ function Index() {
                         },
                     },
                     {
+                        title: 'Hiển thị nhãn',
+                        template: (data: any) => {
+                            return data.displayLabel ? 'Có' : 'Không';
+                        },
+                    },
+                    {
                         title: 'Hành động',
                         template: (data: any) => {
                             return (

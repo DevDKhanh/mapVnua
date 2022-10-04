@@ -53,6 +53,12 @@ function Vector({ path, data }) {
         if (data?.activeTooltip === 1) {
             const { properties } = info;
             layer.bindPopup(getInfo(properties).join(''));
+            if (data?.labelMap && data?.displayLabel)
+                layer.bindTooltip(`${properties[data?.labelMap]}`, {
+                    permanent: true,
+                    direction: 'center',
+                    className: 'countryLabel',
+                });
         }
     };
 

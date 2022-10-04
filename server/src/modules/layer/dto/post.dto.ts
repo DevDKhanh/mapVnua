@@ -38,6 +38,10 @@ export class CreateLayerDto {
   keyColor: string;
 
   @ApiProperty({ example: 'XOI_MON_S1' })
+  @IsString()
+  labelMap: string;
+
+  @ApiProperty({ example: 'XOI_MON_S1' })
   @IsOptional()
   @IsString()
   titleNote: string;
@@ -96,6 +100,10 @@ export class CreateLayerDto {
   @ApiProperty({ example: 0 })
   @IsNumber()
   checked: number;
+
+  @ApiProperty({ example: 0 })
+  @IsNumber()
+  displayLabel: number;
 
   @ApiProperty({ example: 1 })
   @IsNumber()

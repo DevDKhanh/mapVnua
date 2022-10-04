@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { Fragment, memo, useEffect, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -9,6 +9,7 @@ import classifyAPI from '../../../../api/classify';
 import languageAPI from '../../../../api/language';
 import layerAPI from '../../../../api/layer';
 import siteAPI from '../../../../api/site';
+import uploadAPI from '../../../../api/upload';
 import handleGetFile from '../../../../common/hooks/getFile';
 import { useValidateAll } from '../../../../common/hooks/useValidate';
 import ButtonUpload from '../../../../components/controls/ButtonUpload';
@@ -33,6 +34,7 @@ const PreviewVector = dynamic(
 
 /*---------- type form input ----------*/
 interface typeForm {
+    // id: string;
     nameLayer: string;
     language: any;
     classify: any;
@@ -40,43 +42,46 @@ interface typeForm {
     style: any;
     path: any;
     icon: any;
-    typeColor: string;
+    titleNote?: string;
     keyColor: string;
-    dataColor: string;
+    typeColor: string;
     borderColor: string;
     widthBorder: string;
     opacityBorder: string;
     backgroundColor: string;
     opacityBackground: string;
-    titleNote?: string;
     latNE: string;
     lngNE: string;
     latSW: string;
     lngSW: string;
     zIndex: string;
-    checked: any;
+    dataColor: string;
+    labelMap: any;
     active: any;
-    activeNote: any;
     mapData: any;
+    checked: any;
+    displayLabel: any;
+    activeNote: any;
     activeTooltip: any;
 }
 
 /*---------- type form submit ----------*/
 interface typeFormSubmit {
+    // id: string;
     nameLayer: string;
     languageId: string;
     classifyId: string;
     areaId: string;
     style: string;
-    path?: string;
-    icon?: string;
+    path: string;
+    icon: string;
+    titleNote?: string;
     keyColor: string;
-    dataColor: string;
+    typeColor: number;
     borderColor: string;
     widthBorder: number;
-    typeColor: number;
     opacityBorder: number;
-    titleNote?: string;
+    labelMap: string;
     backgroundColor: string;
     opacityBackground: number;
     latNE: number;
@@ -85,6 +90,7 @@ interface typeFormSubmit {
     lngSW: number;
     zIndex: number;
     checked: number;
+    displayLabel: number;
     active: number;
     activeNote: number;
     activeTooltip: number;
@@ -97,6 +103,7 @@ function Index() {
     const validator = useValidateAll;
     const { token } = useSelector((state: RootState) => state.auth);
 
+    const [fileData, setFileData] = useState<any>(null);
     const [listLanguage, setListLanguage] = useState<Array<any>>([]);
     const [listClassify, setListClassify] = useState<Array<any>>([]);
     const [listArea, setListArea] = useState<Array<any>>([]);
@@ -117,6 +124,14 @@ function Index() {
         activeTooltip: {
             txt: 'Có',
             value: 1,
+        },
+        displayLabel: {
+            txt: 'Không',
+            value: 1,
+        },
+        labelMap: {
+            txt: 'Chọn nhãn hiển thị',
+            value: '',
         },
         nameLayer: '',
         language: null,
@@ -236,6 +251,14 @@ function Index() {
                                 txt: data.activeNote ? 'Có' : 'Không',
                                 value: data.activeNote,
                             },
+                            displayLabel: {
+                                txt: data.displayLabel ? 'Có' : 'Không',
+                                value: data.displayLabel,
+                            },
+                            labelMap: {
+                                txt: data.labelMap,
+                                value: data.labelMap,
+                            },
                             activeTooltip: {
                                 txt: data.activeTooltip ? 'Có' : 'Không',
                                 value: data.activeTooltip,
@@ -340,6 +363,8 @@ function Index() {
                     zIndex: Number(dataForm.zIndex),
                     active: dataForm.active.value,
                     checked: dataForm.checked.value,
+                    labelMap: dataForm.labelMap.value,
+                    displayLabel: dataForm.displayLabel.value,
                     activeNote: dataForm.activeNote.value,
                     activeTooltip: dataForm.activeTooltip.value,
                 };
@@ -359,6 +384,46 @@ function Index() {
             }
         })();
     };
+
+    useEffect(() => {
+        function onReaderLoad(event: any) {
+            var obj = JSON.parse(event.target.result);
+            setFileData(obj);
+        }
+        if (!!dataForm.path && typeof dataForm.path !== 'string') {
+            if (dataForm.path?.type === 'application/json') {
+                var reader = new FileReader();
+                reader.onload = onReaderLoad;
+                reader.readAsText(dataForm.path);
+            } else {
+                toast.warn('Sai định dạng đường dẫn');
+            }
+        } else if (typeof dataForm.path === 'string') {
+            (async () => {
+                try {
+                    const [res, status]: any = await uploadAPI.getFile(
+                        dataForm.path
+                    );
+                    if (res && status === 200) {
+                        setFileData(res);
+                    }
+                } catch (err) {}
+            })();
+        }
+    }, [dataForm.path]);
+
+    const properties: Array<{ txt: string; value: string }> = useMemo(() => {
+        const arr = [];
+        if (fileData?.features[0]?.properties) {
+            for (let i in fileData?.features[0]?.properties) {
+                arr.push({
+                    txt: i,
+                    value: i,
+                });
+            }
+        }
+        return arr;
+    }, [fileData]);
 
     return (
         <DashboardLayout title="Thêm lớp mới" hrefBack="/category/layer/">
@@ -502,6 +567,39 @@ function Index() {
                                         step={0.1}
                                         onChange={handleChange}
                                     />
+                                    <Select
+                                        title="Hiển thị nhãn"
+                                        value={dataForm?.displayLabel?.txt}
+                                        data={[
+                                            {
+                                                txt: 'Có',
+                                                value: 1,
+                                            },
+                                            {
+                                                txt: 'Không',
+                                                value: 0,
+                                            },
+                                        ]}
+                                        onChange={(v) =>
+                                            handleChangeSelect(
+                                                v,
+                                                'displayLabel'
+                                            )
+                                        }
+                                    />
+                                    {properties.length > 0 && (
+                                        <Select
+                                            title="Trường hiển thị nhãn"
+                                            value={dataForm?.labelMap?.txt}
+                                            data={properties}
+                                            onChange={(v) =>
+                                                handleChangeSelect(
+                                                    v,
+                                                    'labelMap'
+                                                )
+                                            }
+                                        />
+                                    )}
                                 </Fragment>
                             )}
                             {/*---------- Raster ----------*/}

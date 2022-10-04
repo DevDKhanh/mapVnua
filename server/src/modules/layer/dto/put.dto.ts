@@ -35,6 +35,11 @@ export class UpdateLayerDto {
   @ApiProperty({ example: 'XOI_MON_S1' })
   @IsString()
   @IsOptional()
+  labelMap: string;
+
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @IsString()
+  @IsOptional()
   titleNote: string;
 
   @ApiProperty({
@@ -114,6 +119,11 @@ export class UpdateLayerDto {
   @IsNumber()
   @IsOptional()
   checked: number;
+
+  @ApiProperty({ example: 0 })
+  @IsNumber()
+  @IsOptional()
+  displayLabel: number;
 
   @ApiProperty({ example: 1 })
   @IsNumber()

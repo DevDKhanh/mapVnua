@@ -76,6 +76,10 @@ export class LayerEntity {
   @Column({ type: 'varchar', name: 'truongMauNen', length: 50 })
   keyColor: string;
 
+  @ApiProperty({ example: 'KEY_MAP_LABEL' })
+  @Column({ type: 'varchar', name: 'truongNhan', length: 50 })
+  labelMap: string;
+
   @ApiProperty({ example: '0' })
   @Column({
     type: 'tinyint',
@@ -188,6 +192,15 @@ export class LayerEntity {
     default: 0,
   })
   checked: number;
+
+  @ApiProperty({ example: 1 })
+  @Column({
+    type: 'tinyint',
+    name: 'hienThiNhan',
+    nullable: false,
+    default: 0,
+  })
+  displayLabel: number;
 
   @ApiProperty({ example: 1 })
   @Column({
