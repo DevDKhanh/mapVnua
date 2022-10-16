@@ -31,7 +31,7 @@ export class PermissionController {
   @ApiOperation({
     description: ' SPadmin thêm quyền cho admin',
   })
-  @UseGuards(AdminAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOkResponse({ status: 200, type: null })
   async create(
