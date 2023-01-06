@@ -1,13 +1,14 @@
-import clsx from 'clsx';
-import { useState, useEffect, memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RiArrowDownSFill } from 'react-icons/ri';
 
-import { useCancelToken } from '../../../common/hooks/useCancelToken';
-import { updateLanguage } from '../../../redux/action/dataMap';
-import languageAPI from '../../../api/language';
 import { API } from '../../../constant/config';
+import { RiArrowDownSFill } from 'react-icons/ri';
+import clsx from 'clsx';
+import languageAPI from '../../../api/language';
 import style from './TabLanguage.module.scss';
+import { updateLanguage } from '../../../redux/action/dataMap';
+import { useCancelToken } from '../../../common/hooks/useCancelToken';
+
 function TabLanguage() {
     const dispatch = useDispatch();
     const { newCancelToken } = useCancelToken();

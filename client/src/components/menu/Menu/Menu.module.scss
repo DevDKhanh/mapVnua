@@ -1,10 +1,10 @@
 .menu {
-    position: fixed;
-    top: 0;
-    left: 100px;
-    z-index: 100000;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    max-width: max-content;
+  position: fixed;
+  top: 5px;
+  right: 70px;
+  z-index: 100000;
+  padding: 10px;
+  display: flex;
+  align-items: stretch;
+  max-width: max-content;
 }

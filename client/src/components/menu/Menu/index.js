@@ -1,5 +1,5 @@
-import TabLanguage from '../TabLanguage';
 import TabArea from '../TabArea';
+import TabLanguage from '../TabLanguage';
 import style from './Menu.module.scss';
 
 function Menu() {

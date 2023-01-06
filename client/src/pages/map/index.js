@@ -1,23 +1,25 @@
-import { useEffect, useMemo, useState } from 'react';
+import './styles.scss';
+
 import {
     MapContainer,
-    TileLayer,
-    ZoomControl,
-    useMapEvents,
     Marker,
     Popup,
     ScaleControl,
+    TileLayer,
+    ZoomControl,
+    useMapEvents,
 } from 'react-leaflet';
-import { useSelector } from 'react-redux';
-import Favicon from 'react-favicon';
+import { useEffect, useMemo, useState } from 'react';
 
-import Menu from '../../components/menu/Menu';
-import FullScreen from '../../components/map/FullScreen';
+import { API } from '../../constant/config';
 import ButtonDisplayLayer from '../../components/map/ButtonDisplayLayer';
 import ContainerLayer from '../../components/map/ContainerLayer';
+import Favicon from 'react-favicon';
+import FullScreen from '../../components/map/FullScreen';
+import Menu from '../../components/menu/Menu';
 import NoteTable from '../../components/map/NoteTable';
-import { API } from '../../constant/config';
-import './styles.scss';
+import SearchField from '../../components/map/Search';
+import { useSelector } from 'react-redux';
 
 function Map() {
     const { area, setting } = useSelector((state) => state.dataMap);
@@ -58,6 +60,7 @@ function Map() {
                 zoomControl={false}
                 zoomSnap
             >
+                <SearchField/>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <ZoomControl position="topleft" />
                 <ScaleControl position="bottomright" />
