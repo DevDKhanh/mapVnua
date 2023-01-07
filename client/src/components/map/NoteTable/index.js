@@ -1,10 +1,13 @@
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { convertDataColor } from '../../../common/func/colorConvert';
+import { Fragment, useMemo, useState } from 'react';
+
+import {BiNotepad} from 'react-icons/bi';
 import ItemNote from './components/ItemNote';
+import { convertDataColor } from '../../../common/func/colorConvert';
 import style from './NoteTable.module.scss';
+import { useSelector } from 'react-redux';
 
 function NoteTable() {
+    const [show, setShow] = useState(true);
     const { layers } = useSelector((state) => state.dataMap);
 
     const sortLayers = useMemo(
@@ -41,14 +44,22 @@ function NoteTable() {
     return (
         <>
             {dataNote.length > 0 ? (
-                <div className={style.container}>
-                    <h4 className={style.title}>Chú thích</h4>
-                    <div className={style.main}>
-                        {dataNote.map((v, i) => (
-                            <ItemNote key={i} data={v} index={i} />
-                        ))}
+                <Fragment>
+                    <div className={style.btnShow} onClick={()=>{setShow(!show)}}>
+                        <BiNotepad/>
                     </div>
-                </div>
+                    {
+                        show? 
+                        <div className={style.container}>
+                            <h4 className={style.title}>Chú thích</h4>
+                            <div className={style.main}>
+                                {dataNote.map((v, i) => (
+                                    <ItemNote key={i} data={v} index={i} />
+                                ))}
+                        </div>
+                        </div>:null
+                    }
+                </Fragment>
             ) : null}
         </>
     );
