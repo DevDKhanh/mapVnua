@@ -1,15 +1,46 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
+import { ApiProperty } from '@nestjs/swagger';
 import { LanguageEntity } from '../../language/entities/language.entity';
+
+@Entity({ name: 'tblBanDoNen' })
+export class MapSettingEntity {
+  @ApiProperty()
+  @PrimaryGeneratedColumn('increment')
+  id: number;
+
+  @ApiProperty({ example: 'Bản đồ Hà Nội' })
+  @Column({
+    type: 'varchar',
+    length: 200,
+    nullable: false,
+  })
+  ten: string;
+
+  @ApiProperty({ example: 'Bản đồ Hà Nội' })
+  @Column({
+    type: 'varchar',
+    length: 200,
+    nullable: false,
+  })
+  url: string;
+
+  @OneToMany(
+    () => SettingEntity,
+    x => x.map,
+  )
+  settings: SettingEntity[];
+}
+
 @Entity({ name: 'tblcauhinh' })
 export class SettingEntity {
   @ApiProperty()
@@ -36,6 +67,28 @@ export class SettingEntity {
     nullable: false,
   })
   title: string;
+
+  @ApiProperty({ example: 'Bản đồ Hà Nội' })
+  @Column({
+    type: 'varchar',
+    length: 225,
+    name: 'slogan',
+    nullable: true,
+    default: '',
+  })
+  slogan: string;
+
+  @ApiProperty({ example: 'en' })
+  @Column({ type: 'int', nullable: true })
+  mapId: number;
+
+  @ApiProperty({ type: () => MapSettingEntity })
+  @ManyToOne(
+    () => MapSettingEntity,
+    map => map,
+  )
+  @JoinColumn({ name: 'mapId', referencedColumnName: 'id' })
+  map: MapSettingEntity;
 
   @ApiProperty({ example: 15.14 })
   @Column({

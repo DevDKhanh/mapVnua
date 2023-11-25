@@ -1,5 +1,5 @@
 .btnShow {
-  position: fixed;
+  position: absolute;
   bottom: 4px;
   left: 4px;
   z-index: 100000;
@@ -25,7 +25,7 @@
 
 .container {
   user-select: none;
-  position: fixed;
+  position: absolute;
   bottom: 4px;
   left: 44px;
   z-index: 100000;

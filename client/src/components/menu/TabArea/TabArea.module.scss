@@ -27,7 +27,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 150px;
   background-color: #0059ff;
   padding: 8px;
   border-radius: 5px;
@@ -37,7 +36,6 @@
 
 .container {
   position: relative;
-  max-width: 150px;
   margin-left: 12px;
   .list {
     position: absolute;
@@ -46,7 +44,7 @@
     padding: 10px 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
+    min-width: 100%;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
 }

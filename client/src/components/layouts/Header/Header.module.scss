@@ -1,0 +1,36 @@
+.container {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0px 24px;
+  background: linear-gradient(88deg, #08a1f4 -8.01%, #283c8f 96.89%);
+  gap: 24px;
+
+  h1 {
+    font-size: 20px;
+    color: #fff;
+  }
+}
+
+.logo {
+  width: 40px;
+}
+
+.groupText {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 100px;
+}
+
+.marqueeText {
+  display: inline-block;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: yellow;
+}

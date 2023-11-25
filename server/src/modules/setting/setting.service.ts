@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 import { CreateSettingDto } from './dto/post.dto';
 import { UpdateSettingDto } from './dto/put.dto';
 import { GetListDto } from '../../common/dto/index.dto';
-import { SettingEntity } from './entities/setting.entity';
+import { MapSettingEntity, SettingEntity } from './entities/setting.entity';
 import { LanguageEntity } from '../language/entities/language.entity';
 import { createPagination, resultData } from '../../common/text.helper';
 
@@ -19,6 +19,9 @@ export class SettingService {
 
     @InjectRepository(LanguageEntity)
     private languageRepository: Repository<LanguageEntity>,
+
+    @InjectRepository(MapSettingEntity)
+    private mapRepository: Repository<MapSettingEntity>,
 
     private readonly i18n: I18nRequestScopeService,
   ) {}
@@ -88,6 +91,7 @@ export class SettingService {
   async getList(getListDto: GetListDto) {
     const result = await this.settingRepository
       .createQueryBuilder('setting')
+      .leftJoinAndSelect('setting.map', 'map')
       .leftJoinAndSelect('setting.language', 'language')
       .skip((+getListDto.page - 1) * getListDto.pageSize)
       .take(+getListDto.pageSize)
@@ -101,8 +105,20 @@ export class SettingService {
     );
   }
 
+  async getListMap() {
+    const result = await this.mapRepository.find();
+    return resultData(
+      await this.i18n.translate('site.DETAIL_DATA', {
+        args: { name: 'bản đồ' },
+      }),
+      result,
+    );
+  }
+
   async getDetail(id: number) {
-    const setting = await this.settingRepository.findOne(id);
+    const setting = await this.settingRepository.findOne(id, {
+      relations: ['language', 'map'],
+    });
 
     if (!setting) {
       throw new HttpException(
@@ -113,12 +129,11 @@ export class SettingService {
       );
     }
 
-    const language = await this.languageRepository.findOne(setting.languageId);
     return resultData(
       await this.i18n.translate('site.DETAIL_DATA', {
         args: { name: 'Cấu hình' },
       }),
-      { ...setting, language },
+      setting,
     );
   }
 

@@ -59,13 +59,13 @@ function Select({ title, data, value, onChange }: props) {
               [style.listTop]: !isTopCurent,
             })}
           >
-            {data.map((item, i) => (
+            {data?.map((item, i) => (
               <div
                 key={i}
                 className={style.item}
                 onClick={() => !!onChange && onChange(item)}
               >
-                {item.txt}
+                {item.txt || item.name}
               </div>
             ))}
             {data.length <= 0 && (

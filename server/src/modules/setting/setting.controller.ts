@@ -63,6 +63,14 @@ export class SettingController {
     return this.settingService.getList(getListDto);
   }
 
+  @Get('/maps')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Get list map setting . Public' })
+  @ApiOkResponse({ type: CreateSettingDto, status: 200 })
+  async getListMap() {
+    return this.settingService.getListMap();
+  }
+
   @Get('/:id')
   @HttpCode(200)
   @ApiOperation({ summary: 'Get detail setting . Public' })

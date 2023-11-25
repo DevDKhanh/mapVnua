@@ -1,67 +1,67 @@
 .main {
-	position: fixed;
-	width: 220px;
-	border-radius: 0 5px 5px 0;
-	min-height: 500px;
-	background-color: rgb(255, 255, 255);
-	z-index: 1000;
-	transform: translateY(-50%);
-	top: 50%;
-	left: -220px;
-	transition: 0.3s;
-	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+  position: absolute;
+  width: 220px;
+  border-radius: 0 5px 5px 0;
+  min-height: 500px;
+  background-color: rgb(255, 255, 255);
+  z-index: 1000;
+  transform: translateY(-50%);
+  top: 50%;
+  left: -220px;
+  transition: 0.3s;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
 
-	.btnToggle {
-		width: 25px;
-		height: 70px;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		border-radius: 0 10px 10px 0;
-		background-color: #fff;
-		overflow: hidden;
-		position: absolute;
-		transform: translateY(-50%);
-		top: 50%;
-		right: -25px;
-		border: none;
-		border: 1px solid #ccc;
-		&:hover {
-			cursor: pointer;
-		}
+  .btnToggle {
+    width: 25px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 10px 10px 0;
+    background-color: #fff;
+    overflow: hidden;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    right: -25px;
+    border: none;
+    border: 1px solid #ccc;
+    &:hover {
+      cursor: pointer;
+    }
 
-		&:active {
-			background-color: #ccc;
-		}
+    &:active {
+      background-color: #ccc;
+    }
 
-		&::before {
-			content: '';
-			position: absolute;
-			border-left: solid 10px #000;
-			border-top: solid 10px transparent;
-			border-bottom: solid 10px transparent;
-		}
-	}
+    &::before {
+      content: "";
+      position: absolute;
+      border-left: solid 10px #000;
+      border-top: solid 10px transparent;
+      border-bottom: solid 10px transparent;
+    }
+  }
 
-	.title {
-		text-align: center;
-		background-color: rgb(0, 89, 255);
-		color: #fff;
-		border-radius: 0 5px 0 0;
-	}
+  .title {
+    text-align: center;
+    background-color: rgb(0, 89, 255);
+    color: #fff;
+    border-radius: 0 5px 0 0;
+  }
 }
 
 .main.active {
-	left: 0;
+  left: 0;
 
-	.btnToggle {
-		&::before {
-			content: '';
-			position: absolute;
-			transform: rotate(180deg);
-			border-left: solid 10px #000;
-			border-top: solid 10px transparent;
-			border-bottom: solid 10px transparent;
-		}
-	}
+  .btnToggle {
+    &::before {
+      content: "";
+      position: absolute;
+      transform: rotate(180deg);
+      border-left: solid 10px #000;
+      border-top: solid 10px transparent;
+      border-bottom: solid 10px transparent;
+    }
+  }
 }
