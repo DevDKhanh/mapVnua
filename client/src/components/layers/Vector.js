@@ -94,8 +94,10 @@ function Vector({ path, data }) {
         if (layer?.setStyle) {
           layer.setStyle({
             fillColor: setColor(properties[`${data.keyColor}`], 1, dataColor),
+            fillOpacity: 0.9,
+            opacity: 0.9,
             color: "yellow",
-            weight: 4,
+            weight: 2,
             zIndex: 1,
           });
         }
