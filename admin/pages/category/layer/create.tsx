@@ -1,25 +1,25 @@
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { Fragment, memo, useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
+import ButtonUpload from "../../../components/controls/ButtonUpload";
+import { DATA_COLOR } from "../../../constants/config";
+import { DashboardLayout } from "../../../components/widgets/Layout";
+import Input from "../../../components/site/Input";
+import NoteRaster from "../../../components/controls/NoteRaster";
+import RequiredPermision from "../../../components/protected/requiredPermision";
+import { RootState } from "../../../redux/reducers";
+import Select from "../../../components/site/Select";
+import SelectColorLayer from "../../../components/controls/SelectColorLayer";
 import areaAPI from "../../../api/area";
 import classifyAPI from "../../../api/classify";
+import dynamic from "next/dynamic";
+import handleGetFile from "../../../common/hooks/getFile";
 import languageAPI from "../../../api/language";
 import layerAPI from "../../../api/layer";
+import { toast } from "react-toastify";
 import uploadAPI from "../../../api/upload";
-import handleGetFile from "../../../common/hooks/getFile";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import { useValidateAll } from "../../../common/hooks/useValidate";
-import ButtonUpload from "../../../components/controls/ButtonUpload";
-import NoteRaster from "../../../components/controls/NoteRaster";
-import SelectColorLayer from "../../../components/controls/SelectColorLayer";
-import RequiredPermision from "../../../components/protected/requiredPermision";
-import Input from "../../../components/site/Input";
-import Select from "../../../components/site/Select";
-import { DashboardLayout } from "../../../components/widgets/Layout";
-import { DATA_COLOR } from "../../../constants/config";
-import { RootState } from "../../../redux/reducers";
 
 const GetCoordinatesRaster = dynamic(
   () => import("../../../components/map/GetCoordinatesRaster"),
@@ -200,6 +200,7 @@ function Index() {
       if (resArea?.records && resClassify?.records) {
         setListArea(
           resArea.records.map((item: any) => ({
+            ...item,
             txt: item.nameArea,
             value: item.id,
           }))
