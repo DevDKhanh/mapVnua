@@ -13,6 +13,20 @@ function Vector({ path, data }) {
   const [file, setFile] = useState();
   const map = useMap();
 
+  const titleDetail = useMemo(() => {
+    if (data?.titleDetail) {
+      return JSON.parse(data.titleDetail).reduce(
+        (result, { key, value, isCheck }) => {
+          result[key] = { value, isCheck };
+          return result;
+        },
+        {}
+      );
+    } else {
+      return null;
+    }
+  }, [data?.titleDetail]);
+
   const mapEvents = useMapEvents({
     zoomend: () => {
       mapEvents.eachLayer(function (layer) {
@@ -65,15 +79,29 @@ function Vector({ path, data }) {
     [data.dataColor, data.typeColor]
   );
 
-  const getInfo = (data) => {
+  const getInfo = (item) => {
     const info = [];
-    for (let i in data) {
-      info.push(`<div>
-                    <p>
-                        <b>${i}: </b> ${data[i]}
-                    </p>
-                </div>`);
+    if (titleDetail) {
+      for (let i in titleDetail) {
+        if (titleDetail[i].isCheck) {
+          info.push(`<div>
+        <p>
+            <b>${titleDetail[i]?.value}: </b> ${item[i]}
+        </p>
+    </div>
+    `);
+        }
+      }
+    } else {
+      for (let i in item) {
+        info.push(`<div>
+                      <p>
+                          <b>${i}: </b> ${item[i]}
+                      </p>
+                  </div>`);
+      }
     }
+
     return info;
   };
 

@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -10,9 +9,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { ClassifyEntity } from './../../classify/entities/classify.entity';
+import { ApiProperty } from '@nestjs/swagger';
 import { AreaEntity } from './../../area/entities/area.entity';
+import { ClassifyEntity } from './../../classify/entities/classify.entity';
 import { LanguageEntity } from '../../language/entities/language.entity';
+
 @Entity({ name: 'tbllop' })
 export class LayerEntity {
   // @ApiProperty({ example: 'id Lớp' })
@@ -104,6 +105,13 @@ export class LayerEntity {
   })
   @Column({ type: 'varchar', name: 'duLieuDaiMau', length: 4000 })
   dataColor: string;
+
+  @ApiProperty({
+    example:
+      '[{"key":"Shape_Leng","value":"Shape_Leng","isCheck":true},{"key":"MaDat","value":"MaDat0002","isCheck":true},{"key":"Shape_Area","value":"Shape_Area","isCheck":true}]',
+  })
+  @Column({ type: 'varchar', name: 'duLieuThayThe', length: 4000 })
+  titleDetail: string;
 
   @ApiProperty({ example: '#00000' })
   @Column({ type: 'varchar', name: 'mauVien', length: 10 })

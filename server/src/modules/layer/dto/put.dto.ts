@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
+
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateLayerDto {
   @ApiProperty({ example: 'tên Lớp' })
@@ -49,6 +50,14 @@ export class UpdateLayerDto {
   @IsString()
   @IsOptional()
   dataColor: string;
+
+  @ApiProperty({
+    example:
+      '[{"key":"Shape_Leng","value":"Shape_Leng","isCheck":true},{"key":"MaDat","value":"MaDat0002","isCheck":true},{"key":"Shape_Area","value":"Shape_Area","isCheck":true}]',
+  })
+  @IsOptional()
+  @IsString()
+  titleDetail: string;
 
   @ApiProperty({ example: './upload/abc.json' })
   @IsString()

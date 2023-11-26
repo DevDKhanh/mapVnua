@@ -37,7 +37,6 @@ function SelectColorLayer({
   typeColor,
   titleNote,
 }: any) {
-  const [isReady, setIsReady] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [color, setColor] = useState<string>(DATA_COLOR);

@@ -1,5 +1,6 @@
 import { Fragment, memo, useEffect, useMemo, useState } from "react";
 
+import ButtonSetContentPopup from "../../../../components/controls/ButtonSetContentPopup";
 import ButtonUpload from "../../../../components/controls/ButtonUpload";
 import { DATA_COLOR } from "../../../../constants/config";
 import { DashboardLayout } from "../../../../components/widgets/Layout";
@@ -50,6 +51,7 @@ interface typeForm {
   opacityBorder: string;
   backgroundColor: string;
   opacityBackground: string;
+  titleDetail: string;
   latNE: string;
   lngNE: string;
   latSW: string;
@@ -109,6 +111,7 @@ function Index() {
   const [listArea, setListArea] = useState<Array<any>>([]);
 
   const [dataForm, setDataForm] = useState<typeForm>({
+    titleDetail: "",
     checked: {
       txt: "Không",
       value: 0,
@@ -509,6 +512,13 @@ function Index() {
               {/*---------- Vector ----------*/}
               {dataForm?.style?.value === "Vector" && (
                 <Fragment>
+                  <ButtonSetContentPopup
+                    setForm={setDataForm}
+                    form={{
+                      defaultData: dataForm.titleDetail,
+                      file: dataForm.path,
+                    }}
+                  />
                   <PreviewVector data={dataForm} />
                   <SelectColorLayer
                     onChange={handleChange}

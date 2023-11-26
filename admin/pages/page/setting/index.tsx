@@ -77,7 +77,7 @@ function Index() {
           {
             title: "Map",
             template: (data: any) => {
-              return data.map.ten;
+              return data?.map?.ten;
             },
           },
           {
