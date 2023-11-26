@@ -6,9 +6,9 @@ import { Repository } from 'typeorm';
 import { CreateDisplayDto } from './dto/post.dto';
 import { UpdateDisplayDto } from './dto/put.dto';
 import { GetListDto } from '../../common/dto/index.dto';
-import { DisplayEntity } from './entities/Display.entity';
 import { createPagination, resultData } from '../../common/text.helper';
 import { LanguageEntity } from '../language/entities/language.entity';
+import { DisplayEntity } from './entities/display.entity';
 
 @Injectable()
 export class DisplayService {
