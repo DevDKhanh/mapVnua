@@ -268,6 +268,7 @@ function Index() {
                 txt: data.classify.nameClassify,
               },
               area: {
+                ...data.area,
                 value: data.area.id,
                 txt: data.area.nameArea,
               },
@@ -517,20 +518,6 @@ function Index() {
                 ]}
                 onChange={(v) => handleChangeSelect(v, "style")}
               />
-              {/* <Input
-                                title="Đường dẫn tệp hoặc ảnh"
-                                value={dataForm?.path?.path}
-                                name="path"
-                                type="file"
-                                onChange={handleChangeFile}
-                            />
-                            <Input
-                                title="Icon của lớp"
-                                value={dataForm?.icon?.path}
-                                name="icon"
-                                type="file"
-                                onChange={handleChangeFile}
-                            /> */}
               <ButtonUpload
                 title="Chọn tệp bản đồ hoặc ảnh"
                 titleData="Cập nhật tệp bản đồ hoặc ảnh"

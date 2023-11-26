@@ -270,6 +270,7 @@ function Index() {
                 txt: data.classify.nameClassify,
               },
               area: {
+                ...data.area,
                 value: data.area.id,
                 txt: data.area.nameArea,
               },

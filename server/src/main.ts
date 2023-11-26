@@ -1,9 +1,10 @@
-import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { NestExpressApplication } from '@nestjs/platform-express';
+
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -32,7 +33,11 @@ async function bootstrap() {
       .addTag('Backend')
       .build();
     const document = SwaggerModule.createDocument(app, configDocs);
-    SwaggerModule.setup('swagger', app, document);
+    SwaggerModule.setup('swagger', app, document, {
+      swaggerOptions: {
+        docExpansion: 'none',
+      },
+    });
   }
   await app.listen(PORT);
   console.log('App Running On Port : ' + PORT);

@@ -1,102 +1,122 @@
 .btn {
-    background-color: #ff7d03;
-    padding: 6px 12px;
-    max-width: max-content;
-    color: #fff;
-    border-radius: 6px;
-    cursor: pointer;
-    user-select: none;
-    transition: 0.3s;
-    font-weight: 600;
+  background-color: #ff7d03;
+  padding: 6px 12px;
+  max-width: max-content;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.3s;
+  font-weight: 600;
 
-    &:active {
-        transform: scale(0.9);
-    }
+  &:active {
+    transform: scale(0.9);
+  }
 }
 
 .form {
-    position: fixed;
-    top: 20%;
-    left: 20%;
-    z-index: 10000000000;
-    width: 1000px;
-    background-color: #fff;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    padding: 32px 0;
+  position: fixed;
+  top: 20%;
+  left: 20%;
+  z-index: 10000000000;
+  width: 1000px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 32px 0;
 
-    &:active {
-        cursor: move;
-    }
+  &:active {
+    cursor: move;
+  }
 }
 
 .btnClose {
-    position: absolute;
-    top: -35px;
-    right: 0;
-    width: 30px;
-    height: 30px;
-    background-color: #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 500px;
-    cursor: pointer;
+  position: absolute;
+  top: -35px;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 500px;
+  cursor: pointer;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 44px;
-    padding-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 44px;
+  padding-bottom: 12px;
 
-    p {
-        cursor: pointer;
-        &:hover {
-            text-decoration: underline;
-        }
+  p {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
     }
+  }
 }
 
 .select {
-    padding: 0 44px;
-    padding-bottom: 24px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 3fr;
-    gap: 12px;
+  padding: 0 44px;
+  padding-bottom: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 3fr 100px;
+  gap: 12px;
 }
 
 .input {
-    outline: none;
-    padding: 0 12px;
-    border: 1px solid #000000;
-    border-radius: 4px;
+  outline: none;
+  padding: 0 12px;
+  border: 1px solid #000000;
+  border-radius: 4px;
 }
 
 .main {
-    padding: 0 44px;
-    overflow: auto;
-    height: 60vh;
+  padding: 0 44px;
+  overflow: auto;
+  height: 60vh;
 }
 
 .btnAdd {
-    margin-top: 24px;
-    background-color: rgb(162, 162, 162);
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin-top: 24px;
+  background-color: rgb(162, 162, 162);
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .groupButton {
-    padding: 0 44px;
-    padding-top: 24px;
-    display: flex;
-    align-items: center;
+  padding: 0 44px;
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
 }
 
 .confirm {
-    background-color: rgb(0, 72, 255);
-    margin-left: 24px;
+  background-color: rgb(0, 72, 255);
+  margin-left: 24px;
+}
+
+.btnSearch {
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #777777;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid #777777;
+  user-select: none;
+
+  &:hover {
+    color: #fff;
+    background-color: rgb(62, 117, 255);
+    border: 2px solid rgb(62, 117, 255);
+  }
 }

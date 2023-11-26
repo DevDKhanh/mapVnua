@@ -341,7 +341,7 @@ function Index() {
   const properties: Array<{ txt: string; value: string }> = useMemo(() => {
     const arr = [];
     if (dataForm?.style?.value == "Vector") {
-      if (fileData?.features[0]?.properties) {
+      if (fileData?.features?.[0]?.properties) {
         for (let i in fileData?.features[0]?.properties) {
           arr.push({
             txt: i,

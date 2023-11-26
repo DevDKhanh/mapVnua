@@ -16,6 +16,7 @@ import { AreaModule } from './modules/area/area.module';
 import { LayerModule } from './modules/layer/layer.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { DisplayModule } from './modules/\bdisplay/display.module';
+import { ColorsModule } from './modules/colors/colors.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -47,6 +48,7 @@ import { DisplayModule } from './modules/\bdisplay/display.module';
     DisplayModule,
     LayerModule,
     PermissionModule,
+    ColorsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
