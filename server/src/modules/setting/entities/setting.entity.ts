@@ -86,6 +86,9 @@ export class SettingEntity {
   @ManyToOne(
     () => MapSettingEntity,
     map => map,
+    {
+      onDelete: 'SET NULL',
+    },
   )
   @JoinColumn({ name: 'mapId', referencedColumnName: 'id' })
   map: MapSettingEntity;
