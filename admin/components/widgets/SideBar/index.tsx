@@ -23,16 +23,16 @@ const items = [
     title: "Quản lí danh mục",
     tabList: [
       {
+        href: "/category/layer",
+        txt: "Lớp bản đồ",
+      },
+      {
         href: "/category/location",
         txt: "Khu vực",
       },
       {
         href: "/category/classify",
         txt: "Phân loại",
-      },
-      {
-        href: "/category/layer",
-        txt: "Lớp bản đồ",
       },
       {
         href: "/category/color",

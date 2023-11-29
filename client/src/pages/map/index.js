@@ -2,8 +2,6 @@ import "./styles.scss";
 
 import {
   MapContainer,
-  Marker,
-  Popup,
   ScaleControl,
   TileLayer,
   ZoomControl,
@@ -16,7 +14,6 @@ import ButtonDisplayLayer from "../../components/map/ButtonDisplayLayer";
 import ContainerLayer from "../../components/map/ContainerLayer";
 import Favicon from "react-favicon";
 import FullScreen from "../../components/map/FullScreen";
-import Menu from "../../components/menu/Menu";
 import NoteTable from "../../components/map/NoteTable";
 import SearchField from "../../components/map/Search";
 import { useSelector } from "react-redux";
@@ -69,7 +66,6 @@ function Map() {
         />
         <ZoomControl position="topleft" />
         <ScaleControl position="bottomright" />
-        <Menu />
         <FullScreen />
         <ContainerLayer zoom={zoom} />
         <LocationMarker center={center} zoom={zoom} />

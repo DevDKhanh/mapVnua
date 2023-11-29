@@ -1,11 +1,8 @@
 .menu {
-  position: absolute;
-  top: 5px;
-  right: 70px;
-  z-index: 100000;
-  user-select: none;
-  padding: 10px;
+  position: relative;
+  z-index: 10;
   display: flex;
+  justify-content: center;
   align-items: stretch;
-  max-width: max-content;
+  gap: 12px;
 }

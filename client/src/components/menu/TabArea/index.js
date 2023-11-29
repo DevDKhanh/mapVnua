@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { updateArea, updateLayer } from "../../../redux/action/dataMap";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -6,16 +6,25 @@ import { RiArrowDownSFill } from "react-icons/ri";
 import areaAPI from "../../../api/area";
 import clsx from "clsx";
 import style from "./TabArea.module.scss";
-import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 
 function TabArea() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const ref = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const { area, language } = useSelector((state) => state.dataMap);
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setShow(false);
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [ref]);
 
   useEffect(() => {
     if (!!language) {
@@ -48,7 +57,7 @@ function TabArea() {
   return (
     <>
       {data.length > 1 ? (
-        <div className={style.container}>
+        <div className={style.container} ref={ref}>
           <div
             className={clsx(style.language, style.main)}
             onClick={() => setShow(!show)}

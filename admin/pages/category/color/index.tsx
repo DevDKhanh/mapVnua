@@ -9,6 +9,7 @@ import Pagination from "../../../components/site/Pagination";
 import Search from "../../../components/controls/Search";
 import areaAPI from "../../../api/area";
 import colorAPI from "../../../api/color";
+import { copy } from "../../../common/func/copy";
 import useDebounce from "../../../common/hooks/useDebounce";
 import { useRouter } from "next/router";
 
@@ -99,6 +100,26 @@ function Index() {
             title: "Blue",
             template: (data: any) => {
               return data.blue;
+            },
+          },
+          {
+            title: "Màu",
+            template: (data: any) => {
+              return (
+                <div
+                  title="Click to copy"
+                  style={{
+                    margin: "0 auto",
+                    border: "1px solid #000",
+                    background: `rgb(${data.red}, ${data.green}, ${data.blue})`,
+                    width: 50,
+                    height: 25,
+                  }}
+                  onClick={() =>
+                    copy(`rgb(${data.red}, ${data.green}, ${data.blue})`)
+                  }
+                ></div>
+              );
             },
           },
           {

@@ -1,5 +1,6 @@
 import { API } from "../../../constant/config";
 import Marquee from "react-fast-marquee";
+import Menu from "../../../components/menu/Menu";
 import styles from "./Header.module.scss";
 import { useSelector } from "react-redux";
 
@@ -20,6 +21,7 @@ function Header() {
           <p className={styles.marqueeText}>{settingMap?.slogan}</p>
         </Marquee>
       </div>
+      <Menu />
     </header>
   );
 }
