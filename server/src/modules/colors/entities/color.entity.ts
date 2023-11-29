@@ -23,7 +23,7 @@ export class Color {
   @ApiProperty({ example: 'ABC' })
   @Column({
     type: 'varchar',
-    name: 'mâMu',
+    name: 'maMau',
     length: 100,
     nullable: false,
   })
