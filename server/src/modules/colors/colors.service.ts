@@ -6,7 +6,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateColorDto, SearchColorsDto } from './dto/create-color.dto';
+import {
+  CreateColorDto,
+  CreateColorManyDto,
+  SearchColorsDto,
+} from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 import { Color } from './entities/color.entity';
 import { createPagination, resultData } from 'src/common/text.helper';
@@ -41,6 +45,33 @@ export class ColorsService {
     const save = await this.colorRepository.save(color);
 
     return resultData(await this.i18n.translate('site.SUCCESS_CREATE'), save);
+  }
+
+  async createMany(createManyColorsDto: CreateColorManyDto) {
+    try {
+      const createdColors = [];
+      for (const colorDto of createManyColorsDto.data) {
+        const colorCheck = await this.colorRepository.findOne({
+          where: {
+            code: colorDto.code,
+          },
+        });
+
+        if (!!colorCheck) {
+          continue;
+        }
+
+        const color = this.colorRepository.create({ ...colorDto });
+        const savedColor = await this.colorRepository.save(color);
+        createdColors.push(savedColor);
+      }
+      return resultData(
+        await this.i18n.translate('site.SUCCESS_CREATE'),
+        createdColors,
+      );
+    } catch (err) {
+      throw new HttpException('Error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async findAll(getListDto: GetListDto) {

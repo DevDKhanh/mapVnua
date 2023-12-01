@@ -25,6 +25,18 @@ const colorAPI = {
       },
     });
   },
+  postMany: (data: any[], token: string, tokenAxios?: any) => {
+    return axiosClient.post(
+      `${base}/many`,
+      { data },
+      {
+        cancelToken: tokenAxios,
+        headers: {
+          authorization: "Bearer " + token,
+        },
+      }
+    );
+  },
   searchColors: (data: any, token: string, tokenAxios?: any) => {
     return axiosClient.post(`${base}/search-colors`, data, {
       cancelToken: tokenAxios,

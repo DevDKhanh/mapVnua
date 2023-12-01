@@ -34,6 +34,13 @@ export class CreateColorDto {
   blue: number;
 }
 
+export class CreateColorManyDto {
+  @ApiProperty({ example: [] })
+  @IsNotEmpty()
+  @IsArray()
+  data: any[];
+}
+
 export class SearchColorsDto {
   @ApiProperty({
     example: [{ value: 'string', color: 'string', note: 'string' }],

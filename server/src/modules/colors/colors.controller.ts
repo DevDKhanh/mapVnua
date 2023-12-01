@@ -10,7 +10,11 @@ import {
   Put,
 } from '@nestjs/common';
 import { ColorsService } from './colors.service';
-import { CreateColorDto, SearchColorsDto } from './dto/create-color.dto';
+import {
+  CreateColorDto,
+  CreateColorManyDto,
+  SearchColorsDto,
+} from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 import { ApiTags } from '@nestjs/swagger';
 import {
@@ -24,6 +28,12 @@ import { GetListDto } from 'src/common/dto/index.dto';
 @Controller('colors')
 export class ColorsController {
   constructor(private readonly colorsService: ColorsService) {}
+
+  @Post('/many')
+  @UseGuards(PermisionCreateGuard)
+  createMany(@Body() createColorDto: CreateColorManyDto) {
+    return this.colorsService.createMany(createColorDto);
+  }
 
   @Post()
   @UseGuards(PermisionCreateGuard)

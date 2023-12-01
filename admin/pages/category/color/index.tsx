@@ -4,6 +4,7 @@ import ActionData from "../../../components/site/ActionData";
 import ButtonCreate from "../../../components/controls/ButtonCreate";
 import { DashboardLayout } from "../../../components/widgets/Layout";
 import DataTable from "../../../components/site/Table";
+import ImportFileWork from "../../../components/controls/ImportFileWork";
 import Link from "next/link";
 import Pagination from "../../../components/site/Pagination";
 import Search from "../../../components/controls/Search";
@@ -55,8 +56,15 @@ function Index() {
 
   return (
     <DashboardLayout title="Quản lý mã màu">
+      <ImportFileWork />
       <div className="group-header">
-        <ButtonCreate href="/category/color/create" />
+        <div className="d-flex gap-12">
+          <ButtonCreate href="/category/color/create" />
+          <ButtonCreate
+            title="Inport file"
+            href="/category/color?importFile=open"
+          />
+        </div>
         {/* <Search
           placeholder="Tìm kiếm theo tên khu vực"
           name="keyword"
