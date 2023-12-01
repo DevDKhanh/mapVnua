@@ -312,7 +312,7 @@ function SelectColorLayer({
                     handleSearchColors(convertColor);
                   }}
                 >
-                  Dúng màu chuẩn
+                  Dùng màu chuẩn
                 </div>
               ) : null}
             </div>
