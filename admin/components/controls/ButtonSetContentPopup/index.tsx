@@ -154,14 +154,12 @@ const ButtonSetContentPopup = ({ form, setForm }: any) => {
                       Áp dụng
                     </div>
                   ) : null}
-                  {data.length <= 0 ? (
-                    <div
-                      className={clsx(styles.btn, styles.update)}
-                      onClick={handleUpdateData}
-                    >
-                      Lấy thông tin
-                    </div>
-                  ) : null}
+                  <div
+                    className={clsx(styles.btn, styles.update)}
+                    onClick={handleUpdateData}
+                  >
+                    Lấy thông tin
+                  </div>
                 </div>
               </form>
             )}
