@@ -107,8 +107,8 @@ function Index() {
                 txt: data.language.nameLanguage,
               },
               map: {
-                value: data.map.id,
-                txt: data.map.ten,
+                value: data?.map?.id,
+                txt: data?.map?.ten,
               },
             });
           }

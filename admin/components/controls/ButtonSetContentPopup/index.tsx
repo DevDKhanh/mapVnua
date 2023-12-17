@@ -43,7 +43,7 @@ const ButtonSetContentPopup = ({ form, setForm }: any) => {
         setData(convert);
       }
     } else {
-      toast.warn("Vui lòng chọ file");
+      toast.warn("Vui lòng chọn file");
     }
   }, [fileData?.features]);
 
@@ -58,7 +58,6 @@ const ButtonSetContentPopup = ({ form, setForm }: any) => {
   };
 
   const handleSubmit = () => {
-    console.log(form?.titleDetail, JSON.stringify(data));
     setForm((prev: any) => ({ ...prev, titleDetail: JSON.stringify(data) }));
   };
 

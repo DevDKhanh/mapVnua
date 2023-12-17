@@ -2,6 +2,7 @@ import { Fragment, memo, useEffect, useMemo, useState } from "react";
 
 import ButtonSetContentPopup from "../../../components/controls/ButtonSetContentPopup";
 import ButtonUpload from "../../../components/controls/ButtonUpload";
+import CustomIcon from "../../../components/controls/CustomIcon";
 import { DATA_COLOR } from "../../../constants/config";
 import { DashboardLayout } from "../../../components/widgets/Layout";
 import Input from "../../../components/site/Input";
@@ -45,6 +46,7 @@ interface typeForm {
   titleNote?: string;
   keyColor: string;
   typeColor: string;
+  dataIcon: any[];
   titleDetail: string;
   borderColor: string;
   widthBorder: string;
@@ -84,6 +86,7 @@ interface typeFormSubmit {
   opacityBorder: number;
   labelMap: string;
   backgroundColor: string;
+  dataIcon: string;
   opacityBackground: number;
   latNE: number;
   lngNE: number;
@@ -109,6 +112,7 @@ function Index() {
   const [listArea, setListArea] = useState<Array<any>>([]);
 
   const [dataForm, setDataForm] = useState<typeForm>({
+    dataIcon: [],
     active: {
       txt: "Có",
       value: 1,
@@ -272,6 +276,21 @@ function Index() {
         dataForm?.style?.value === "Raster" ? "image" : "file"
       );
 
+      const dataIcon = await Promise.all(
+        dataForm.dataIcon?.map(async (x: any) => {
+          if (!x?.fileIcon) {
+            return x;
+          }
+
+          const fileIcon = await handleGetFile(x.fileIcon, token);
+          return {
+            ...x,
+            icon: fileIcon,
+            fileIcon: null,
+          };
+        })
+      );
+
       try {
         const formSubmit: typeFormSubmit = {
           ...dataForm,
@@ -282,6 +301,7 @@ function Index() {
           classifyId: dataForm.classify.value,
           areaId: dataForm.area.value,
           style: dataForm.style.value,
+          dataIcon: JSON.stringify(dataIcon),
           path: filePath,
           icon: fileIcon,
           keyColor: dataForm.keyColor,
@@ -437,14 +457,23 @@ function Index() {
                       file: dataForm.path,
                     }}
                   />
-                  <SelectColorLayer
-                    onChange={handleChange}
-                    titleNote={dataForm.titleNote}
-                    dataColor={dataForm.dataColor}
-                    file={dataForm.path}
-                    keyColor={dataForm.keyColor}
-                    typeColor={dataForm.typeColor}
-                  />
+                  <div className={"group-input"}>
+                    <SelectColorLayer
+                      onChange={handleChange}
+                      titleNote={dataForm.titleNote}
+                      dataColor={dataForm.dataColor}
+                      file={dataForm.path}
+                      keyColor={dataForm.keyColor}
+                      typeColor={dataForm.typeColor}
+                    />
+                    <CustomIcon
+                      setForm={setDataForm}
+                      form={{
+                        defaultData: dataForm.dataIcon || [],
+                        file: dataForm.path,
+                      }}
+                    />
+                  </div>
                   <PreviewVector data={dataForm} />
                   <Input
                     title="Màu viền"

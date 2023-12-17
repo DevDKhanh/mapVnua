@@ -1,0 +1,230 @@
+.btn {
+  background-color: #ff7d03;
+  padding: 6px 12px;
+  max-width: max-content;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.3s;
+  font-weight: 600;
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.form {
+  z-index: 10000000000;
+  width: 1000px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 32px;
+
+  &:active {
+    cursor: move;
+  }
+
+  .list {
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 24px;
+  }
+}
+
+.btnClose {
+  position: absolute;
+  top: -35px;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 500px;
+  cursor: pointer;
+}
+
+.main {
+  position: relative;
+  background-color: #fff;
+  padding: 32px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  min-height: max-content;
+
+  .btnClose {
+    position: absolute;
+    top: -35px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 500px;
+    cursor: pointer;
+  }
+}
+
+.select {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+
+  .btnSelect {
+    border: 4px solid #ccc;
+    padding: 32px;
+    font-weight: 700;
+    color: #ccc;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    &:hover {
+      color: #ff7d03;
+      border-color: #ff7d03;
+    }
+
+    & + .btnSelect {
+      margin-left: 12px;
+    }
+  }
+}
+
+.selectImage {
+  width: 60vw;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+
+  .listImage {
+    flex: 1;
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .item {
+    position: relative;
+    min-height: 170px;
+    cursor: pointer;
+    border: 4px solid #c4c4c4;
+    background-color: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    opacity: 0.7;
+    transition: all 0.2s;
+    &:hover {
+      border: 4px solid #ff7d03;
+      opacity: 1;
+    }
+    &:active {
+      transform: scale(0.9);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+.btnBack {
+  background-color: #000000;
+  color: #fff;
+  padding: 4px 12px;
+  max-width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.listFile {
+  flex: 1;
+  margin-top: 12px;
+  .itemFile {
+    margin-top: 8px;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+
+    &:hover {
+      color: red;
+    }
+
+    p {
+      margin-left: 12px;
+    }
+  }
+}
+
+.headerBtn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .btnSelect {
+    background-color: rgb(0, 157, 255);
+    padding: 4px 12px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.3s;
+    border-radius: 4px;
+
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+.note {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  i {
+    font-size: 20px;
+    cursor: pointer;
+  }
+  input {
+    flex: 1;
+    padding: 8px;
+    outline: none;
+    border: 1px solid #ccc;
+  }
+}
+
+.icon {
+  img {
+    width: 50px;
+    height: 50px;
+    display: block;
+    object-fit: cover;
+  }
+  p {
+    color: #ff7d03;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}

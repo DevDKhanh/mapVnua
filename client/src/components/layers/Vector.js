@@ -27,6 +27,14 @@ function Vector({ path, data }) {
     }
   }, [data?.titleDetail]);
 
+  const dataIcon = useMemo(() => {
+    if (data?.dataIcon) {
+      return JSON.parse(data.dataIcon);
+    } else {
+      return null;
+    }
+  }, [data?.dataIcon]);
+
   const mapEvents = useMapEvents({
     zoomend: () => {
       mapEvents.eachLayer(function (layer) {
@@ -47,20 +55,6 @@ function Vector({ path, data }) {
       });
     },
   });
-
-  const icon = useMemo(
-    () =>
-      new L.Icon({
-        iconUrl: `${API}/upload${data.icon}`,
-        iconSize: [26, 26],
-        popupAnchor: [0, -15],
-        shadowAnchor: [13, 28],
-        interactive: true,
-        shadowUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
-      }),
-    [data.icon]
-  );
 
   useEffect(() => {
     if (path) {
@@ -117,6 +111,24 @@ function Vector({ path, data }) {
         });
     }
 
+    const icon = dataIcon.find(
+      (x) =>
+        JSON.stringify(x.properties) ===
+        JSON.stringify(layer?.feature?.properties)
+    );
+
+    layer.setIcon(
+      new L.Icon({
+        iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
+        iconSize: [26, 26],
+        popupAnchor: [0, -15],
+        shadowAnchor: [13, 28],
+        interactive: true,
+        shadowUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
+      })
+    );
+
     layer.on({
       mouseover: () => {
         if (layer?.setStyle) {
@@ -133,7 +145,7 @@ function Vector({ path, data }) {
         if (layer.setIcon) {
           layer.setIcon(
             new L.Icon({
-              iconUrl: `${API}/upload${data.icon}`,
+              iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
               iconSize: [35, 35],
               popupAnchor: [0, -15],
               shadowAnchor: [13, 28],
@@ -158,7 +170,7 @@ function Vector({ path, data }) {
         if (layer?.setIcon) {
           layer.setIcon(
             new L.Icon({
-              iconUrl: `${API}/upload${data.icon}`,
+              iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
               iconSize: [26, 26],
               popupAnchor: [0, -15],
               shadowAnchor: [13, 28],
@@ -171,15 +183,6 @@ function Vector({ path, data }) {
       },
     });
   };
-
-  const handleCustomMarker = useCallback(
-    (feature, latlng) => {
-      return L.marker(latlng, {
-        icon,
-      });
-    },
-    [icon]
-  );
 
   const setColor = useCallback(
     (d, t, l) => {
@@ -229,7 +232,6 @@ function Vector({ path, data }) {
         <GeoJSON
           data={file}
           style={handleStyle}
-          pointToLayer={handleCustomMarker}
           onEachFeature={handleEachInfo}
         />
       )}

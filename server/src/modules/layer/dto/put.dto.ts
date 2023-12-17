@@ -56,8 +56,17 @@ export class UpdateLayerDto {
       '[{"key":"Shape_Leng","value":"Shape_Leng","isCheck":true},{"key":"MaDat","value":"MaDat0002","isCheck":true},{"key":"Shape_Area","value":"Shape_Area","isCheck":true}]',
   })
   @IsOptional()
+  @IsOptional()
   @IsString()
   titleDetail: string;
+
+  @ApiProperty({
+    example:
+      '[{"key":"Shape_Leng","value":"Shape_Leng","isCheck":true},{"key":"MaDat","value":"MaDat0002","isCheck":true},{"key":"Shape_Area","value":"Shape_Area","isCheck":true}]',
+  })
+  @IsOptional()
+  @IsString()
+  dataIcon: string;
 
   @ApiProperty({ example: './upload/abc.json' })
   @IsString()

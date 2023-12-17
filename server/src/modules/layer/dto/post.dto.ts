@@ -59,8 +59,17 @@ export class CreateLayerDto {
     example:
       '[{"key":"Shape_Leng","value":"Shape_Leng","isCheck":true},{"key":"MaDat","value":"MaDat0002","isCheck":true},{"key":"Shape_Area","value":"Shape_Area","isCheck":true}]',
   })
+  @IsOptional()
   @IsString()
   titleDetail: string;
+
+  @ApiProperty({
+    example:
+      '[{"key":"Shape_Leng","value":"Shape_Leng","isCheck":true},{"key":"MaDat","value":"MaDat0002","isCheck":true},{"key":"Shape_Area","value":"Shape_Area","isCheck":true}]',
+  })
+  @IsOptional()
+  @IsString()
+  dataIcon: string;
 
   @ApiProperty({ example: '#00000' })
   @IsString()

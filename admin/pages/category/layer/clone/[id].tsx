@@ -2,6 +2,7 @@ import { Fragment, memo, useEffect, useMemo, useState } from "react";
 
 import ButtonSetContentPopup from "../../../../components/controls/ButtonSetContentPopup";
 import ButtonUpload from "../../../../components/controls/ButtonUpload";
+import CustomIcon from "../../../../components/controls/CustomIcon";
 import { DATA_COLOR } from "../../../../constants/config";
 import { DashboardLayout } from "../../../../components/widgets/Layout";
 import Input from "../../../../components/site/Input";
@@ -65,6 +66,7 @@ interface typeForm {
   displayLabel: any;
   activeNote: any;
   activeTooltip: any;
+  dataIcon: any[];
 }
 
 /*---------- type form submit ----------*/
@@ -96,6 +98,7 @@ interface typeFormSubmit {
   active: number;
   activeNote: number;
   activeTooltip: number;
+  dataIcon: string;
 }
 
 /*===========> MAIN COMPONENT <==========*/
@@ -111,6 +114,7 @@ function Index() {
   const [listArea, setListArea] = useState<Array<any>>([]);
 
   const [dataForm, setDataForm] = useState<typeForm>({
+    dataIcon: [],
     titleDetail: "",
     checked: {
       txt: "Không",
@@ -238,6 +242,7 @@ function Index() {
             const { data } = res;
             setDataForm({
               ...data,
+              dataIcon: data?.dataIcon !== "" ? JSON.parse(data.dataIcon) : [],
               typeColor: `${data.typeColor}`,
               checked: {
                 txt: data.checked ? "Có" : "Không",
@@ -339,9 +344,25 @@ function Index() {
         dataForm?.style?.value === "Raster" ? "image" : "file"
       );
 
+      const dataIcon = await Promise.all(
+        dataForm.dataIcon?.map(async (x: any) => {
+          if (!x?.fileIcon) {
+            return x;
+          }
+
+          const fileIcon = await handleGetFile(x.fileIcon, token);
+          return {
+            ...x,
+            icon: fileIcon,
+            fileIcon: null,
+          };
+        })
+      );
+
       try {
         const formSubmit: typeFormSubmit = {
           ...dataForm,
+          dataIcon: JSON.stringify(dataIcon),
           typeColor: +dataForm.typeColor,
           titleNote: dataForm?.titleNote || dataForm.nameLayer,
           nameLayer: dataForm.nameLayer,
@@ -520,14 +541,23 @@ function Index() {
                     }}
                   />
                   <PreviewVector data={dataForm} />
-                  <SelectColorLayer
-                    onChange={handleChange}
-                    titleNote={dataForm.titleNote}
-                    dataColor={dataForm.dataColor}
-                    file={dataForm.path}
-                    keyColor={dataForm.keyColor}
-                    typeColor={dataForm.typeColor}
-                  />
+                  <div className={"group-input"}>
+                    <SelectColorLayer
+                      onChange={handleChange}
+                      titleNote={dataForm.titleNote}
+                      dataColor={dataForm.dataColor}
+                      file={dataForm.path}
+                      keyColor={dataForm.keyColor}
+                      typeColor={dataForm.typeColor}
+                    />
+                    <CustomIcon
+                      setForm={setDataForm}
+                      form={{
+                        defaultData: dataForm.dataIcon || [],
+                        file: dataForm.path,
+                      }}
+                    />
+                  </div>
                   <Input
                     title="Màu viền"
                     isColorPicker

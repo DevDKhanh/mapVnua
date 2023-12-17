@@ -9,7 +9,8 @@ const siteAPI = {
       | "classify"
       | "area"
       | "display"
-      | "colors",
+      | "colors"
+      | "map",
     id: number,
     token: string,
     tokenAxios?: any
@@ -29,6 +30,7 @@ const siteAPI = {
       | "classify"
       | "area"
       | "display"
+      | "map"
       | "colors",
     id: any,
     token: string,

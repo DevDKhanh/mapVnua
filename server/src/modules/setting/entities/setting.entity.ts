@@ -26,6 +26,14 @@ export class MapSettingEntity {
   })
   ten: string;
 
+  @ApiProperty({ example: 'url image' })
+  @Column({
+    type: 'varchar',
+    length: 200,
+    nullable: false,
+  })
+  urlImage: string;
+
   @ApiProperty({ example: 'Bản đồ Hà Nội' })
   @Column({
     type: 'varchar',
@@ -33,6 +41,14 @@ export class MapSettingEntity {
     nullable: false,
   })
   url: string;
+
+  @ApiProperty()
+  @CreateDateColumn({ name: 'thoiGianTao' })
+  createdAt: Date;
+
+  @ApiProperty()
+  @UpdateDateColumn({ name: 'thoiGianCapNhat' })
+  updatedAt: Date;
 
   @OneToMany(
     () => SettingEntity,

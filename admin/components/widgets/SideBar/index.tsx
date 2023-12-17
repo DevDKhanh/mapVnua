@@ -35,6 +35,10 @@ const items = [
         txt: "Phân loại",
       },
       {
+        href: "/category/map",
+        txt: "Bản đồ nền",
+      },
+      {
         href: "/category/color",
         txt: "Mã màu",
       },

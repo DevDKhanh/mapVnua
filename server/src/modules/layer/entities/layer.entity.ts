@@ -107,6 +107,12 @@ export class LayerEntity {
   dataColor: string;
 
   @ApiProperty({
+    example: '',
+  })
+  @Column({ type: 'varchar', name: 'duLieuIcon', length: 4000, default: '' })
+  dataIcon: string;
+
+  @ApiProperty({
     example:
       '[{"key":"Shape_Leng","value":"Shape_Leng","isCheck":true},{"key":"MaDat","value":"MaDat0002","isCheck":true},{"key":"Shape_Area","value":"Shape_Area","isCheck":true}]',
   })

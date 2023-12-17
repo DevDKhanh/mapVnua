@@ -2,6 +2,7 @@ import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 
+import Draggable from "react-draggable";
 import Loading from "../../site/Loading";
 import { Map } from "iconsax-react";
 import Vector from "./Vector";

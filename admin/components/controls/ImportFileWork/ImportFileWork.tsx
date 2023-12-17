@@ -5,7 +5,7 @@ import { PropsImportFileWork, Template } from "./interfaces";
 
 import { Button } from "@mui/material";
 import Image from "next/image";
-import Popup from "../Popup";
+import Popup from "../Popup2";
 import { RootState } from "../../../redux/reducers";
 import clsx from "clsx";
 import colorAPI from "../../../api/color";

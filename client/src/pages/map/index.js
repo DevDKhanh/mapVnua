@@ -7,9 +7,10 @@ import {
   ZoomControl,
   useMapEvents,
 } from "react-leaflet";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { API } from "../../constant/config";
+import BaseMap from "../../components/map/BaseMap";
 import ButtonDisplayLayer from "../../components/map/ButtonDisplayLayer";
 import ContainerLayer from "../../components/map/ContainerLayer";
 import Favicon from "react-favicon";
@@ -19,8 +20,8 @@ import SearchField from "../../components/map/Search";
 import { useSelector } from "react-redux";
 
 function Map() {
-  const { area, setting } = useSelector((state) => state.dataMap);
-
+  const ref = useRef(null);
+  const { area, setting, baseMap } = useSelector((state) => state.dataMap);
   const [settingMap] = setting;
 
   const center = useMemo(() => {
@@ -45,6 +46,16 @@ function Map() {
     document.title = settingMap?.title;
   }, [settingMap?.title]);
 
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.setUrl(
+        baseMap?.url ||
+          settingMap?.map?.url ||
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      );
+    }
+  }, [baseMap?.url, settingMap?.map?.url]);
+
   return (
     <div className="container">
       {settingMap?.icon && (
@@ -59,7 +70,9 @@ function Map() {
       >
         <SearchField />
         <TileLayer
+          ref={ref}
           url={
+            baseMap?.url ||
             settingMap?.map?.url ||
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           }
@@ -69,6 +82,7 @@ function Map() {
         <FullScreen />
         <ContainerLayer zoom={zoom} />
         <LocationMarker center={center} zoom={zoom} />
+        <BaseMap />
       </MapContainer>
       <NoteTable />
       <ButtonDisplayLayer />

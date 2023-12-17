@@ -2,6 +2,7 @@ import { Fragment, memo, useEffect, useMemo, useState } from "react";
 
 import ButtonSetContentPopup from "../../../../components/controls/ButtonSetContentPopup";
 import ButtonUpload from "../../../../components/controls/ButtonUpload";
+import CustomIcon from "../../../../components/controls/CustomIcon";
 import { DATA_COLOR } from "../../../../constants/config";
 import { DashboardLayout } from "../../../../components/widgets/Layout";
 import Input from "../../../../components/site/Input";
@@ -57,6 +58,7 @@ interface typeForm {
   lngSW: string;
   zIndex: string;
   dataColor: string;
+  dataIcon: any[];
   labelMap: any;
   active: any;
   mapData: any;
@@ -80,6 +82,7 @@ interface typeFormSubmit {
   keyColor: string;
   typeColor: number;
   borderColor: string;
+  dataIcon: string;
   widthBorder: number;
   opacityBorder: number;
   labelMap: string;
@@ -145,6 +148,7 @@ function Index() {
     typeColor: "0",
     keyColor: "key",
     dataColor: DATA_COLOR,
+    dataIcon: [],
     path: "",
     icon: "",
     borderColor: "#ccc",
@@ -241,6 +245,7 @@ function Index() {
                 txt: data.checked ? "Có" : "Không",
                 value: data.checked,
               },
+              dataIcon: data?.dataIcon !== "" ? JSON.parse(data.dataIcon) : [],
               displayLabel: {
                 txt: data.displayLabel ? "Có" : "Không",
                 value: data.displayLabel,
@@ -319,21 +324,33 @@ function Index() {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    /*---------- Create file form updaload icon ----------*/
+    const fileIcon = await handleGetFile(dataForm.icon, token);
 
+    /*---------- Upload file or raster ----------*/
+    const filePath = await handleGetFile(
+      dataForm.path,
+      token,
+      dataForm?.style?.value === "Raster" ? "image" : "file"
+    );
+    const dataIcon = await Promise.all(
+      dataForm.dataIcon?.map(async (x: any) => {
+        if (!x?.fileIcon) {
+          return x;
+        }
+
+        const fileIcon = await handleGetFile(x.fileIcon, token);
+        return {
+          ...x,
+          icon: fileIcon,
+          fileIcon: null,
+        };
+      })
+    );
     if (!addLanguage) {
       (async () => {
-        /*---------- Create file form updaload icon ----------*/
-        const fileIcon = await handleGetFile(dataForm.icon, token);
-
-        /*---------- Upload file or raster ----------*/
-        const filePath = await handleGetFile(
-          dataForm.path,
-          token,
-          dataForm?.style?.value === "Raster" ? "image" : "file"
-        );
-
         const formSubmit: typeFormSubmit = {
           ...dataForm,
           typeColor: +dataForm.typeColor,
@@ -350,6 +367,7 @@ function Index() {
           backgroundColor: dataForm.backgroundColor,
           icon: fileIcon,
           path: filePath,
+          dataIcon: JSON.stringify(dataIcon),
           opacityBackground: Number(dataForm.opacityBackground),
           latNE: Number(dataForm.latNE),
           lngNE: Number(dataForm.lngNE),
@@ -382,16 +400,6 @@ function Index() {
       })();
     } else {
       (async () => {
-        /*---------- Create file form updaload icon ----------*/
-        const fileIcon = await handleGetFile(dataForm.icon, token);
-
-        /*---------- Upload file or raster ----------*/
-        const filePath = await handleGetFile(
-          dataForm.path,
-          token,
-          dataForm?.style?.value === "Raster" ? "image" : "file"
-        );
-
         try {
           const formSubmit: typeFormSubmit = {
             ...dataForm,
@@ -410,6 +418,7 @@ function Index() {
             backgroundColor: dataForm.backgroundColor,
             opacityBackground: Number(dataForm.opacityBackground),
             latNE: Number(dataForm.latNE),
+            dataIcon: JSON.stringify(dataIcon),
             lngNE: Number(dataForm.lngNE),
             latSW: Number(dataForm.latSW),
             lngSW: Number(dataForm.lngSW),
@@ -559,14 +568,23 @@ function Index() {
                     }}
                   />
                   <PreviewVector data={dataForm} />
-                  <SelectColorLayer
-                    onChange={handleChange}
-                    titleNote={dataForm.titleNote}
-                    dataColor={dataForm.dataColor}
-                    file={dataForm.path}
-                    keyColor={dataForm.keyColor}
-                    typeColor={dataForm.typeColor}
-                  />
+                  <div className={"group-input"}>
+                    <SelectColorLayer
+                      onChange={handleChange}
+                      titleNote={dataForm.titleNote}
+                      dataColor={dataForm.dataColor}
+                      file={dataForm.path}
+                      keyColor={dataForm.keyColor}
+                      typeColor={dataForm.typeColor}
+                    />
+                    <CustomIcon
+                      setForm={setDataForm}
+                      form={{
+                        defaultData: dataForm.dataIcon || [],
+                        file: dataForm.path,
+                      }}
+                    />
+                  </div>
                   <Input
                     title="Màu viền"
                     isColorPicker

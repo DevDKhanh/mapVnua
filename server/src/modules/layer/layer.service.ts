@@ -140,25 +140,29 @@ export class LayerService {
   }
 
   async getList(getListDto: GetListDto) {
-    const result = await this.layerRepository
-      .createQueryBuilder('layer')
-      .where('layer.nameLayer like :keyword ', {
-        keyword: `%${getListDto?.keyword?.trim()}%`,
-      })
-      .leftJoinAndSelect('layer.language', 'language')
-      .leftJoinAndSelect('layer.area', 'area')
-      .leftJoinAndSelect('layer.classify', 'classify')
-      .skip((+getListDto.page - 1) * getListDto.pageSize)
-      .orderBy('layer.createdAt', 'DESC')
-      .take(+getListDto.pageSize)
-      .getManyAndCount();
+    try {
+      const result = await this.layerRepository
+        .createQueryBuilder('layer')
+        .where('layer.nameLayer like :keyword ', {
+          keyword: `%${getListDto?.keyword?.trim()}%`,
+        })
+        .leftJoinAndSelect('layer.language', 'language')
+        .leftJoinAndSelect('layer.area', 'area')
+        .leftJoinAndSelect('layer.classify', 'classify')
+        .skip((+getListDto.page - 1) * getListDto.pageSize)
+        .orderBy('layer.createdAt', 'DESC')
+        .take(+getListDto.pageSize)
+        .getManyAndCount();
 
-    return createPagination(
-      result[0],
-      result[1],
-      getListDto.page,
-      getListDto.pageSize,
-    );
+      return createPagination(
+        result[0],
+        result[1],
+        getListDto.page,
+        getListDto.pageSize,
+      );
+    } catch (err) {
+      throw new HttpException('', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async getDataForClient(getListDto: GetLayerDto) {
