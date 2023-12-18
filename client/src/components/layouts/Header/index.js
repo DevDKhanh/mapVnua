@@ -15,7 +15,7 @@ function Header() {
     <header className={styles.container}>
       <img
         className={styles.logo}
-        src={API + "/upload" + settingMap.icon}
+        src={API + "/upload" + settingMap?.icon}
         alt="logo "
       />
       <h1>{settingMap?.title}</h1>
