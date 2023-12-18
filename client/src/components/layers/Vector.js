@@ -111,7 +111,7 @@ function Vector({ path, data }) {
         });
     }
 
-    const icon = dataIcon.find(
+    const icon = dataIcon?.find(
       (x) =>
         JSON.stringify(x.properties) ===
         JSON.stringify(layer?.feature?.properties)
