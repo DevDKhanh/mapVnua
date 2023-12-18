@@ -102,9 +102,9 @@ function Vector({ path, data }) {
   const handleEachInfo = (info, layer) => {
     const { properties } = info;
     if (data?.activeTooltip === 1) {
-      layer.bindPopup(getInfo(properties).join(""));
+      layer?.bindPopup(getInfo(properties).join(""));
       if (data?.labelMap && data?.displayLabel)
-        layer.bindTooltip(`${properties[data?.labelMap]}`, {
+        layer?.bindTooltip(`${properties[data?.labelMap]}`, {
           permanent: true,
           direction: "center",
           className: `countryLabel ${map.getZoom() < 10 ? "hidden-label" : ""}`,
@@ -117,7 +117,7 @@ function Vector({ path, data }) {
         JSON.stringify(layer?.feature?.properties)
     );
 
-    layer.setIcon(
+    layer?.setIcon(
       new L.Icon({
         iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
         iconSize: [26, 26],
@@ -129,10 +129,10 @@ function Vector({ path, data }) {
       })
     );
 
-    layer.on({
+    layer?.on({
       mouseover: () => {
         if (layer?.setStyle) {
-          layer.setStyle({
+          layer?.setStyle({
             fillColor: setColor(properties[`${data.keyColor}`], 1, dataColor),
             fillOpacity: 0.9,
             opacity: 0.9,
@@ -142,8 +142,8 @@ function Vector({ path, data }) {
           });
         }
 
-        if (layer.setIcon) {
-          layer.setIcon(
+        if (layer?.setIcon) {
+          layer?.setIcon(
             new L.Icon({
               iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
               iconSize: [35, 35],
@@ -158,7 +158,7 @@ function Vector({ path, data }) {
       },
       mouseout: () => {
         if (layer?.setStyle) {
-          layer.setStyle({
+          layer?.setStyle({
             color: setColor(properties[`${data.keyColor}`], 0, dataColor),
             opacity: data.opacityBorder,
             weight: data.widthBorder,
@@ -168,7 +168,7 @@ function Vector({ path, data }) {
           });
         }
         if (layer?.setIcon) {
-          layer.setIcon(
+          layer?.setIcon(
             new L.Icon({
               iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
               iconSize: [26, 26],

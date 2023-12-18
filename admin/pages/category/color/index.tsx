@@ -61,7 +61,7 @@ function Index() {
         <div className="d-flex gap-12">
           <ButtonCreate href="/category/color/create" />
           <ButtonCreate
-            title="Inport file"
+            title="Import file"
             href="/category/color?importFile=open"
           />
         </div>
