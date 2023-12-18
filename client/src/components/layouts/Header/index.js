@@ -2,13 +2,16 @@ import { API } from "../../../constant/config";
 import Marquee from "react-fast-marquee";
 import Menu from "../../../components/menu/Menu";
 import styles from "./Header.module.scss";
+import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function Header() {
+  const [searchParams] = useSearchParams();
+  const diplayHeader = searchParams.get("header");
   const { setting } = useSelector((state) => state.dataMap);
   const [settingMap] = setting;
 
-  return (
+  return diplayHeader === "false" ? null : (
     <header className={styles.container}>
       <img
         className={styles.logo}

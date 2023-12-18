@@ -15,12 +15,17 @@ import ButtonDisplayLayer from "../../components/map/ButtonDisplayLayer";
 import ContainerLayer from "../../components/map/ContainerLayer";
 import Favicon from "react-favicon";
 import FullScreen from "../../components/map/FullScreen";
+import Menu from "../../components/menu/Menu";
 import NoteTable from "../../components/map/NoteTable";
 import SearchField from "../../components/map/Search";
+import clsx from "clsx";
+import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 function Map() {
   const ref = useRef(null);
+  const [searchParams] = useSearchParams();
+  const diplayHeader = searchParams.get("header");
   const { area, setting, baseMap } = useSelector((state) => state.dataMap);
   const [settingMap] = setting;
 
@@ -57,12 +62,14 @@ function Map() {
   }, [baseMap?.url, settingMap?.map?.url]);
 
   return (
-    <div className="container">
+    <div className={"container"}>
       {settingMap?.icon && (
         <Favicon url={API + "/upload" + settingMap.icon}></Favicon>
       )}
       <MapContainer
-        className="map_container"
+        className={clsx("map_container", {
+          "full-height": diplayHeader === "false",
+        })}
         center={center}
         zoom={zoom || 6}
         zoomControl={false}
@@ -83,6 +90,7 @@ function Map() {
         <ContainerLayer zoom={zoom} />
         <LocationMarker center={center} zoom={zoom} />
         <BaseMap />
+        <Menu />
       </MapContainer>
       <NoteTable />
       <ButtonDisplayLayer />

@@ -1,12 +1,12 @@
 import { memo, useEffect, useRef, useState } from "react";
 import { updateArea, updateLayer } from "../../../redux/action/dataMap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { RiArrowDownSFill } from "react-icons/ri";
 import areaAPI from "../../../api/area";
 import clsx from "clsx";
 import style from "./TabArea.module.scss";
-import { useSearchParams } from "react-router-dom";
 
 function TabArea() {
   const dispatch = useDispatch();
@@ -15,6 +15,14 @@ function TabArea() {
   const { area, language } = useSelector((state) => state.dataMap);
   const [show, setShow] = useState(false);
   const [data, setData] = useState([]);
+
+  const navigate = useNavigate();
+
+  const updateQueryParam = (key, value) => {
+    const queryParams = new URLSearchParams(window.location.search);
+    queryParams.set(key, value);
+    navigate(`?${queryParams.toString()}`);
+  };
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -48,7 +56,7 @@ function TabArea() {
 
   const handleChange = (item) => {
     const areaData = data.filter((v, i) => v.id === item.id)[0];
-    setSearchParams(`kv=${areaData.idArea}`);
+    updateQueryParam("kv", areaData.idArea);
     dispatch(updateArea(areaData));
     dispatch(updateLayer([]));
     setShow(false);
