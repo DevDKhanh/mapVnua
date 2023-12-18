@@ -117,17 +117,19 @@ function Vector({ path, data }) {
         JSON.stringify(layer?.feature?.properties)
     );
 
-    layer?.setIcon(
-      new L.Icon({
-        iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
-        iconSize: [26, 26],
-        popupAnchor: [0, -15],
-        shadowAnchor: [13, 28],
-        interactive: true,
-        shadowUrl:
-          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
-      })
-    );
+    if (!!layer?.setIcon) {
+      layer?.setIcon(
+        new L.Icon({
+          iconUrl: `${API}/upload${icon?.icon ? icon.icon : data.icon}`,
+          iconSize: [26, 26],
+          popupAnchor: [0, -15],
+          shadowAnchor: [13, 28],
+          interactive: true,
+          shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png",
+        })
+      );
+    }
 
     layer?.on({
       mouseover: () => {
