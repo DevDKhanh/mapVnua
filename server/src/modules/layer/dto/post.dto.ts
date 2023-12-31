@@ -41,6 +41,10 @@ export class CreateLayerDto {
 
   @ApiProperty({ example: 'XOI_MON_S1' })
   @IsString()
+  keyIcon: string;
+
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @IsString()
   labelMap: string;
 
   @ApiProperty({ example: 'XOI_MON_S1' })

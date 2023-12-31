@@ -3,8 +3,6 @@ import { RiCloseFill, RiInformationFill } from "react-icons/ri";
 
 import { API_URL } from "../../../constants/config";
 import { Button } from "@mui/material";
-import { DocumentText1 } from "iconsax-react";
-import Draggable from "react-draggable";
 import ImageN from "next/image";
 import PaginationCustom from "../../site/PaginationCustom";
 import Popup from "../Popup";
@@ -18,31 +16,28 @@ export default function CustomIcon({ form, setForm }: any) {
   const [open, setOpen] = useState<boolean>(false);
   const [fileData, setFileData] = useState<any>(null);
   const [data, setData] = useState<any[]>([]);
+  const [valueKey, setValueKey] = useState<string>("");
 
   const handleOpen = useCallback(() => {
     if (fileData?.features) {
-      const dataFeatures = fileData?.features;
-      const { properties, geometry } = fileData?.features?.[0];
-      if (properties && geometry?.type == "Point") {
-        if (data?.length == 0) {
-          setData(
-            dataFeatures.map((x: any) => ({
-              id: JSON.stringify(dataFeatures.geometry?.coordinates),
-              icon: "",
-              note: "",
-              properties: {
-                ...x?.properties,
-                geometry: dataFeatures.geometry?.coordinates,
-              },
-            }))
-          );
-        }
-        setOpen(true);
-      }
+      setOpen(true);
     } else {
       toast.warn("Vui lòng chọn file");
     }
   }, [data?.length, fileData?.features]);
+
+  useEffect(() => {
+    if (fileData?.features) {
+      const dataFeatures = fileData?.features;
+      const { properties, geometry } = fileData?.features?.[0];
+      if (valueKey != "key" && properties && geometry?.type == "Point") {
+        const uniqueArray = [
+          ...new Set(dataFeatures.map((x: any) => x.properties[valueKey])),
+        ];
+        setData(uniqueArray.map((x) => ({ id: x, icon: "", note: "" })));
+      }
+    }
+  }, [valueKey]);
 
   useEffect(() => {
     function onReaderLoad(event: any) {
@@ -71,6 +66,7 @@ export default function CustomIcon({ form, setForm }: any) {
 
   useEffect(() => {
     setData(form.defaultData);
+    setValueKey(form.keyIcon);
   }, [form?.defaultData]);
 
   const selectFile = (file: any, index: number) => {
@@ -96,8 +92,22 @@ export default function CustomIcon({ form, setForm }: any) {
 
   const handleSubmit = () => {
     setOpen(false);
-    setForm((prev: any) => ({ ...prev, dataIcon: data }));
+    setForm((prev: any) => ({ ...prev, dataIcon: data, keyIcon: valueKey }));
   };
+
+  const properties: Array<{ key: string; value: string }> = useMemo(() => {
+    const arr = [];
+    if (fileData?.features[0]?.properties) {
+      for (let i in fileData?.features[0]?.properties) {
+        arr.push({
+          key: i,
+          value: fileData?.features[0]?.properties[i],
+        });
+      }
+    }
+    return arr;
+  }, [fileData]);
+
   return fileData?.features?.[0]?.geometry?.type == "Point" ? (
     <div>
       <div
@@ -114,6 +124,20 @@ export default function CustomIcon({ form, setForm }: any) {
               <RiCloseFill />
             </div>
             <h2>Tuỳ chỉnh Icon điểm</h2>
+            <select
+              name="keyColor"
+              onChange={(e: any) => {
+                setValueKey(e.target.value);
+              }}
+              value={valueKey}
+            >
+              <option value="key">Lựa chọn key icon</option>
+              {properties.map((v, i) => (
+                <option key={i} value={v.key}>
+                  {v.key}
+                </option>
+              ))}
+            </select>
             <div className={styles.list}>
               {data?.map((x, i) => (
                 <Item
@@ -176,8 +200,6 @@ function Item({ data, index, selectFile, setNote }: any) {
           </i>
         </Tippy>
         <div className={styles.icon} onClick={handleOpen}>
-          {console.log(data)}
-
           {data?.icon ? (
             <img
               src={

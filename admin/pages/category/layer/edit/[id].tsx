@@ -59,6 +59,7 @@ interface typeForm {
   zIndex: string;
   dataColor: string;
   dataIcon: any[];
+  keyIcon: string;
   labelMap: any;
   active: any;
   mapData: any;
@@ -97,6 +98,7 @@ interface typeFormSubmit {
   displayLabel: number;
   active: number;
   activeNote: number;
+  keyIcon: string;
   activeTooltip: number;
 }
 
@@ -117,6 +119,7 @@ function Index() {
       txt: "Không",
       value: 0,
     },
+    keyIcon: "",
     active: {
       txt: "Có",
       value: 1,
@@ -580,6 +583,7 @@ function Index() {
                     <CustomIcon
                       setForm={setDataForm}
                       form={{
+                        keyIcon: dataForm.keyIcon,
                         defaultData: dataForm.dataIcon || [],
                         file: dataForm.path,
                       }}

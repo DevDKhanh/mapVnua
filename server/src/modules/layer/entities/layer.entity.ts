@@ -77,6 +77,10 @@ export class LayerEntity {
   @Column({ type: 'varchar', name: 'truongMauNen', length: 50 })
   keyColor: string;
 
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @Column({ type: 'varchar', name: 'truongIcon', length: 50 })
+  keyIcon: string;
+
   @ApiProperty({ example: 'KEY_MAP_LABEL' })
   @Column({ type: 'varchar', name: 'truongNhan', length: 50 })
   labelMap: string;

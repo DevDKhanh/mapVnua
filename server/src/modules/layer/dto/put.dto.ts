@@ -36,6 +36,11 @@ export class UpdateLayerDto {
   @ApiProperty({ example: 'XOI_MON_S1' })
   @IsString()
   @IsOptional()
+  keyIcon: string;
+
+  @ApiProperty({ example: 'XOI_MON_S1' })
+  @IsString()
+  @IsOptional()
   labelMap: string;
 
   @ApiProperty({ example: 'XOI_MON_S1' })

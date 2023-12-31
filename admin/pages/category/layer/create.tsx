@@ -46,6 +46,7 @@ interface typeForm {
   titleNote?: string;
   keyColor: string;
   typeColor: string;
+  keyIcon: string;
   dataIcon: any[];
   titleDetail: string;
   borderColor: string;
@@ -162,6 +163,7 @@ function Index() {
     lngSW: "107",
     zIndex: "10",
     mapData: ".",
+    keyIcon: "",
   });
 
   /*---------- get list language insert select language ----------*/
@@ -469,6 +471,7 @@ function Index() {
                     <CustomIcon
                       setForm={setDataForm}
                       form={{
+                        keyIcon: dataForm.keyIcon,
                         defaultData: dataForm.dataIcon || [],
                         file: dataForm.path,
                       }}

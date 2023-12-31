@@ -45,6 +45,7 @@ interface typeForm {
   path: any;
   icon: any;
   titleNote?: string;
+  keyIcon: string;
   keyColor: string;
   typeColor: string;
   borderColor: string;
@@ -82,6 +83,7 @@ interface typeFormSubmit {
   titleNote?: string;
   keyColor: string;
   typeColor: number;
+  keyIcon: string;
   borderColor: string;
   widthBorder: number;
   opacityBorder: number;
@@ -128,6 +130,7 @@ function Index() {
       txt: "Có",
       value: 1,
     },
+    keyIcon: "",
     activeTooltip: {
       txt: "Có",
       value: 1,
@@ -553,6 +556,7 @@ function Index() {
                     <CustomIcon
                       setForm={setDataForm}
                       form={{
+                        keyIcon: dataForm.keyIcon,
                         defaultData: dataForm.dataIcon || [],
                         file: dataForm.path,
                       }}
