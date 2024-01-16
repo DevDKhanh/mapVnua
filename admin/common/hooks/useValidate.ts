@@ -2,7 +2,11 @@ export const useValidateAll = (form: any) => {
   let c: Array<boolean> = [];
 
   for (let i in form) {
-    if (["titleDetail", "dataIcon", "keyColor", "typeColor"].includes(i)) {
+    if (
+      ["titleDetail", "dataIcon", "keyColor", "typeColor", "keyIcon"].includes(
+        i
+      )
+    ) {
       c.push(true);
     } else if (!!form[i]?.trim && form[i]?.trim() === "") {
       c.push(false);
