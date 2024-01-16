@@ -151,6 +151,7 @@ export class LayerService {
         .leftJoinAndSelect('layer.classify', 'classify')
         .skip((+getListDto.page - 1) * getListDto.pageSize)
         .orderBy('layer.createdAt', 'DESC')
+        .addOrderBy('layer.index', 'DESC')
         .take(+getListDto.pageSize)
         .getManyAndCount();
 
@@ -172,6 +173,9 @@ export class LayerService {
         languageId: getListDto.langId,
         classifyId: getListDto.classifyId,
         active: 1,
+      },
+      order: {
+        zIndex: 1,
       },
     });
     return result;
