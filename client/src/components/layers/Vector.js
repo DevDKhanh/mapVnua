@@ -213,7 +213,7 @@ function Vector({ path, data }) {
         weight: data.widthBorder,
         fillOpacity: data.opacityBackground,
         fillColor: setColor(properties[`${data.keyColor}`], 1, dataColor),
-        zIndex: 1,
+        zIndex: data.zIndex,
       };
     },
     [
@@ -221,6 +221,7 @@ function Vector({ path, data }) {
       data.opacityBackground,
       data.opacityBorder,
       data.widthBorder,
+      data.zIndex,
       dataColor,
       setColor,
     ]
