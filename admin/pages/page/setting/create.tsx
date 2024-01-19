@@ -117,6 +117,8 @@ function Index() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    console.log({ dataForm });
+
     if (!validator(dataForm)) {
       toast.warn("Vui lòng nhập đầy đủ thông tin");
       return;
@@ -164,15 +166,12 @@ function Index() {
                 data={listLanguage}
                 onChange={(v) => handleChangeSelect(v, "language")}
               />
-              {listMap.length > 0 ? (
-                <Select
-                  title="Bản đồ"
-                  value={dataForm?.map?.txt}
-                  data={listMap}
-                  onChange={(v) => handleChangeSelect(v, "map")}
-                />
-              ) : null}
-
+              <Select
+                title="Bản đồ"
+                value={dataForm?.map?.txt}
+                data={listMap}
+                onChange={(v) => handleChangeSelect(v, "map")}
+              />
               <Input
                 title="Tiêu đề"
                 value={dataForm?.title}

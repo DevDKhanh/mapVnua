@@ -162,6 +162,8 @@ export class LayerService {
         getListDto.pageSize,
       );
     } catch (err) {
+      console.log(err);
+
       throw new HttpException('', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

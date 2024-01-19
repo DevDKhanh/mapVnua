@@ -186,14 +186,12 @@ function Index() {
                 data={listLanguage}
                 onChange={(v) => handleChangeSelect(v, "language")}
               />
-              {listMap.length > 0 ? (
-                <Select
-                  title="Bản đồ"
-                  value={dataForm?.map?.txt}
-                  data={listMap}
-                  onChange={(v) => handleChangeSelect(v, "map")}
-                />
-              ) : null}
+              <Select
+                title="Bản đồ"
+                value={dataForm?.map?.txt}
+                data={listMap}
+                onChange={(v) => handleChangeSelect(v, "map")}
+              />
               <Input
                 title="Tiêu đề"
                 value={dataForm?.title}

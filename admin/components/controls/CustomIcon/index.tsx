@@ -34,7 +34,7 @@ export default function CustomIcon({ form, setForm }: any) {
         const uniqueArray = [
           ...new Set(dataFeatures.map((x: any) => x.properties[valueKey])),
         ];
-        setData(uniqueArray.map((x) => ({ id: x, icon: "", note: "" })));
+        setData(uniqueArray.map((x) => ({ id: x, icon: "", note: x })));
       }
     }
   }, [valueKey]);
@@ -176,25 +176,10 @@ function Item({ data, index, selectFile, setNote }: any) {
     setShow(() => true);
   };
 
-  const info = useMemo(() => {
-    const info = [];
-    for (let i in data?.properties) {
-      info.push(
-        <div>
-          <p>
-            <b>{i}: </b>
-            {data?.properties[i]}
-          </p>
-        </div>
-      );
-    }
-    return info;
-  }, [data]);
-
   return (
     <Fragment>
       <div className={styles.item}>
-        <Tippy content={info}>
+        <Tippy content={data.id}>
           <i>
             <RiInformationFill />
           </i>

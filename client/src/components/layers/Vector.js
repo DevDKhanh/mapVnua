@@ -206,7 +206,6 @@ function Vector({ path, data }) {
   const handleStyle = useCallback(
     (info, layer) => {
       const { properties } = info;
-
       return {
         color: setColor(properties[`${data.keyColor}`], 0, dataColor),
         opacity: data.opacityBorder,
